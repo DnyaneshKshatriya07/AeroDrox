@@ -1,0 +1,41 @@
+@model IEnumerable<AeroDroxUAV.Models.Drone>
+@{
+    var role = ViewBag.Role as string;
+}
+
+<h2>Drones</h2>
+
+@if(role == "Admin")
+{
+    <a href="/Drone/Create" class="btn btn-success mb-2">Add Drone</a>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Description</th>
+            @if(role == "Admin") { <th>Actions</th> }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var drone in Model)
+        {
+            <tr>
+                <td>@drone.Name</td>
+                <td>@drone.Type</td>
+                <td>@drone.Price</td>
+                <td>@drone.Description</td>
+                @if(role == "Admin")
+                {
+                    <td>
+                        <a href="/Drone/Edit/@drone.Id" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="/Drone/Delete/@drone.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

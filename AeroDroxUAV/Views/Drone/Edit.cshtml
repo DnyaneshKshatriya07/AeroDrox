@@ -1,0 +1,29 @@
+@model AeroDroxUAV.Models.Drone
+@{
+    ViewData["Title"] = "Edit Drone";
+}
+
+<h2>Edit Drone</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Type</label>
+        <input asp-for="Type" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Price</label>
+        <input asp-for="Price" class="form-control" step="0.01" required />
+    </div>
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Drone</button>
+    <a href="/Drone/Index" class="btn btn-secondary">Cancel</a>
+</form>

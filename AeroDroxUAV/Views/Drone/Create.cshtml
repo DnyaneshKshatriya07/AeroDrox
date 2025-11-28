@@ -1,0 +1,27 @@
+@model AeroDroxUAV.Models.Drone
+@{
+    ViewData["Title"] = "Add Drone";
+}
+
+<h2>Add New Drone</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label>Name</label>
+        <input type="text" name="Name" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Type</label>
+        <input type="text" name="Type" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Price</label>
+        <input type="number" name="Price" step="0.01" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea name="Description" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Add Drone</button>
+    <a href="/Drone/Index" class="btn btn-secondary">Cancel</a>
+</form>
