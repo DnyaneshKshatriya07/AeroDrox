@@ -5,8 +5,8 @@ public class BasicAuthMiddleware
     private readonly RequestDelegate _next;
 
     // Your API login credentials
-    private const string API_USER = "apiUser";          // ← change if needed
-    private const string API_PASSWORD = "apiPass123";   // ← change if needed
+    private const string API_USER = "API";          // ← change if needed
+    private const string API_PASSWORD = "API123";   // ← change if needed
 
     public BasicAuthMiddleware(RequestDelegate next)
     {
