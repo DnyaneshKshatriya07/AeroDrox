@@ -7,8 +7,7 @@
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role") ?? "";
     var isLoggedIn = !string.IsNullOrEmpty(username);
     var isAdmin = role == "Admin";
-    
-    // NOTE: Removed ViewBag.DroneServices access here, as the View Component will handle it.
+// NOTE: Removed ViewBag.DroneServices access here, as the View Component will handle it.
 }
 
 <!DOCTYPE html>
@@ -25,7 +24,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="/">AeroDroxUAV</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">

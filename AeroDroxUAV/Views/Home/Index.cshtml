@@ -1,10 +1,13 @@
-﻿@{
-    ViewData["Title"] = "AeroDroxUAV - Home";
+﻿@* Views/Home/Index.cshtml *@
+@{
+    ViewData["Title"] = "AeroDroxUAV - Precision Aerial Solutions";
 }
 
 <style>
     /* Custom styles for the single page sections */
     .hero-section {
+        /* Placeholder background image. In a real app, use a local, high-res image. */
+        /*  */
         background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('https://dummyimage.com/1200x600/343a40/ffffff&text=Aerial+View+Background') no-repeat center center;
         background-size: cover;
         color: white;
@@ -17,6 +20,7 @@
     }
 </style>
 
+@* --- 1. HERO SECTION --- *@
 <header class="hero-section">
     <div class="container">
         <h1 class="display-2 fw-bold mb-3">AeroDroxUAV</h1>
@@ -27,16 +31,19 @@
 </header>
 
 
+@* --- 2. ABOUT US SECTION --- *@
 <section id="about" class="section-padding bg-light">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <h2 class="display-5 mb-4">About AeroDroxUAV</h2>
                 <p>
-                    Founded in 2018, AeroDroxUAV is committed to delivering cutting-edge, reliable, and sustainable UAV solutions for industrial and recreational use. Our technology is built for durability and precision, empowering professionals across agriculture, construction, and media.
+                    Founded in 2018, AeroDroxUAV is committed to delivering cutting-edge, reliable, and sustainable UAV solutions for industrial and recreational use.
+                    Our technology is built for durability and precision, empowering professionals across agriculture, construction, and media.
                 </p>
                 <p>
-                    We believe in the power of aerial data to drive efficiency and safety. Our dedicated team of engineers and pilots works tirelessly to push the boundaries of drone capability.
+                    We believe in the power of aerial data to drive efficiency and safety.
+                    Our dedicated team of engineers and pilots works tirelessly to push the boundaries of drone capability.
                 </p>
             </div>
             <div class="col-lg-6 text-center">
@@ -46,18 +53,23 @@
     </div>
 </section>
 
+@* --- 3. PRODUCTS SECTION (DRONES) --- *@
 <section id="products" class="section-padding">
     <div class="container">
         <h2 class="display-5 text-center mb-5">Our Flagship Drones</h2>
+        
         <div class="row g-4">
             
-            @* Dummy Data - Replace with actual model data if available *@
+            @* Dummy Data for demonstration *@
             @{
                 var drones = new List<dynamic>
                 {
-                    new { Name = "Sentinel X10", Type = "Industrial Quadcopter", Price = 4999.99, Description = "Heavy-lift capacity, long endurance for infrastructure inspection." },
-                    new { Name = "Aviator Pro", Type = "Professional Cinematography", Price = 2799.00, Description = "4K 60fps stabilized camera, advanced obstacle avoidance." },
-                    new { Name = "Agri-View 500", Type = "Agricultural Surveying", Price = 5999.50, Description = "Multi-spectral sensor package for crop health analysis." }
+                    new { Name = "Sentinel X10", Type = "Industrial Quadcopter", Price = 4999.99, Description = "Heavy-lift capacity, long endurance for infrastructure inspection."
+                    },
+                    new { Name = "Aviator Pro", Type = "Professional Cinematography", Price = 2799.00, Description = "4K 60fps stabilized camera, advanced obstacle avoidance."
+                    },
+                    new { Name = "Agri-View 500", Type = "Agricultural Surveying", Price = 5999.50, Description = "Multi-spectral sensor package for crop health analysis."
+                    }
                 };
             }
 
@@ -65,6 +77,7 @@
             {
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
+                        @*  *@@*  *@@*  *@
                         <img src="https://dummyimage.com/400x250/007bff/ffffff&text=@drone.Name" class="card-img-top" alt="@drone.Name">
                         <div class="card-body">
                             <h5 class="card-title">@drone.Name</h5>
@@ -77,23 +90,28 @@
             }
         </div>
         <div class="text-center mt-5">
+            @* Link to the internal dashboard/catalogue *@
             <a href="/Drone/Index" class="btn btn-outline-dark">View All Products (Requires Login)</a>
         </div>
     </div>
 </section>
 
+@* --- 4. SERVICES SECTION --- *@
 <section id="services" class="section-padding bg-light">
     <div class="container">
         <h2 class="display-5 text-center mb-5">Professional Drone Services</h2>
         <div class="row g-4">
             
-            @* Dummy Data - Replace with actual model data if available *@
+            @* Dummy Data for demonstration (Fixes the previous multi-line string error) *@
             @{
                 var services = new List<dynamic>
                 {
-                    new { Name = "Infrastructure Inspection", Description = "High-resolution thermal and visual scans of bridges, towers, and utility lines." },
-                    new { Name = "3D Mapping & Modeling", Description = "Accurate photogrammetry for detailed digital terrain and building models." },
-                    new { Name = "Aerial Cinematography", Description = "Broadcast-quality video production for films, events, and marketing." }
+                    new { Name = "Infrastructure Inspection", Description = "High-resolution thermal and visual scans of bridges, towers, and utility lines." 
+                    },
+                    new { Name = "3D Mapping & Modeling", Description = "Accurate photogrammetry for detailed digital terrain and building models."
+                    },
+                    new { Name = "Aerial Cinematography", Description = "Broadcast-quality video production for films, events, and marketing."
+                    }
                 };
             }
 
@@ -110,12 +128,15 @@
     </div>
 </section>
 
+@* --- 5. CONTACT SECTION --- *@
 <section id="contact" class="section-padding">
     <div class="container">
         <h2 class="display-5 text-center mb-5">Get In Touch</h2>
         <div class="row">
             <div class="col-lg-8 offset-lg-2">
-                <p class="text-center mb-4">Have questions or ready to start a project? Fill out the form below or contact us directly.</p>
+                <p class="text-center mb-4">Have questions or ready to start a project?
+                    Fill out the form below or contact us directly.</p>
+                @* Note: The form below is static HTML. In a real application, you would replace <form> with <form asp-controller="..." asp-action="..." method="post"> *@
                 <form>
                     <div class="row mb-3">
                         <div class="col-md-6">
