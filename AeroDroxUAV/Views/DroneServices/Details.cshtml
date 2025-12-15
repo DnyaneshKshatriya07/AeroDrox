@@ -1,0 +1,55 @@
+@model AeroDroxUAV.Models.DroneServices
+
+@{
+    // Ensure this is the first line after @model, not counting blank lines
+    ViewData["Title"] = @Model.Name;
+}
+
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-primary text-white text-center">
+                <h1 class="h3 mb-0">@Model.Name</h1>
+            </div>
+            <div class="card-body">
+                
+                <h4 class="card-title text-primary">Service Details</h4>
+                <p class="card-text">
+                    This is the view for the service: <strong>@Model.Name</strong>.
+                    <br/>
+                    Please replace this placeholder text with the actual details, description, and pricing information from your <code>DroneServices</code> model.
+                </p>
+                
+                <hr/>
+                
+                <dl class="row">
+                    <dt class="col-sm-4 text-muted">Service ID</dt>
+                    <dd class="col-sm-8">@Model.Id</dd>
+
+                    @* NOTE: I removed Duration and Price properties to fix the build errors.
+                       You must add them back ONLY if your DroneServices model contains them. 
+                    *@
+                </dl>
+                
+                <hr/>
+                
+                <div class="text-center">
+                    <a asp-controller="Contact" asp-action="Index" class="btn btn-success btn-lg mx-2">
+                        Request This Service
+                    </a>
+                    <a asp-controller="DroneServices" asp-action="Index" class="btn btn-outline-secondary mx-2">
+                        Back to All Services
+                    </a>
+                </div>
+            </div>
+            
+            @* Optional: Admin-only quick links for editing *@
+            @if (ViewBag.Role == "Admin")
+            {
+                <div class="card-footer text-end bg-light">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-warning">Edit Service</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

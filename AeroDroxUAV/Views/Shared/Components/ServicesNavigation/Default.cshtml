@@ -1,39 +1,46 @@
 @model IEnumerable<AeroDroxUAV.Models.DroneServices>
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@* RZ2005 & RZ2001 FIX: Ensure the @model line is the very first line. *@
 
-@{
-    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role") ?? "";
-    var isAdmin = role == "Admin";
-    var services = Model ?? new List<AeroDroxUAV.Models.DroneServices>();
-}
-
-@* SERVICES DROPDOWN - Visible to both Admin and User *@
 <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle text-white" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownServices" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         Services
     </a>
-    <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-        @if (services.Any())
+    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownServices">
+        @if (Model != null && Model.Any())
         {
-            @foreach (var service in services)
+            foreach (var service in Model)
             {
-                @* Placeholder link. You would create a ServicesController/Details action for this. *@
-                <li><a class="dropdown-item" href="/DroneServices/Details/@service.Id">@service.Name</a></li>
+                // CS8602 Warnings are addressed by the null/Any check above, but adding 
+                // a local null check in case the enumerator contains nulls is safer if the list can have null elements.
+                if (service != null) 
+                {
+                    <li>
+                        <a class="dropdown-item" 
+                           asp-controller="DroneServices" 
+                           asp-action="Details" 
+                           asp-route-id="@service.Id">
+                            @service.Name 
+                        </a>
+                    </li>
+                }
             }
         }
-        else if (!isAdmin)
+        else
         {
-            <li><span class="dropdown-item text-muted">No services available</span></li>
+            <li><span class="dropdown-item disabled">No services available</span></li>
         }
-
-        @if (isAdmin)
+        
+        @* Add a separator and a link to the main services page for completeness *@
+        @if (Model != null && Model.Any())
         {
-            if (services.Any())
-            {
-                <li><hr class="dropdown-divider"></li>
-            }
-            @* Admin link to manage services *@
-            <li><a class="dropdown-item text-primary" asp-controller="DroneServices" asp-action="Index">Manage Services</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item" 
+                   asp-controller="DroneServices" 
+                   asp-action="Index">
+                    View All Services
+                </a>
+            </li>
         }
     </ul>
 </li>

@@ -9,5 +9,11 @@ namespace AeroDroxUAV.Repositories
         Task<bool> HasUsersAsync();
         Task AddAsync(User user);
         Task SaveChangesAsync();
+        // NEW: Method to get all users
+        Task<List<User>> GetAllUsersAsync(); 
+        // NEW: For Edit/Delete
+        Task<User?> GetUserByIdAsync(int id);
+        Task DeleteUserAsync(User user);
+        Task UpdateUserAsync(User user);
     }
 }

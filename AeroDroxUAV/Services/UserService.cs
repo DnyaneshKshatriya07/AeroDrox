@@ -47,5 +47,60 @@ namespace AeroDroxUAV.Services
             await _userRepository.SaveChangesAsync();
             return true;
         }
+
+        // NEW: Implementation for getting all users
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            return await _userRepository.GetAllUsersAsync();
+        }
+        
+        // NEW: Implementation for getting a user by ID
+        public async Task<User?> GetUserByIdAsync(int id)
+        {
+            return await _userRepository.GetUserByIdAsync(id);
+        }
+        
+        // NEW: Implementation for deleting a user
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            var user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return false; // User not found
+            }
+
+            await _userRepository.DeleteUserAsync(user);
+            await _userRepository.SaveChangesAsync();
+            return true;
+        }
+
+        // NEW: Implementation for updating a user
+        public async Task<bool> UpdateUserAsync(User user, string newUsername, string newPassword, string newRole)
+        {
+            // 1. Handle Username update (check for uniqueness if it changed)
+            if (user.Username != newUsername)
+            {
+                var existingUser = await _userRepository.GetByUsernameAsync(newUsername);
+                if (existingUser != null)
+                {
+                    return false; // New username is already taken
+                }
+                user.Username = newUsername;
+            }
+
+            // 2. Handle Password update (only if a new password is provided)
+            if (!string.IsNullOrEmpty(newPassword))
+            {
+                user.Password = newPassword;
+            }
+
+            // 3. Handle Role update
+            user.Role = newRole;
+
+            // 4. Update in repository and save changes
+            await _userRepository.UpdateUserAsync(user);
+            await _userRepository.SaveChangesAsync();
+            return true;
+        }
     }
 }

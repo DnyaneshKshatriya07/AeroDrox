@@ -51,10 +51,10 @@
                         @if (isAdmin)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-warning" href="#">Analysis</a> @* Placeholder *@
+                                <a class="nav-link text-warning" asp-controller="Analysis" asp-action="Index">Analysis</a> @* Placeholder *@
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Register">Users / Admin</a>
+                                <a class="nav-link text-warning" asp-controller="Account" asp-action="UserManagement">Users / Admin</a>
                             </li>
                         }
 
