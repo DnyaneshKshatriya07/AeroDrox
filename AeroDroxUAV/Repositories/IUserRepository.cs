@@ -5,15 +5,17 @@ namespace AeroDroxUAV.Repositories
     public interface IUserRepository
     {
         Task<User?> GetByUsernameAndPasswordAsync(string username, string password);
-        Task<User?> GetByUsernameAsync(string username); // NEW: For uniqueness check
+        Task<User?> GetByEmailOrMobileAndPasswordAsync(string emailOrMobile, string password);
+        Task<User?> GetByUsernameAsync(string username);
+        Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByMobileNumberAsync(string mobileNumber);
         Task<bool> HasUsersAsync();
         Task AddAsync(User user);
         Task SaveChangesAsync();
-        // NEW: Method to get all users
-        Task<List<User>> GetAllUsersAsync(); 
-        // NEW: For Edit/Delete
+        Task<List<User>> GetAllUsersAsync();
         Task<User?> GetUserByIdAsync(int id);
         Task DeleteUserAsync(User user);
         Task UpdateUserAsync(User user);
+        Task<User?> GetByEmailOrMobileAsync(string emailOrMobile);
     }
 }

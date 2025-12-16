@@ -17,8 +17,7 @@
         <a asp-action="UserManagement" asp-route-filter="Admins" class="btn @(filter == "Admins" ? "btn-info" : "btn-outline-info")">
             Admins (@adminCount)
         </a>
-        <a asp-action="UserManagement" 
-        asp-route-filter="Users" class="btn @(filter == "Users" ? "btn-secondary" : "btn-outline-secondary")">
+        <a asp-action="UserManagement" asp-route-filter="Users" class="btn @(filter == "Users" ? "btn-secondary" : "btn-outline-secondary")">
             Standard Users (@userCount)
         </a>
     </div>
@@ -32,7 +31,12 @@
         <tr>
             <th>ID</th>
             <th>Username</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
             <th>Role</th>
+            <th>Created</th>
+            <th>Last Login</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -44,13 +48,21 @@
                 <tr>
                     <td>@user.Id</td>
                     <td>@user.Username</td>
-                    <td><span class="badge @(user.Role == "Admin" ?
-                    "bg-info" : "bg-secondary")">@user.Role</span></td>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>@user.MobileNumber</td>
+                    <td><span class="badge @(user.Role == "Admin" ? "bg-info" : "bg-secondary")">@user.Role</span></td>
+                    <td>@user.CreatedAt.ToString("yyyy-MM-dd")</td>
+                    <td>@(user.LastLoginAt?.ToString("yyyy-MM-dd HH:mm") ?? "Never")</td>
                     <td>
-                        <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-sm btn-warning me-2">Edit</a>
+                        <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-sm btn-warning me-2">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
                         <form asp-action="DeleteUser" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete user @user.Username?');">
                             <input type="hidden" name="id" value="@user.Id" />
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -59,8 +71,24 @@
         else
         {
             <tr>
-                <td colspan="4" class="text-center">No users found for this filter.</td>
+                <td colspan="9" class="text-center">No users found for this filter.</td>
             </tr>
         }
     </tbody>
 </table>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}

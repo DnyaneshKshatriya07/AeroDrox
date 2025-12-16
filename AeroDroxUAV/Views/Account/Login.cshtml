@@ -1,25 +1,140 @@
-@model AeroDroxUAV.Models.User
 @{
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>AeroDrox UAV Login
+                    </h3>
+                </div>
+                <div class="card-body p-5">
+                    <form method="post" asp-controller="Account" asp-action="Login" id="loginForm">
+                        <div class="form-floating mb-3">
+                            <input type="text" name="LoginId" class="form-control" id="loginId" 
+                                   placeholder="name@example.com or 1234567890" required />
+                            <label for="loginId">
+                                <i class="fas fa-user me-2"></i>Email or Mobile Number
+                            </label>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input type="password" name="Password" class="form-control" id="password" 
+                                   placeholder="Password" required />
+                            <label for="password">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                            <div class="mt-2">
+                                <input type="checkbox" id="showPassword" class="form-check-input">
+                                <label for="showPassword" class="form-check-label small">Show Password</label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </button>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted">Don't have an account? 
+                                <a asp-action="Register" class="text-decoration-none">Register here</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+                
+                @if(ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger mx-4 mb-4" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
+                    </div>
+                }
+                
+                @if(TempData["Success"] != null)
+                {
+                    <div class="alert alert-success mx-4 mb-4" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                    </div>
+                }
+            </div>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted small">
+                    <i class="fas fa-info-circle me-1"></i>
+                    You can login using your registered email address or mobile number.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<form method="post" asp-controller="Account" asp-action="Login">
-    <div class="mb-3">
-        <label>Username</label>
-        <input type="text" name="Username" class="form-control" required />
-    </div>
-    <div class="mb-3">
-        <label>Password</label>
-        <input type="password" name="Password" class="form-control" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
-
-@if(ViewBag.Error != null)
-{
-    <div class="alert alert-danger mt-3">
-        @ViewBag.Error
-    </div>
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Toggle password visibility
+            $('#showPassword').change(function() {
+                var passwordInput = $('#password');
+                if ($(this).is(':checked')) {
+                    passwordInput.attr('type', 'text');
+                } else {
+                    passwordInput.attr('type', 'password');
+                }
+            });
+            
+            // Auto-focus on login field
+            $('#loginId').focus();
+            
+            // Form validation
+            $('#loginForm').submit(function() {
+                var loginId = $('#loginId').val().trim();
+                if (loginId === '') {
+                    alert('Please enter your email or mobile number.');
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+    
+    <style>
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        .form-floating {
+            position: relative;
+        }
+        
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+    </style>
 }

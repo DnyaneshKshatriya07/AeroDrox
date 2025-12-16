@@ -1,45 +1,327 @@
-@model AeroDroxUAV.Models.User
 @{
     ViewData["Title"] = "Register";
-    // Safely retrieve the boolean value
-    var isAdmin = ViewBag.IsAdminLoggedIn as bool? ?? false; 
+    var isAdmin = ViewBag.IsAdminLoggedIn as bool? ?? false;
 }
 
-<h2>@(isAdmin ? "Create New Admin Account" : "Create Account (User Registration)")</h2>
-
-<form method="post" asp-controller="Account" asp-action="Register">
-    <div class="mb-3">
-        <label>Username</label>
-        <input type="text" name="Username" class="form-control" required />
-    </div>
-    <div class="mb-3">
-        <label>Password</label>
-        <input type="password" name="Password" class="form-control" required />
-    </div>
-
-    @* Only show the Role selection if an Admin is currently logged in. *@
-    @if (isAdmin)
-    {
-        <div class="mb-3">
-            <label>Role</label>
-            <select name="Role" class="form-control">
-                <option value="User">User</option>
-                <option value="Admin">Admin</option>
-            </select>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-gradient-primary text-white text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-plus me-2"></i>
+                        @(isAdmin ? "Create New Account" : "Create Your Account")
+                    </h3>
+                </div>
+                <div class="card-body p-5">
+                    <form method="post" asp-controller="Account" asp-action="Register" id="registerForm" class="needs-validation" novalidate>
+                        <div class="row">
+                            <!-- Full Name -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="text" name="FullName" class="form-control" id="fullName" 
+                                           placeholder="John Doe" required />
+                                    <label for="fullName">
+                                        <i class="fas fa-user me-2"></i>Full Name
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        Please enter your full name.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Username -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="text" name="Username" class="form-control" id="username" 
+                                           placeholder="johndoe" required />
+                                    <label for="username">
+                                        <i class="fas fa-at me-2"></i>Username
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        Please choose a username.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="email" name="Email" class="form-control" id="email" 
+                                           placeholder="name@example.com" required />
+                                    <label for="email">
+                                        <i class="fas fa-envelope me-2"></i>Email Address
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid email address.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Mobile Number -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="tel" name="MobileNumber" class="form-control" id="mobileNumber" 
+                                           placeholder="1234567890" pattern="[0-9]{10}" required />
+                                    <label for="mobileNumber">
+                                        <i class="fas fa-phone me-2"></i>Mobile Number
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid 10-digit mobile number.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Password -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="password" name="Password" class="form-control" id="password" 
+                                           placeholder="Password" pattern=".{6,}" required />
+                                    <label for="password">
+                                        <i class="fas fa-lock me-2"></i>Password
+                                    </label>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Minimum 6 characters
+                                    </div>
+                                    <div class="mt-2">
+                                        <input type="checkbox" id="showPassword" class="form-check-input">
+                                        <label for="showPassword" class="form-check-label small">Show Password</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Confirm Password -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="password" name="ConfirmPassword" class="form-control" id="confirmPassword" 
+                                           placeholder="Confirm Password" required />
+                                    <label for="confirmPassword">
+                                        <i class="fas fa-lock me-2"></i>Confirm Password
+                                    </label>
+                                    <div class="invalid-feedback" id="passwordMatchError">
+                                        Passwords do not match.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @if (isAdmin)
+                        {
+                            <div class="mb-4">
+                                <div class="form-floating">
+                                    <select name="Role" class="form-control" id="role">
+                                        <option value="User">User</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                    <label for="role">
+                                        <i class="fas fa-user-tag me-2"></i>Role
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" name="Role" value="User" />
+                        }
+                        
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>
+                                @(isAdmin ? "Create Account" : "Register Now")
+                            </button>
+                        </div>
+                        
+                        @if (!isAdmin)
+                        {
+                            <div class="text-center mt-4">
+                                <p class="text-muted">Already have an account? 
+                                    <a asp-action="Login" class="text-decoration-none">Login here</a>
+                                </p>
+                            </div>
+                        }
+                    </form>
+                </div>
+                
+                @if(ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger mx-4 mb-4" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
+                    </div>
+                }
+            </div>
+            
+            @if (!isAdmin)
+            {
+                <div class="card mt-4 shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">
+                            <i class="fas fa-shield-alt me-2"></i>Secure Registration
+                        </h5>
+                        <p class="card-text text-muted small">
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                            Your information is encrypted and secure
+                            <br>
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                            We never share your personal information
+                        </p>
+                    </div>
+                </div>
+            }
         </div>
-    }
-    else
-    {
-        @* Hidden field ensures all public registrations are for "User" role. *@
-        <input type="hidden" name="Role" value="User" />
-    }
-
-    <button type="submit" class="btn btn-primary">Register</button>
-</form>
-
-@if(ViewBag.Error != null)
-{
-    <div class="alert alert-danger mt-3">
-        @ViewBag.Error
     </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Toggle password visibility
+            $('#showPassword').change(function() {
+                var passwordInput = $('#password');
+                var confirmInput = $('#confirmPassword');
+                if ($(this).is(':checked')) {
+                    passwordInput.attr('type', 'text');
+                    confirmInput.attr('type', 'text');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    confirmInput.attr('type', 'password');
+                }
+            });
+            
+            // Password match validation
+            function validatePasswordMatch() {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirmPassword').val();
+                var errorDiv = $('#passwordMatchError');
+                
+                if (password !== confirmPassword) {
+                    $('#confirmPassword').addClass('is-invalid');
+                    errorDiv.show();
+                    return false;
+                } else {
+                    $('#confirmPassword').removeClass('is-invalid');
+                    errorDiv.hide();
+                    return true;
+                }
+            }
+            
+            $('#confirmPassword').on('keyup', validatePasswordMatch);
+            $('#password').on('keyup', validatePasswordMatch);
+            
+            // Mobile number formatting
+            $('#mobileNumber').on('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            });
+            
+            // Form validation
+            $('#registerForm').submit(function(e) {
+                e.preventDefault();
+                
+                if (!this.checkValidity()) {
+                    e.stopPropagation();
+                    $(this).addClass('was-validated');
+                    return false;
+                }
+                
+                if (!validatePasswordMatch()) {
+                    return false;
+                }
+                
+                this.submit();
+            });
+            
+            // Real-time validation
+            $('input').on('blur', function() {
+                $(this).addClass('touched');
+                if ($(this).is(':invalid')) {
+                    $(this).addClass('is-invalid');
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+    
+    <style>
+        .card {
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        
+        .card-header {
+            border-radius: 20px 20px 0 0 !important;
+        }
+        
+        .form-floating {
+            position: relative;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            padding: 16px 12px 4px 12px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .form-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .card-body {
+            background: #f8f9fa;
+        }
+        
+        .touched:invalid {
+            border-color: #dc3545;
+        }
+        
+        .invalid-feedback {
+            display: none;
+        }
+        
+        .was-validated .form-control:invalid ~ .invalid-feedback,
+        .was-validated .form-control:invalid ~ .form-text + .invalid-feedback {
+            display: block;
+        }
+    </style>
 }
+

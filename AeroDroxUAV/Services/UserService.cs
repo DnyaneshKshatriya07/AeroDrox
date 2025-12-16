@@ -12,33 +12,58 @@ namespace AeroDroxUAV.Services
             _userRepository = userRepository;
         }
 
-        public async Task<User?> AuthenticateAsync(string username, string password)
+        public async Task<User?> AuthenticateAsync(string loginId, string password)
         {
-            return await _userRepository.GetByUsernameAndPasswordAsync(username, password);
+            // Try both email and mobile number for login
+            return await _userRepository.GetByEmailOrMobileAndPasswordAsync(loginId, password);
         }
 
         public async Task SeedDefaultUsersAsync()
         {
             if (!await _userRepository.HasUsersAsync())
             {
-                await _userRepository.AddAsync(new User { Username = "admin", Password = "admin123", Role = "Admin" });
-                await _userRepository.AddAsync(new User { Username = "user", Password = "user123", Role = "User" });
+                await _userRepository.AddAsync(new User 
+                { 
+                    Username = "admin",
+                    FullName = "Administrator",
+                    Email = "admin@aerodrox.com",
+                    MobileNumber = "1234567890",
+                    Password = "admin123",
+                    Role = "Admin" 
+                });
                 await _userRepository.SaveChangesAsync();
             }
         }
-        
-        public async Task<bool> CreateUserAsync(string username, string password, string role)
+
+        public async Task<bool> CreateUserAsync(string username, string fullName, string email, string mobileNumber, string password, string role)
         {
-            // Check if the username is unique
-            var existingUser = await _userRepository.GetByUsernameAsync(username); 
-            if (existingUser != null)
+            // Check if username is unique
+            var existingUserByUsername = await _userRepository.GetByUsernameAsync(username);
+            if (existingUserByUsername != null)
             {
-                return false; // User already exists
+                return false;
             }
-            
+
+            // Check if email is unique
+            var existingUserByEmail = await _userRepository.GetByEmailAsync(email);
+            if (existingUserByEmail != null)
+            {
+                return false;
+            }
+
+            // Check if mobile number is unique
+            var existingUserByMobile = await _userRepository.GetByMobileNumberAsync(mobileNumber);
+            if (existingUserByMobile != null)
+            {
+                return false;
+            }
+
             var newUser = new User 
             {
                 Username = username,
+                FullName = fullName,
+                Email = email,
+                MobileNumber = mobileNumber,
                 Password = password,
                 Role = role
             };
@@ -48,25 +73,22 @@ namespace AeroDroxUAV.Services
             return true;
         }
 
-        // NEW: Implementation for getting all users
         public async Task<List<User>> GetAllUsersAsync()
         {
             return await _userRepository.GetAllUsersAsync();
         }
-        
-        // NEW: Implementation for getting a user by ID
+
         public async Task<User?> GetUserByIdAsync(int id)
         {
             return await _userRepository.GetUserByIdAsync(id);
         }
-        
-        // NEW: Implementation for deleting a user
+
         public async Task<bool> DeleteUserAsync(int id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
-                return false; // User not found
+                return false;
             }
 
             await _userRepository.DeleteUserAsync(user);
@@ -74,33 +96,58 @@ namespace AeroDroxUAV.Services
             return true;
         }
 
-        // NEW: Implementation for updating a user
-        public async Task<bool> UpdateUserAsync(User user, string newUsername, string newPassword, string newRole)
+        public async Task<bool> UpdateUserAsync(User user, string newUsername, string newFullName, string newEmail, string newMobileNumber, string newPassword, string newRole)
         {
-            // 1. Handle Username update (check for uniqueness if it changed)
+            // Check username uniqueness if changed
             if (user.Username != newUsername)
             {
                 var existingUser = await _userRepository.GetByUsernameAsync(newUsername);
-                if (existingUser != null)
+                if (existingUser != null && existingUser.Id != user.Id)
                 {
-                    return false; // New username is already taken
+                    return false;
                 }
                 user.Username = newUsername;
             }
 
-            // 2. Handle Password update (only if a new password is provided)
+            // Check email uniqueness if changed
+            if (user.Email != newEmail)
+            {
+                var existingUser = await _userRepository.GetByEmailAsync(newEmail);
+                if (existingUser != null && existingUser.Id != user.Id)
+                {
+                    return false;
+                }
+                user.Email = newEmail;
+            }
+
+            // Check mobile number uniqueness if changed
+            if (user.MobileNumber != newMobileNumber)
+            {
+                var existingUser = await _userRepository.GetByMobileNumberAsync(newMobileNumber);
+                if (existingUser != null && existingUser.Id != user.Id)
+                {
+                    return false;
+                }
+                user.MobileNumber = newMobileNumber;
+            }
+
+            user.FullName = newFullName;
+
             if (!string.IsNullOrEmpty(newPassword))
             {
                 user.Password = newPassword;
             }
 
-            // 3. Handle Role update
             user.Role = newRole;
 
-            // 4. Update in repository and save changes
             await _userRepository.UpdateUserAsync(user);
             await _userRepository.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<User?> GetUserByEmailOrMobileAsync(string emailOrMobile)
+        {
+            return await _userRepository.GetByEmailOrMobileAsync(emailOrMobile);
         }
     }
 }

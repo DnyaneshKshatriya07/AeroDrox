@@ -16,13 +16,39 @@ namespace AeroDroxUAV.Repositories
         public async Task<User?> GetByUsernameAndPasswordAsync(string username, string password)
         {
             return await _context.Users
-                                 .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+                .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
         }
-        
+
+        public async Task<User?> GetByEmailOrMobileAndPasswordAsync(string emailOrMobile, string password)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => 
+                    (u.Email == emailOrMobile || u.MobileNumber == emailOrMobile) 
+                    && u.Password == password);
+        }
+
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await _context.Users
-                                 .FirstOrDefaultAsync(u => u.Username == username);
+                .FirstOrDefaultAsync(u => u.Username == username);
+        }
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User?> GetByMobileNumberAsync(string mobileNumber)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.MobileNumber == mobileNumber);
+        }
+
+        public async Task<User?> GetByEmailOrMobileAsync(string emailOrMobile)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == emailOrMobile || u.MobileNumber == emailOrMobile);
         }
 
         public async Task<bool> HasUsersAsync()
@@ -34,35 +60,34 @@ namespace AeroDroxUAV.Repositories
         {
             await _context.Users.AddAsync(user);
         }
-        
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
         }
 
-        // NEW: Implementation to get all users
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.OrderByDescending(u => u.CreatedAt).ToListAsync();
         }
 
-        // NEW: Implementation for getting a user by ID
         public async Task<User?> GetUserByIdAsync(int id)
         {
             return await _context.Users.FindAsync(id);
         }
-        
-        // NEW: Implementation for deleting a user
+
         public async Task DeleteUserAsync(User user)
         {
             _context.Users.Remove(user);
+            // Add await to make this truly async
+            await Task.CompletedTask;
         }
-        
-        // NEW: Implementation for updating a user
+
         public async Task UpdateUserAsync(User user)
         {
-            // Attach the user and mark it as modified
-            _context.Users.Update(user); 
+            _context.Users.Update(user);
+            // Add await to make this truly async
+            await Task.CompletedTask;
         }
     }
 }

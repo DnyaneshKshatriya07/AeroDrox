@@ -5,52 +5,136 @@
     var roles = new List<string> { "Admin", "User" };
 }
 
-<h2>Edit User: @Model.Username</h2>
-
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.Error
-    </div>
-}
-
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="EditUser" method="post">
-            <input type="hidden" asp-for="Id" />
-
-            <div class="form-group mb-3">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <small class="form-text text-muted">Changing the username requires the new name to be unique.</small>
-            </div>
-
-            <div class="form-group mb-3">
-                <label for="Password" class="control-label">New Password (optional)</label>
-                <input type="password" name="Password" class="form-control" />
-                <small class="form-text text-muted">Leave blank to keep the current password.</small>
-            </div>
-
-            <div class="form-group mb-3">
-                <label for="Role" class="control-label">Role</label>
-                <select name="Role" class="form-control">
-                    @foreach (var role in roles)
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-edit me-2"></i>Edit User: @Model.FullName
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
                     {
-                        <option value="@role" selected="@(Model.Role == role)">@role</option>
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>@ViewBag.Error
+                        </div>
                     }
-                </select>
+
+                    <form asp-action="EditUser" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="Username" class="form-control" />
+                                    <label asp-for="Username" class="control-label"></label>
+                                    <small class="form-text text-muted">
+                                        Changing the username requires the new name to be unique.
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="FullName" class="form-control" />
+                                    <label asp-for="FullName" class="control-label"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="Email" class="form-control" type="email" />
+                                    <label asp-for="Email" class="control-label"></label>
+                                    <small class="form-text text-muted">
+                                        Email must be unique.
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="MobileNumber" class="form-control" pattern="[0-9]{10}" />
+                                    <label asp-for="MobileNumber" class="control-label"></label>
+                                    <small class="form-text text-muted">
+                                        Mobile number must be unique and 10 digits.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="password" name="Password" class="form-control" 
+                                           pattern=".{6,}" title="Minimum 6 characters" />
+                                    <label for="Password" class="control-label">New Password (optional)</label>
+                                    <small class="form-text text-muted">
+                                        Leave blank to keep the current password. Minimum 6 characters.
+                                    </small>
+                                    <div class="mt-2">
+                                        <input type="checkbox" id="showPasswordEdit" class="form-check-input">
+                                        <label for="showPasswordEdit" class="form-check-label small">Show Password</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <select name="Role" class="form-control">
+                                        @foreach (var role in roles)
+                                        {
+                                            <option value="@role" selected="@(Model.Role == role)">@role</option>
+                                        }
+                                    </select>
+                                    <label for="Role" class="control-label">Role</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+                        
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                                <a asp-action="UserManagement" class="btn btn-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                            </div>
+                            <div class="text-muted small">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Created: @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            
-            <hr />
-            
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-                <a asp-action="UserManagement" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            // Toggle password visibility
+            $('#showPasswordEdit').change(function() {
+                var passwordInput = $('input[name="Password"]');
+                if ($(this).is(':checked')) {
+                    passwordInput.attr('type', 'text');
+                } else {
+                    passwordInput.attr('type', 'password');
+                }
+            });
+            
+            // Mobile number formatting
+            $('#MobileNumber').on('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            });
+        });
+    </script>
 }
