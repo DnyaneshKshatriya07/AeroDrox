@@ -3,17 +3,150 @@
     ViewData["Title"] = "Delete Drone";
 }
 
-<h2>Delete Drone</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-danger text-white py-4">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        </div>
+                        <div>
+                            <h1 class="h3 mb-0">Delete Drone</h1>
+                            <p class="mb-0 opacity-75">Confirm deletion of drone</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-5">
+                    <div class="alert alert-warning border-warning">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="fas fa-exclamation-circle fa-2x text-warning"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading">Warning!</h5>
+                                <p class="mb-0">You are about to delete a drone. This action cannot be undone.</p>
+                            </div>
+                        </div>
+                    </div>
 
-<p>Are you sure you want to delete this drone?</p>
+                    <div class="drone-details p-4 mb-4 rounded" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <h4 class="text-center mb-4">
+                            <i class="fas fa-drone text-primary me-2"></i>@Model.Name
+                            <small class="text-muted d-block mt-1">(@Model.Type)</small>
+                        </h4>
+                        
+                        <div class="row text-center">
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3 bg-white rounded shadow-sm">
+                                    <h6 class="text-muted mb-2">
+                                        <i class="fas fa-dollar-sign me-1"></i>Price
+                                    </h6>
+                                    <h4 class="text-success fw-bold">$@Model.Price</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3 bg-white rounded shadow-sm">
+                                    <h6 class="text-muted mb-2">
+                                        <i class="fas fa-info-circle me-1"></i>Status
+                                    </h6>
+                                    <h4>
+                                        <span class="badge bg-primary">Active</span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-align-left me-1"></i>Description
+                            </h6>
+                            <div class="p-3 bg-white rounded shadow-sm">
+                                <p class="mb-0">@Model.Description</p>
+                            </div>
+                        </div>
+                    </div>
 
-<div>
-    <h4>@Model.Name (@Model.Type)</h4>
-    <p>Price: @Model.Price</p>
-    <p>Description: @Model.Description</p>
+                    <form method="post" id="deleteForm">
+                        <div class="text-center">
+                            <h5 class="mb-4 text-danger">
+                                <i class="fas fa-question-circle me-2"></i>
+                                Are you sure you want to delete this drone?
+                            </h5>
+                            
+                            <div class="d-flex justify-content-center gap-3">
+                                <button type="submit" class="btn btn-danger btn-lg px-5">
+                                    <i class="fas fa-trash me-2"></i>Yes, Delete Drone
+                                </button>
+                                <a href="/Drone/Index" class="btn btn-outline-secondary btn-lg px-5">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                            </div>
+                            
+                            <p class="text-muted mt-4 small">
+                                <i class="fas fa-info-circle me-1"></i>
+                                This action will permanently remove the drone from the system.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<form method="post">
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="/Drone/Index" class="btn btn-secondary">Cancel</a>
-</form>
+<style>
+    .card {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+    
+    .card-header {
+        border-radius: 20px 20px 0 0 !important;
+    }
+    
+    .bg-danger {
+        background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    }
+    
+    .alert-warning {
+        border-radius: 12px;
+        border-left: 5px solid #ffc107;
+    }
+    
+    .drone-details {
+        border: 2px dashed #dee2e6;
+    }
+    
+    .btn-danger {
+        background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+    }
+    
+    .btn-outline-secondary {
+        border-radius: 12px;
+        padding: 12px 30px;
+        border-width: 2px;
+    }
+    
+    .badge {
+        font-size: 0.9rem;
+        padding: 0.5em 1em;
+        border-radius: 50px;
+    }
+    
+    .shadow-sm {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    }
+</style>

@@ -1,27 +1,246 @@
 @model AeroDroxUAV.Models.Drone
 @{
-    ViewData["Title"] = "Add Drone";
+    ViewData["Title"] = "Add New Drone";
 }
 
-<h2>Add New Drone</h2>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-gradient-primary text-white py-4">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-drone fa-2x"></i>
+                        </div>
+                        <div>
+                            <h1 class="h3 mb-0">Add New Drone</h1>
+                            <p class="mb-0 opacity-75">Enter the drone details below</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-5">
+                    <form method="post" id="droneForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-floating">
+                                    <input type="text" name="Name" class="form-control" 
+                                           id="name" placeholder="Enter drone name" required />
+                                    <label for="name">
+                                        <i class="fas fa-signature me-2"></i>Drone Name
+                                    </label>
+                                    <div class="form-text">
+                                        Enter the model or brand name
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="form-floating">
+                                    <input type="text" name="Type" class="form-control" 
+                                           id="type" placeholder="Enter drone type" required />
+                                    <label for="type">
+                                        <i class="fas fa-tag me-2"></i>Type
+                                    </label>
+                                    <div class="form-text">
+                                        e.g., Camera Drone, Racing Drone, etc.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-<form method="post">
-    <div class="mb-3">
-        <label>Name</label>
-        <input type="text" name="Name" class="form-control" required />
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-floating">
+                                    <input type="number" name="Price" step="0.01" 
+                                           class="form-control" id="price" 
+                                           placeholder="Enter price" required />
+                                    <label for="price">
+                                        <i class="fas fa-dollar-sign me-2"></i>Price
+                                    </label>
+                                    <div class="form-text">
+                                        Enter price in USD
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="form-floating">
+                                    <select class="form-select" name="Category" id="category">
+                                        <option value="">Select Category</option>
+                                        <option value="Consumer">Consumer</option>
+                                        <option value="Professional">Professional</option>
+                                        <option value="Enterprise">Enterprise</option>
+                                        <option value="Racing">Racing</option>
+                                    </select>
+                                    <label for="category">
+                                        <i class="fas fa-layer-group me-2"></i>Category
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                <textarea name="Description" class="form-control" 
+                                          id="description" placeholder="Enter description"
+                                          style="height: 150px;"></textarea>
+                                <label for="description">
+                                    <i class="fas fa-align-left me-2"></i>Description
+                                </label>
+                                <div class="form-text">
+                                    Add detailed specifications and features
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-floating">
+                                    <input type="text" name="BatteryLife" class="form-control" 
+                                           id="battery" placeholder="Battery life" />
+                                    <label for="battery">
+                                        <i class="fas fa-battery-full me-2"></i>Battery Life
+                                    </label>
+                                    <div class="form-text">
+                                        e.g., 30 minutes
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="form-floating">
+                                    <input type="number" name="Range" class="form-control" 
+                                           id="range" placeholder="Flight range" />
+                                    <label for="range">
+                                        <i class="fas fa-satellite-dish me-2"></i>Range (meters)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-5">
+                            <div>
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-save me-2"></i>Add Drone
+                                </button>
+                            </div>
+                            <div>
+                                <a href="/Drone/Index" class="btn btn-outline-secondary btn-lg">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label>Type</label>
-        <input type="text" name="Type" class="form-control" required />
-    </div>
-    <div class="mb-3">
-        <label>Price</label>
-        <input type="number" name="Price" step="0.01" class="form-control" required />
-    </div>
-    <div class="mb-3">
-        <label>Description</label>
-        <textarea name="Description" class="form-control"></textarea>
-    </div>
-    <button type="submit" class="btn btn-success">Add Drone</button>
-    <a href="/Drone/Index" class="btn btn-secondary">Cancel</a>
-</form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Form validation
+            $('#droneForm').submit(function(e) {
+                e.preventDefault();
+                
+                var isValid = true;
+                $(this).find('[required]').each(function() {
+                    if ($(this).val() === '') {
+                        $(this).addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+                
+                if (isValid) {
+                    this.submit();
+                }
+            });
+            
+            // Real-time validation
+            $('input[required], textarea[required]').on('blur', function() {
+                if ($(this).val() === '') {
+                    $(this).addClass('is-invalid');
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+            
+            // Price formatting
+            $('#price').on('blur', function() {
+                var value = parseFloat($(this).val());
+                if (!isNaN(value)) {
+                    $(this).val(value.toFixed(2));
+                }
+            });
+        });
+    </script>
+    
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card {
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            border-radius: 20px 20px 0 0 !important;
+        }
+        
+        .form-floating {
+            position: relative;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            padding: 16px 12px 4px 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline-secondary {
+            border-radius: 12px;
+            padding: 12px 30px;
+            border-width: 2px;
+        }
+        
+        .form-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        label {
+            font-weight: 500;
+        }
+    </style>
+}
