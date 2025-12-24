@@ -10,11 +10,12 @@ namespace AeroDroxUAV.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "Contact Us";
+            ViewBag.IsLoggedIn = !string.IsNullOrEmpty(HttpContext.Session.GetString("Username"));
+            ViewBag.Role = HttpContext.Session.GetString("Role") ?? "";
             return View();
         }
 
         // POST: /Contact/Submit
-        // Dummy implementation for form submission
         [HttpPost]
         public IActionResult Submit(string name, string email, string message)
         {
@@ -25,6 +26,8 @@ namespace AeroDroxUAV.Controllers
 
             ViewBag.SuccessMessage = "Thank you for contacting us! We will get back to you shortly.";
             ViewData["Title"] = "Contact Us";
+            ViewBag.IsLoggedIn = !string.IsNullOrEmpty(HttpContext.Session.GetString("Username"));
+            ViewBag.Role = HttpContext.Session.GetString("Role") ?? "";
             return View("Index");
         }
     }

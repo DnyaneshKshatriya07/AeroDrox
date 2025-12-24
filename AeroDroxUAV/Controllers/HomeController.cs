@@ -5,7 +5,6 @@ using AeroDroxUAV.Services;
 using Microsoft.AspNetCore.Http;
 
 namespace AeroDroxUAV.Controllers;
-
 [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public class HomeController : Controller
 {
@@ -47,8 +46,8 @@ public class HomeController : Controller
         ViewBag.NewAccessories = newAccessories;
         ViewBag.TotalDrones = allDrones.Count();
         ViewBag.TotalAccessories = allAccessories.Count();
-        ViewBag.FeaturedServices = await _droneServicesService.GetFeaturedDroneServicesAsync();
         ViewBag.IsLoggedIn = IsLoggedIn();
+        ViewBag.Role = HttpContext.Session.GetString("Role") ?? "";
         
         return View(); 
     }

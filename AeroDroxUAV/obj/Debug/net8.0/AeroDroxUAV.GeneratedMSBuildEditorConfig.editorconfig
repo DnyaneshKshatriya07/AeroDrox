@@ -30,6 +30,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjZXNzb3JpZXMvRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/workspaces/ASPNET_Projects/AeroDroxUAV/Views/Accessories/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjZXNzb3JpZXMvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/workspaces/ASPNET_Projects/AeroDroxUAV/Views/Accessories/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjZXNzb3JpZXMvRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -44,6 +48,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/workspaces/ASPNET_Projects/AeroDroxUAV/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspaces/ASPNET_Projects/AeroDroxUAV/Views/Account/MyProfile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9NeVByb2ZpbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspaces/ASPNET_Projects/AeroDroxUAV/Views/Account/Register.cshtml]
@@ -68,6 +76,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/workspaces/ASPNET_Projects/AeroDroxUAV/Views/Drone/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRHJvbmUvRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspaces/ASPNET_Projects/AeroDroxUAV/Views/Drone/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRHJvbmUvRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspaces/ASPNET_Projects/AeroDroxUAV/Views/Drone/Edit.cshtml]

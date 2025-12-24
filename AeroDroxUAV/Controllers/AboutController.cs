@@ -10,6 +10,8 @@ namespace AeroDroxUAV.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "About Us";
+            ViewBag.IsLoggedIn = !string.IsNullOrEmpty(HttpContext.Session.GetString("Username"));
+            ViewBag.Role = HttpContext.Session.GetString("Role") ?? "";
             // Example data to pass to the view
             ViewBag.YearFounded = 2020; 
             ViewBag.Mission = "To provide cutting-edge, reliable, and sustainable UAV solutions for industrial and recreational use.";

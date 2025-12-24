@@ -2,11 +2,12 @@
 
 @{
     ViewData["Title"] = @Model.Name;
+    var isLoggedIn = !string.IsNullOrEmpty(Context.Session.GetString("Username"));
 }
 
 <div class="container py-5">
     <div class="row">
-        <!-- Service Details -->
+        <!-- Service Details Card -->
         <div class="col-lg-8">
             <div class="card shadow border-0 mb-4">
                 <div class="card-header bg-gradient-primary text-white py-4">
@@ -19,24 +20,15 @@
                             <p class="mb-0 opacity-75">Professional Drone Service</p>
                         </div>
                         <div>
+                            <!-- Removed Price badge since DroneServices doesn't have Price property -->
                             <span class="badge bg-light text-dark fs-6 px-3 py-2">
-                                $@Model.PricePerAcre <small class="text-muted">/acre</small>
+                                Contact for Quote
                             </span>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Service Image -->
-                @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                {
-                    <div class="card-img-top" style="height: 400px; overflow: hidden;">
-                        <img src="@Model.ImageUrl" class="img-fluid w-100 h-100" 
-                             style="object-fit: cover;" alt="@Model.Name">
-                    </div>
-                }
-                
                 <div class="card-body p-5">
-                    <!-- Service Type and Category -->
+                    <!-- Service Type -->
                     <div class="row mb-5">
                         <div class="col-md-6">
                             <div class="d-flex align-items-center mb-3">
@@ -54,13 +46,11 @@
                         <div class="col-md-6">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="bg-success text-white rounded-circle p-3 me-3">
-                                    <i class="fas fa-layer-group fa-lg"></i>
+                                    <i class="fas fa-clock fa-lg"></i>
                                 </div>
                                 <div>
-                                    <p class="text-muted mb-0">Category</p>
-                                    <h5 class="mb-0">
-                                        <span class="badge bg-success">@Model.Category</span>
-                                    </h5>
+                                    <p class="text-muted mb-0">Average Duration</p>
+                                    <h5 class="mb-0">2-4 Hours</h5>
                                 </div>
                             </div>
                         </div>
@@ -76,40 +66,74 @@
                         </div>
                     </div>
 
-                    <!-- Service Benefits -->
-                    @if(!string.IsNullOrEmpty(Model.Benefits))
-                    {
-                        <div class="mb-5">
-                            <h4 class="mb-4">
-                                <i class="fas fa-star me-2 text-warning"></i>Service Benefits
-                            </h4>
-                            <div class="row">
-                                @{
-                                    var benefits = Model.Benefits.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                                    foreach(var benefit in benefits)
-                                    {
-                                        <div class="col-md-6 mb-3">
-                                            <div class="d-flex">
-                                                <div class="me-3">
-                                                    <i class="fas fa-check-circle text-success"></i>
-                                                </div>
-                                                <div>
-                                                    <h6>@benefit.Trim()</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                }
+                    <!-- Service Features -->
+                    <div class="mb-5">
+                        <h4 class="mb-4">
+                            <i class="fas fa-star me-2 text-warning"></i>Service Features
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Professional Equipment</h6>
+                                        <p class="text-muted small mb-0">High-quality drone equipment used</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Certified Operators</h6>
+                                        <p class="text-muted small mb-0">FAA certified drone pilots</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Quick Turnaround</h6>
+                                        <p class="text-muted small mb-0">Fast service delivery</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Quality Guarantee</h6>
+                                        <p class="text-muted small mb-0">100% satisfaction guaranteed</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    }
+                    </div>
 
                     <!-- Action Buttons -->
                     <div class="text-center mt-5">
                         <div class="d-flex justify-content-center gap-3">
-                            <a asp-controller="Contact" asp-action="Index" class="btn btn-primary btn-lg px-5">
-                                <i class="fas fa-calendar-check me-2"></i>Book This Service
-                            </a>
+                            @if(isLoggedIn)
+                            {
+                                <a asp-controller="Contact" asp-action="Index" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-calendar-check me-2"></i>Book This Service
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Account" asp-action="BookService" asp-route-serviceId="@Model.Id" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-calendar-check me-2"></i>Book This Service
+                                </a>
+                            }
                             <a asp-controller="DroneServices" asp-action="Index" class="btn btn-outline-secondary btn-lg">
                                 <i class="fas fa-arrow-left me-2"></i>Back to Services
                             </a>
@@ -140,41 +164,31 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3">
                             <div>
                                 <i class="fas fa-tag me-2 text-muted"></i>
-                                <span class="fw-semibold">Type</span>
+                                <span class="fw-semibold">Category</span>
                             </div>
                             <span class="badge bg-primary">@Model.Type</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3">
                             <div>
-                                <i class="fas fa-layer-group me-2 text-muted"></i>
-                                <span class="fw-semibold">Category</span>
-                            </div>
-                            <span class="badge bg-success">@Model.Category</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3">
-                            <div>
                                 <i class="fas fa-dollar-sign me-2 text-muted"></i>
-                                <span class="fw-semibold">Price Per Acre</span>
+                                <span class="fw-semibold">Price</span>
                             </div>
-                            <span class="fw-bold text-success">
-                                $@Model.PricePerAcre
-                            </span>
+                            <!-- Changed to show "Contact for Quote" since no Price property -->
+                            <span class="fw-bold text-warning">Contact for Quote</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3">
                             <div>
-                                <i class="fas fa-toggle-on me-2 text-muted"></i>
-                                <span class="fw-semibold">Status</span>
+                                <i class="fas fa-clock me-2 text-muted"></i>
+                                <span class="fw-semibold">Duration</span>
                             </div>
-                            <span class="badge @(Model.IsActive ? "bg-success" : "bg-secondary")">
-                                @(Model.IsActive ? "Active" : "Inactive")
-                            </span>
+                            <span>2-4 Hours</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3">
                             <div>
                                 <i class="fas fa-calendar me-2 text-muted"></i>
-                                <span class="fw-semibold">Created</span>
+                                <span class="fw-semibold">Availability</span>
                             </div>
-                            <small class="text-muted">@Model.CreatedAt.ToString("MMM dd, yyyy")</small>
+                            <span class="badge bg-success">Available</span>
                         </li>
                     </ul>
                 </div>
@@ -222,12 +236,6 @@
                             <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
                                 <i class="fas fa-trash me-2"></i>Delete Service
                             </a>
-                            <form method="post" action="/DroneServices/ToggleStatus/@Model.Id">
-                                <button type="submit" class="btn @(Model.IsActive ? "btn-outline-warning" : "btn-outline-success") w-100">
-                                    <i class="fas @(Model.IsActive ? "fa-eye-slash" : "fa-eye") me-2"></i>
-                                    @(Model.IsActive ? "Deactivate" : "Activate") Service
-                                </button>
-                            </form>
                         </div>
                     </div>
                 </div>

@@ -65,7 +65,8 @@ namespace AeroDroxUAV.Services
                 Email = email,
                 MobileNumber = mobileNumber,
                 Password = password,
-                Role = role
+                Role = role,
+                CreatedAt = DateTime.UtcNow
             };
 
             await _userRepository.AddAsync(newUser);
@@ -141,13 +142,77 @@ namespace AeroDroxUAV.Services
             user.Role = newRole;
 
             await _userRepository.UpdateUserAsync(user);
-            await _userRepository.SaveChangesAsync();
             return true;
         }
 
         public async Task<User?> GetUserByEmailOrMobileAsync(string emailOrMobile)
         {
             return await _userRepository.GetByEmailOrMobileAsync(emailOrMobile);
+        }
+
+        // Fixed method - now uses the repository method correctly
+        public async Task<bool> UpdateProfileAsync(int userId, string fullName, string email, string mobileNumber, 
+                                                   string? address, string? city, string? state, string? pinCode, 
+                                                   DateTime? dateOfBirth, string? gender, string? profilePicture)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Check email uniqueness if changed
+            if (user.Email != email)
+            {
+                var existingUser = await _userRepository.GetByEmailAsync(email);
+                if (existingUser != null && existingUser.Id != user.Id)
+                {
+                    return false;
+                }
+                user.Email = email;
+            }
+
+            // Check mobile number uniqueness if changed
+            if (user.MobileNumber != mobileNumber)
+            {
+                var existingUser = await _userRepository.GetByMobileNumberAsync(mobileNumber);
+                if (existingUser != null && existingUser.Id != user.Id)
+                {
+                    return false;
+                }
+                user.MobileNumber = mobileNumber;
+            }
+
+            // Update profile fields
+            user.FullName = fullName;
+            user.Address = address;
+            user.City = city;
+            user.State = state;
+            user.PinCode = pinCode;
+            user.DateOfBirth = dateOfBirth;
+            user.Gender = gender;
+            
+            if (!string.IsNullOrEmpty(profilePicture))
+            {
+                user.ProfilePicture = profilePicture;
+            }
+
+            await _userRepository.UpdateProfileAsync(user);
+            return true;
+        }
+
+        // New method for updating password only
+        public async Task<bool> UpdatePasswordAsync(int userId, string currentPassword, string newPassword)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null || user.Password != currentPassword)
+            {
+                return false;
+            }
+
+            user.Password = newPassword;
+            await _userRepository.UpdateUserAsync(user);
+            return true;
         }
     }
 }

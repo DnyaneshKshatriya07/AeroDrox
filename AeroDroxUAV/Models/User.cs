@@ -11,5 +11,14 @@ namespace AeroDroxUAV.Models
         public required string Role { get; set; } // "Admin" or "User"
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastLoginAt { get; set; }
+        
+        // New Profile Fields
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? PinCode { get; set; }
+        public string? ProfilePicture { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? Gender { get; set; }
     }
 }

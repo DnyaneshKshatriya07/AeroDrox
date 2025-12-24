@@ -79,15 +79,36 @@ namespace AeroDroxUAV.Repositories
         public async Task DeleteUserAsync(User user)
         {
             _context.Users.Remove(user);
-            // Add await to make this truly async
-            await Task.CompletedTask;
+            await _context.SaveChangesAsync(); // Add await here
         }
 
         public async Task UpdateUserAsync(User user)
         {
             _context.Users.Update(user);
-            // Add await to make this truly async
-            await Task.CompletedTask;
+            await _context.SaveChangesAsync(); // Add await here
+        }
+
+        // Updated method to properly update profile
+        public async Task UpdateProfileAsync(User user)
+        {
+            var existingUser = await _context.Users.FindAsync(user.Id);
+            if (existingUser != null)
+            {
+                // Update only profile fields
+                existingUser.FullName = user.FullName;
+                existingUser.Email = user.Email;
+                existingUser.MobileNumber = user.MobileNumber;
+                existingUser.Address = user.Address;
+                existingUser.City = user.City;
+                existingUser.State = user.State;
+                existingUser.PinCode = user.PinCode;
+                existingUser.DateOfBirth = user.DateOfBirth;
+                existingUser.Gender = user.Gender;
+                existingUser.ProfilePicture = user.ProfilePicture;
+                
+                _context.Users.Update(existingUser);
+                await _context.SaveChangesAsync(); // Add await here
+            }
         }
     }
 }

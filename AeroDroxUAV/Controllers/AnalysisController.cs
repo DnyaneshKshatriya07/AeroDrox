@@ -18,6 +18,13 @@ public class AnalysisController : Controller
 
     public IActionResult Index()
     {
+        // Analytics dashboard should still require login
+        if (!IsLoggedIn()) return RedirectToAction("Login", "Account");
+        
+        // And should be admin-only
+        if (HttpContext.Session.GetString("Role") != "Admin")
+            return RedirectToAction("Index", "Home");
+            
         return View(); 
     }
 

@@ -17,5 +17,8 @@ namespace AeroDroxUAV.Repositories
         Task DeleteUserAsync(User user);
         Task UpdateUserAsync(User user);
         Task<User?> GetByEmailOrMobileAsync(string emailOrMobile);
+        
+        // Add this method
+        Task UpdateProfileAsync(User user);
     }
 }

@@ -79,83 +79,80 @@
             <!-- Navigation Links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    @if (isLoggedIn)
+                    <!-- Home -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Products -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2" asp-controller="Drone" asp-action="Index">
+                            <i class="bi bi-drone"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Services Dropdown -->
+                    @await Component.InvokeAsync("ServicesNavigation")
+                    
+                    <!-- Accessories -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2" asp-controller="Accessories" asp-action="Index">
+                            <i class="bi bi-tools"></i>
+                            <span>Accessories</span>
+                        </a>
+                    </li>
+                    
+                    <!-- Admin Links -->
+                    @if (isAdmin)
                     {
-                        <!-- Home -->
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door"></i>
-                                <span>Home</span>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-warning" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-shield-check"></i>
+                                <span>Admin</span>
                             </a>
-                        </li>
-                        
-                        <!-- Products -->
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" asp-controller="Drone" asp-action="Index">
-                                <i class="bi bi-drone"></i>
-                                <span>Products</span>
-                            </a>
-                        </li>
-                        
-                        <!-- Services Dropdown -->
-                        @await Component.InvokeAsync("ServicesNavigation")
-                        
-                        <!-- Accessories -->
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" asp-controller="Accessories" asp-action="Index">
-                                <i class="bi bi-tools"></i>
-                                <span>Accessories</span>
-                            </a>
-                        </li>
-                        
-                        <!-- Admin Links -->
-                        @if (isAdmin)
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-warning" href="#" role="button" data-bs-toggle="dropdown">
-                                    <i class="bi bi-shield-check"></i>
-                                    <span>Admin</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-dark border-0 shadow-lg">
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center gap-2 py-3" asp-controller="Analysis" asp-action="Index">
-                                            <i class="bi bi-graph-up"></i>
-                                            <span>Analytics Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center gap-2 py-3" asp-controller="Account" asp-action="UserManagement">
-                                            <i class="bi bi-people"></i>
-                                            <span>User Management</span>
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center gap-2 py-3" href="#">
-                                            <i class="bi bi-gear"></i>
-                                            <span>System Settings</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-                        
-                        <!-- Contact -->
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" asp-controller="Contact" asp-action="Index">
-                                <i class="bi bi-chat-dots"></i>
-                                <span>Contact</span>
-                            </a>
-                        </li>
-                        
-                        <!-- About -->
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" asp-controller="About" asp-action="Index">
-                                <i class="bi bi-info-circle"></i>
-                                <span>About</span>
-                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark border-0 shadow-lg">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-3" asp-controller="Analysis" asp-action="Index">
+                                        <i class="bi bi-graph-up"></i>
+                                        <span>Analytics Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-3" asp-controller="Account" asp-action="UserManagement">
+                                        <i class="bi bi-people"></i>
+                                        <span>User Management</span>
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-3" href="#">
+                                        <i class="bi bi-gear"></i>
+                                        <span>System Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     }
+                    
+                    <!-- Contact -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2" asp-controller="Contact" asp-action="Index">
+                            <i class="bi bi-chat-dots"></i>
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                    
+                    <!-- About -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2" asp-controller="About" asp-action="Index">
+                            <i class="bi bi-info-circle"></i>
+                            <span>About</span>
+                        </a>
+                    </li>
                 </ul>
                 
                 <!-- User Section -->

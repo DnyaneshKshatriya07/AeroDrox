@@ -1,48 +1,259 @@
-/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+/* _Layout.cshtml.css */
+/* Modern UI Styles for AeroDroxUAV with Grey Navbar */
 
-a.navbar-brand[b-j1rc08fr5l] {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+/* Global Styles */
+:root[b-j1rc08fr5l] {
+    --primary-color: #0d6efd;
+    --primary-dark: #0b5ed7;
+    --primary-light: #cfe2ff;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --dark-color: #212529;
+    --light-color: #f8f9fa;
+    --grey-navbar: linear-gradient(135deg, #495057, #6c757d);
+    --gradient-primary: linear-gradient(135deg, #0d6efd, #0b5ed7);
+    --gradient-dark: linear-gradient(135deg, #212529, #343a40);
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    --transition: all 0.3s ease;
 }
 
-a[b-j1rc08fr5l] {
-  color: #0077cc;
+*[b-j1rc08fr5l] {
+    transition: var(--transition);
+}
+
+body[b-j1rc08fr5l] {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Grey Navbar Styles */
+.navbar[b-j1rc08fr5l] {
+    background: var(--grey-navbar) !important;
+    box-shadow: var(--shadow-lg);
+    padding: 0.75rem 0;
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.navbar-brand[b-j1rc08fr5l] {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white !important;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    position: relative;
+}
+
+.navbar-brand[b-j1rc08fr5l]::after {
+    content: '✈';
+    margin-left: 8px;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    display: inline-block;
+    animation: float-b-j1rc08fr5l 3s ease-in-out infinite;
+}
+
+.navbar-nav .nav-item[b-j1rc08fr5l] {
+    margin: 0 0.25rem;
+}
+
+.navbar-nav .nav-link[b-j1rc08fr5l] {
+    color: #fff !important;
+    font-weight: 500;
+    padding: 0.75rem 1.25rem !important;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar-nav .nav-link[b-j1rc08fr5l]::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover[b-j1rc08fr5l]::before {
+    width: 80%;
+}
+
+.navbar-nav .nav-link:hover[b-j1rc08fr5l] {
+    background: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link.active[b-j1rc08fr5l] {
+    background: rgba(13, 110, 253, 0.2) !important;
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Login/User Info Section */
+.navbar-text[b-j1rc08fr5l] {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.navbar-text .text-info[b-j1rc08fr5l] {
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+}
+
+/* Buttons */
+.btn-outline-light[b-j1rc08fr5l] {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-outline-light:hover[b-j1rc08fr5l] {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
 }
 
 .btn-primary[b-j1rc08fr5l] {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
 }
 
-.nav-pills .nav-link.active[b-j1rc08fr5l], .nav-pills .show > .nav-link[b-j1rc08fr5l] {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.btn-primary:hover[b-j1rc08fr5l] {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, #0b5ed7, #0a58ca);
 }
 
-.border-top[b-j1rc08fr5l] {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom[b-j1rc08fr5l] {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow[b-j1rc08fr5l] {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy[b-j1rc08fr5l] {
-  font-size: 1rem;
-  line-height: inherit;
+/* Container */
+.container[b-j1rc08fr5l] {
+    max-width: 1400px;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    margin-top: 2rem !important;
+    margin-bottom: 2rem;
+    flex-grow: 1;
 }
 
-.footer[b-j1rc08fr5l] {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+/* Footer */
+footer[b-j1rc08fr5l] {
+    background: var(--gradient-dark) !important;
+    color: white;
+    padding: 2rem 0 !important;
+    margin-top: auto;
+    border-top: 3px solid var(--primary-color);
+    position: relative;
+}
+
+footer[b-j1rc08fr5l]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+}
+
+/* Animation */
+@keyframes float-b-j1rc08fr5l {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-nav .nav-link[b-j1rc08fr5l] {
+        padding: 0.75rem 1rem !important;
+        text-align: center;
+    }
+    
+    .container[b-j1rc08fr5l] {
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1rem;
+    }
+    
+    .navbar-brand[b-j1rc08fr5l] {
+        font-size: 1.5rem;
+    }
+}
+
+/* Card Styles */
+.card[b-j1rc08fr5l] {
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.card:hover[b-j1rc08fr5l] {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-5px);
+}
+
+/* Form Controls */
+.form-control[b-j1rc08fr5l] {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: var(--transition);
+}
+
+.form-control:focus[b-j1rc08fr5l] {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Alert Styles */
+.alert[b-j1rc08fr5l] {
+    border: none;
+    border-radius: 10px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Custom Scrollbar */
+[b-j1rc08fr5l]::-webkit-scrollbar {
+    width: 10px;
+}
+
+[b-j1rc08fr5l]::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+[b-j1rc08fr5l]::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+[b-j1rc08fr5l]::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
 }

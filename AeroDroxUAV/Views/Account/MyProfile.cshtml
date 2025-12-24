@@ -1,0 +1,525 @@
+@model AeroDroxUAV.Models.User
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Column - Profile Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-circle me-2"></i>Profile Overview
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    <!-- Profile Picture -->
+                    <div class="mb-4">
+                        <div class="position-relative d-inline-block">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+                            {
+                                <img src="@Model.ProfilePicture" class="rounded-circle shadow" 
+                                     style="width: 150px; height: 150px; object-fit: cover;" 
+                                     alt="Profile Picture">
+                            }
+                            else
+                            {
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                     style="width: 150px; height: 150px;">
+                                    <i class="fas fa-user text-white" style="font-size: 4rem;"></i>
+                                </div>
+                            }
+                            <!-- Upload Button -->
+                            <button class="btn btn-sm btn-outline-primary position-absolute bottom-0 end-0 rounded-circle" 
+                                    style="width: 40px; height: 40px;"
+                                    data-bs-toggle="modal" data-bs-target="#profilePictureModal">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- User Info -->
+                    <h5 class="mb-2">@Model.FullName</h5>
+                    <p class="text-muted mb-1">
+                        <i class="fas fa-user-tag me-2"></i>@Model.Role
+                    </p>
+                    <p class="text-muted mb-1">
+                        <i class="fas fa-at me-2"></i>@Model.Username
+                    </p>
+                    <p class="text-muted mb-3">
+                        <i class="fas fa-calendar-plus me-2"></i>
+                        Member since @Model.CreatedAt.ToString("MMMM yyyy")
+                    </p>
+                    
+                    <!-- Stats -->
+                    <div class="row text-center mt-4">
+                        <div class="col-6 border-end">
+                            <h6 class="text-muted">Last Login</h6>
+                            <p class="fw-bold">
+                                @if (Model.LastLoginAt.HasValue)
+                                {
+                                    @Model.LastLoginAt.Value.ToString("MMM dd, yyyy")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Never</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="text-muted">Account ID</h6>
+                            <p class="fw-bold">#@Model.Id.ToString("D4")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Change Password Card -->
+            <div class="card shadow-lg border-0 mt-4">
+                <div class="card-header bg-warning text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdatePassword" method="post" id="passwordForm">
+                        @if (TempData["PasswordError"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>@TempData["PasswordError"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Current Password</label>
+                            <div class="input-group">
+                                <input type="password" name="CurrentPassword" class="form-control" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <div class="input-group">
+                                <input type="password" name="NewPassword" class="form-control" 
+                                       pattern=".{6,}" title="Minimum 6 characters" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">Minimum 6 characters</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Confirm New Password</label>
+                            <div class="input-group">
+                                <input type="password" name="ConfirmPassword" class="form-control" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-warning w-100">
+                            <i class="fas fa-sync-alt me-2"></i>Update Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Profile Edit Form -->
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Edit Profile
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>@TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-action="MyProfile" method="post">
+                        <div class="row">
+                            <!-- Personal Information -->
+                            <div class="col-12 mb-4">
+                                <h5 class="border-bottom pb-2">
+                                    <i class="fas fa-user me-2"></i>Personal Information
+                                </h5>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Full Name *</label>
+                                <input type="text" name="FullName" class="form-control" 
+                                       value="@Model.FullName" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" name="Email" class="form-control" 
+                                       value="@Model.Email" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Mobile Number *</label>
+                                <input type="tel" name="MobileNumber" class="form-control" 
+                                       value="@Model.MobileNumber" pattern="[0-9]{10}" required>
+                                <small class="text-muted">10-digit number only</small>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Gender</label>
+                                <select name="Gender" class="form-select">
+                                    <option value="">Select Gender</option>
+                                    <option value="Male" selected="@(Model.Gender == "Male")">Male</option>
+                                    <option value="Female" selected="@(Model.Gender == "Female")">Female</option>
+                                    <option value="Other" selected="@(Model.Gender == "Other")">Other</option>
+                                    <option value="Prefer not to say" selected="@(Model.Gender == "Prefer not to say")">Prefer not to say</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" name="DateOfBirth" class="form-control" 
+                                       value="@(Model.DateOfBirth?.ToString("yyyy-MM-dd"))">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-control" value="@Model.Username" readonly>
+                                <small class="text-muted">Username cannot be changed</small>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <!-- Address Information -->
+                            <div class="col-12 mb-4">
+                                <h5 class="border-bottom pb-2">
+                                    <i class="fas fa-home me-2"></i>Address Information
+                                </h5>
+                            </div>
+                            
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Address</label>
+                                <textarea name="Address" class="form-control" rows="3">@Model.Address</textarea>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">City</label>
+                                <input type="text" name="City" class="form-control" value="@Model.City">
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">State</label>
+                                <input type="text" name="State" class="form-control" value="@Model.State">
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Pin Code</label>
+                                <input type="text" name="PinCode" class="form-control" 
+                                       value="@Model.PinCode" pattern="[0-9]{6}" 
+                                       title="6-digit pin code">
+                                <small class="text-muted">6-digit number only</small>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-success px-4">
+                                        <i class="fas fa-save me-2"></i>Save Changes
+                                    </button>
+                                    <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Profile Completion -->
+            <div class="card shadow-lg border-0 mt-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Profile Completion
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @{
+                        var profileFields = new List<bool>
+                        {
+                            !string.IsNullOrEmpty(Model.FullName),
+                            !string.IsNullOrEmpty(Model.Email),
+                            !string.IsNullOrEmpty(Model.MobileNumber),
+                            !string.IsNullOrEmpty(Model.Address),
+                            !string.IsNullOrEmpty(Model.City),
+                            !string.IsNullOrEmpty(Model.State),
+                            !string.IsNullOrEmpty(Model.PinCode),
+                            !string.IsNullOrEmpty(Model.Gender),
+                            Model.DateOfBirth.HasValue,
+                            !string.IsNullOrEmpty(Model.ProfilePicture)
+                        };
+                        
+                        var completedFields = profileFields.Count(f => f);
+                        var totalFields = profileFields.Count;
+                        var percentage = (int)((double)completedFields / totalFields * 100);
+                    }
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-medium">@percentage% Complete</span>
+                            <span class="text-muted">@completedFields of @totalFields fields</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-info" role="progressbar" 
+                                 style="width: @percentage%" 
+                                 aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row small">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.FullName) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    Full Name
+                                </li>
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.Email) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    Email Address
+                                </li>
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.MobileNumber) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    Mobile Number
+                                </li>
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.Address) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    Address
+                                </li>
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.City) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    City
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.State) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    State
+                                </li>
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.PinCode) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    Pin Code
+                                </li>
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.Gender) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    Gender
+                                </li>
+                                <li>
+                                    <i class="fas @(!Model.DateOfBirth.HasValue ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    Date of Birth
+                                </li>
+                                <li>
+                                    <i class="fas @(string.IsNullOrEmpty(Model.ProfilePicture) ? "fa-times text-danger" : "fa-check text-success") me-2"></i>
+                                    Profile Picture
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Picture Upload Modal -->
+<div class="modal fade" id="profilePictureModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-camera me-2"></i>Update Profile Picture
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Select Profile Picture</label>
+                        <input type="file" name="profilePicture" class="form-control" accept=".jpg,.jpeg,.png,.gif" required>
+                        <small class="text-muted">Maximum file size: 5MB. Allowed formats: JPG, JPEG, PNG, GIF</small>
+                    </div>
+                    <div class="text-center">
+                        <div class="border rounded p-3 mb-3">
+                            <i class="fas fa-image fa-3x text-muted mb-3"></i>
+                            <p class="mb-0">Preview will appear here</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Toggle password visibility
+            $('.toggle-password').click(function() {
+                var input = $(this).closest('.input-group').find('input');
+                var icon = $(this).find('i');
+                
+                if (input.attr('type') === 'password') {
+                    input.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    input.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+            
+            // Preview selected profile picture
+            $('input[name="profilePicture"]').change(function() {
+                var file = this.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var previewDiv = $(this).closest('.modal-body').find('.border.rounded');
+                        previewDiv.html('<img src="' + e.target.result + '" class="img-fluid rounded" alt="Preview">');
+                    }.bind(this);
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Mobile number validation
+            $('input[name="MobileNumber"]').on('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            });
+            
+            // Pin code validation
+            $('input[name="PinCode"]').on('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+            });
+            
+            // Form validation
+            $('form').submit(function(e) {
+                var form = $(this);
+                if (form[0].checkValidity() === false) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                form.addClass('was-validated');
+            });
+            
+            // Auto-close alerts after 5 seconds
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 5000);
+        });
+    </script>
+    
+    <style>
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+            border: none;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        
+        .btn {
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            border-radius: 10px;
+        }
+        
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+        
+        .modal-header {
+            border-radius: 15px 15px 0 0;
+            border: none;
+        }
+        
+        .rounded-circle {
+            border: 5px solid #f8f9fa;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .border-bottom {
+            border-color: #dee2e6 !important;
+        }
+        
+        .input-group-text {
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .input-group .form-control {
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .toggle-password {
+            border-radius: 0 10px 10px 0;
+        }
+    </style>
+}

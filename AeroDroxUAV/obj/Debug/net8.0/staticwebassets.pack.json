@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/01c59aa7-cb9f-446a-a72a-cf0bf7d7b091_about-hero.jpg",
+      "PackagePath": "staticwebassets/images/services/01c59aa7-cb9f-446a-a72a-cf0bf7d7b091_about-hero.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/abaf512a-9d12-461b-8773-96209464014c_about-team.jpg",
+      "PackagePath": "staticwebassets/images/services/abaf512a-9d12-461b-8773-96209464014c_about-team.jpg"
+    },
+    {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/js/site.js",
       "PackagePath": "staticwebassets/js/site.js"
     },
@@ -243,6 +251,22 @@
     {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/lib/jquery/dist/jquery.min.map",
       "PackagePath": "staticwebassets/lib/jquery/dist/jquery.min.map"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/accessories/6eb2aaea-e7c8-4ca2-8142-72c417ed9ea4.jpg",
+      "PackagePath": "staticwebassets/uploads/accessories/6eb2aaea-e7c8-4ca2-8142-72c417ed9ea4.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/drones/8a97df30-8885-417e-b391-dacf6ca45f3b_about-whyus.jpg",
+      "PackagePath": "staticwebassets/uploads/drones/8a97df30-8885-417e-b391-dacf6ca45f3b_about-whyus.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/drones/9b42d13d-0626-4aea-a67e-741f8dc63aa8_about-team.jpg",
+      "PackagePath": "staticwebassets/uploads/drones/9b42d13d-0626-4aea-a67e-741f8dc63aa8_about-team.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/profiles/profile_2_87059a3e-11b3-43b5-b7c8-f72ff209d0a9.png",
+      "PackagePath": "staticwebassets/uploads/profiles/profile_2_87059a3e-11b3-43b5-b7c8-f72ff209d0a9.png"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AeroDroxUAV.Microsoft.AspNetCore.StaticWebAssets.props",
