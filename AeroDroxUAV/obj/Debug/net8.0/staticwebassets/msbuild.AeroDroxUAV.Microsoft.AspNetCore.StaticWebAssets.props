@@ -1056,6 +1056,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\drones\9b42d13d-0626-4aea-a67e-741f8dc63aa8_about-team.jpg))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\drones\f7009160-6416-4059-99e6-f7816dc6e984_ic_launcher.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>AeroDroxUAV</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/AeroDroxUAV</BasePath>
+      <RelativePath>uploads/drones/f7009160-6416-4059-99e6-f7816dc6e984_ic_launcher.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\drones\f7009160-6416-4059-99e6-f7816dc6e984_ic_launcher.png))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\profiles\profile_2_87059a3e-11b3-43b5-b7c8-f72ff209d0a9.png))">
       <SourceType>Package</SourceType>
       <SourceId>AeroDroxUAV</SourceId>
