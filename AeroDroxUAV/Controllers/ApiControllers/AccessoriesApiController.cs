@@ -1,8 +1,9 @@
+// AccessoriesApiController.cs
 using AeroDroxUAV.Models;
 using AeroDroxUAV.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http; // Needed for session access
+using Microsoft.AspNetCore.Http;
 
 namespace AeroDroxUAV.Controllers
 {
@@ -27,8 +28,8 @@ namespace AeroDroxUAV.Controllers
         {
             // if (!IsLoggedIn()) { return Unauthorized(); } // <-- Temporarily commented
             
-            var accessoriess = await _accessoriesService.GetAllAccessoriesAsync(); 
-            return Ok(accessoriess);
+            var accessories = await _accessoriesService.GetAllAccessoriesAsync(); 
+            return Ok(accessories);
         }
 
         // GET: api/AccessoriesApi/5
@@ -58,6 +59,7 @@ namespace AeroDroxUAV.Controllers
                 return BadRequest(ModelState);
             }
             
+            accessories.CreatedAt = DateTime.Now;
             await _accessoriesService.CreateAccessoriesAsync(accessories);
 
             return CreatedAtAction(nameof(GetAccessory), new { id = accessories.Id }, accessories);

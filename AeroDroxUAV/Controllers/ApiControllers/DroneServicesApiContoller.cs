@@ -1,7 +1,9 @@
+// DroneServicesApiController.cs
 using AeroDroxUAV.Models;
-using AeroDroxUAV.Services; // Dependency on Service Layer
+using AeroDroxUAV.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace AeroDroxUAV.Controllers
 {
@@ -50,6 +52,11 @@ namespace AeroDroxUAV.Controllers
         public async Task<ActionResult<DroneServices>> PostDroneService(DroneServices droneService)
         {
             // if (!IsLoggedIn() || !IsAdmin()) { return Forbid(); }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             
             await _droneServicesService.CreateDroneServicesAsync(droneService);
 
@@ -66,8 +73,12 @@ namespace AeroDroxUAV.Controllers
             }
 
             // if (!IsLoggedIn() || !IsAdmin()) { return Forbid(); }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             
-            // This call uses the corrected GetDroneServicesByIdAsync() which is non-tracking.
             var existingDroneService = await _droneServicesService.GetDroneServicesByIdAsync(id);
             if (existingDroneService == null)
             {
@@ -80,13 +91,11 @@ namespace AeroDroxUAV.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                // This check is often not strictly necessary if logic is sound, but kept here for robustness.
-                // Re-check existence, which will be false if another user deleted it.
                 if (await _droneServicesService.GetDroneServicesByIdAsync(id) == null)
                 {
                     return NotFound();
                 }
-                throw; // Re-throw if it's a true concurrency issue
+                throw;
             }
 
             return NoContent();

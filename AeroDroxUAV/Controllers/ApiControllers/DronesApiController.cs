@@ -1,7 +1,9 @@
+// DronesApiController.cs
 using AeroDroxUAV.Models;
-using AeroDroxUAV.Services; // Dependency on Service Layer
+using AeroDroxUAV.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace AeroDroxUAV.Controllers
 {
@@ -50,7 +52,13 @@ namespace AeroDroxUAV.Controllers
         public async Task<ActionResult<Drone>> PostDrone(Drone drone)
         {
             // if (!IsLoggedIn() || !IsAdmin()) { return Forbid(); }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             
+            drone.CreatedAt = DateTime.Now;
             await _droneService.CreateDroneAsync(drone);
 
             return CreatedAtAction(nameof(GetDrone), new { id = drone.Id }, drone);
@@ -66,8 +74,12 @@ namespace AeroDroxUAV.Controllers
             }
 
             // if (!IsLoggedIn() || !IsAdmin()) { return Forbid(); }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             
-            // This existence check now uses the non-tracked entity, preventing the error.
             var existingDrone = await _droneService.GetDroneByIdAsync(id);
             if (existingDrone == null)
             {
@@ -76,12 +88,10 @@ namespace AeroDroxUAV.Controllers
 
             try
             {
-                // This call to UpdateDroneAsync now succeeds.
                 await _droneService.UpdateDroneAsync(drone);
             }
             catch (DbUpdateConcurrencyException)
             {
-                // Simple existence check after a potential concurrency error
                 if (await _droneService.GetDroneByIdAsync(id) == null)
                 {
                     return NotFound();
