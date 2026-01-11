@@ -253,6 +253,10 @@
       "PackagePath": "staticwebassets/lib/jquery/dist/jquery.min.map"
     },
     {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/drones/eb42f220-713b-464b-a7b4-267bf78ef21a_WhatsApp Image 2026-01-05 at 6.31.12 PM.jpeg",
+      "PackagePath": "staticwebassets/uploads/drones/eb42f220-713b-464b-a7b4-267bf78ef21a_WhatsApp Image 2026-01-05 at 6.31.12 PM.jpeg"
+    },
+    {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AeroDroxUAV.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
