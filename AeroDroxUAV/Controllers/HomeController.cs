@@ -5,6 +5,7 @@ using AeroDroxUAV.Services;
 using Microsoft.AspNetCore.Http;
 
 namespace AeroDroxUAV.Controllers;
+
 [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public class HomeController : Controller
 {
@@ -30,22 +31,47 @@ public class HomeController : Controller
     {
         ViewData["Title"] = "AeroDroxUAV - Precision Aerial Solutions";
         
-        // Get featured drones
-        var allDrones = await _droneService.GetAllDronesAsync();
-        var featuredDrones = allDrones.Where(d => d.IsFeatured).Take(6).ToList();
-        var newDrones = allDrones.OrderByDescending(d => d.CreatedAt).Take(6).ToList();
+        // Initialize ViewBag collections to empty lists to avoid null references
+        ViewBag.FeaturedDrones = new List<Drone>();
+        ViewBag.NewDrones = new List<Drone>();
+        ViewBag.FeaturedAccessories = new List<Accessories>();
+        ViewBag.NewAccessories = new List<Accessories>();
+        ViewBag.FeaturedServices = new List<DroneServices>();
+        ViewBag.TotalDrones = 0;
+        ViewBag.TotalAccessories = 0;
         
-        // Get accessories
-        var allAccessories = await _accessoriesService.GetAllAccessoriesAsync();
-        var featuredAccessories = allAccessories.Take(6).ToList();
-        var newAccessories = allAccessories.OrderByDescending(a => a.CreatedAt).Take(6).ToList();
+        try
+        {
+            // Get featured drones
+            var allDrones = await _droneService.GetAllDronesAsync();
+            if (allDrones != null)
+            {
+                ViewBag.FeaturedDrones = allDrones.Where(d => d.IsFeatured).Take(6).ToList();
+                ViewBag.NewDrones = allDrones.OrderByDescending(d => d.CreatedAt).Take(6).ToList();
+                ViewBag.TotalDrones = allDrones.Count();
+            }
+            
+            // Get accessories
+            var allAccessories = await _accessoriesService.GetAllAccessoriesAsync();
+            if (allAccessories != null)
+            {
+                ViewBag.FeaturedAccessories = allAccessories.Take(6).ToList();
+                ViewBag.NewAccessories = allAccessories.OrderByDescending(a => a.CreatedAt).Take(6).ToList();
+                ViewBag.TotalAccessories = allAccessories.Count();
+            }
+            
+            // Get drone services if available
+            var featuredServices = await _droneServicesService.GetAllDroneServicesAsync();
+            if (featuredServices != null)
+            {
+                ViewBag.FeaturedServices = featuredServices.Take(4).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading data for home page");
+        }
         
-        ViewBag.FeaturedDrones = featuredDrones;
-        ViewBag.NewDrones = newDrones;
-        ViewBag.FeaturedAccessories = featuredAccessories;
-        ViewBag.NewAccessories = newAccessories;
-        ViewBag.TotalDrones = allDrones.Count();
-        ViewBag.TotalAccessories = allAccessories.Count();
         ViewBag.IsLoggedIn = IsLoggedIn();
         ViewBag.Role = HttpContext.Session.GetString("Role") ?? "";
         

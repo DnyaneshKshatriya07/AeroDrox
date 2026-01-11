@@ -22,7 +22,7 @@
 
     <!-- Stats Cards -->
     <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card bg-primary text-white shadow-sm border-0">
                 <div class="card-body py-4">
                     <div class="d-flex align-items-center">
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card bg-success text-white shadow-sm border-0">
                 <div class="card-body py-4">
                     <div class="d-flex align-items-center">
@@ -52,7 +52,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card bg-info text-white shadow-sm border-0">
                 <div class="card-body py-4">
                     <div class="d-flex align-items-center">
@@ -62,21 +62,6 @@
                         <div>
                             <h3 class="h2 mb-0">@Model.Count(s => s.Category == "Agriculture")</h3>
                             <p class="mb-0">Agricultural Services</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-white shadow-sm border-0">
-                <div class="card-body py-4">
-                    <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <i class="fas fa-camera fa-2x"></i>
-                        </div>
-                        <div>
-                            <h3 class="h2 mb-0">@Model.Count(s => s.Type.Contains("Photography") || s.Type.Contains("Videography"))</h3>
-                            <p class="mb-0">Media Services</p>
                         </div>
                     </div>
                 </div>
@@ -125,19 +110,17 @@
                         <div class="position-absolute top-0 start-0 m-3">
                             <span class="badge bg-primary">@service.Category</span>
                         </div>
+
+                        <!-- Book Now Button Overlay -->
+                        <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: rgba(0,0,0,0.7);">
+                            <a href="/Contact/Index" class="btn btn-warning btn-sm w-100">
+                                <i class="fas fa-calendar-check me-2"></i>Book Now
+                            </a>
+                        </div>
                     </div>
                     
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h5 class="card-title mb-0">@service.Name</h5>
-                            <h5 class="text-success fw-bold mb-0">
-                                $@service.PricePerAcre<span class="text-muted small fw-normal">/acre</span>
-                            </h5>
-                        </div>
-                        
-                        <p class="card-text text-muted small">
-                            <i class="fas fa-tag me-1"></i>@service.Type
-                        </p>
+                        <h5 class="card-title mb-2">@service.Name</h5>
                         
                         <p class="card-text text-truncate-3" style="height: 4.5em; overflow: hidden;">
                             @service.Description
@@ -267,5 +250,18 @@
         border-radius: 8px;
         padding: 0.25rem 0.5rem;
         margin-left: 0.25rem;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #fbb034 0%, #ffdd00 100%);
+        border: none;
+        color: #000;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-warning:hover {
+        background: linear-gradient(135deg, #ffdd00 0%, #fbb034 100%);
+        transform: translateY(-2px);
     }
 </style>

@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/a8fbca3e-8eb6-4ba9-b92a-63f7d51852ef_WhatsApp Image 2026-01-05 at 6.31.12 PM.jpeg",
+      "PackagePath": "staticwebassets/images/services/a8fbca3e-8eb6-4ba9-b92a-63f7d51852ef_WhatsApp Image 2026-01-05 at 6.31.12 PM.jpeg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/c76602e2-ada6-45ed-ad17-82d130883ed2_WhatsApp Image 2026-01-05 at 6.31.12 PM.jpeg",
+      "PackagePath": "staticwebassets/images/services/c76602e2-ada6-45ed-ad17-82d130883ed2_WhatsApp Image 2026-01-05 at 6.31.12 PM.jpeg"
+    },
+    {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/js/site.js",
       "PackagePath": "staticwebassets/js/site.js"
     },
@@ -243,10 +251,6 @@
     {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/lib/jquery/dist/jquery.min.map",
       "PackagePath": "staticwebassets/lib/jquery/dist/jquery.min.map"
-    },
-    {
-      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/accessories/bf3f8362-0dd4-4a70-9ada-6129951ecc15.jpeg",
-      "PackagePath": "staticwebassets/uploads/accessories/bf3f8362-0dd4-4a70-9ada-6129951ecc15.jpeg"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AeroDroxUAV.Microsoft.AspNetCore.StaticWebAssets.props",
