@@ -47,7 +47,7 @@ public class HomeController : Controller
             if (allDrones != null)
             {
                 ViewBag.FeaturedDrones = allDrones.Where(d => d.IsFeatured).Take(6).ToList();
-                ViewBag.NewDrones = allDrones.OrderByDescending(d => d.CreatedAt).Take(6).ToList();
+                ViewBag.NewDrones = allDrones.OrderByDescending(d => d.CreatedAt).Take(8).ToList();
                 ViewBag.TotalDrones = allDrones.Count();
             }
             
@@ -55,16 +55,17 @@ public class HomeController : Controller
             var allAccessories = await _accessoriesService.GetAllAccessoriesAsync();
             if (allAccessories != null)
             {
-                ViewBag.FeaturedAccessories = allAccessories.Take(6).ToList();
-                ViewBag.NewAccessories = allAccessories.OrderByDescending(a => a.CreatedAt).Take(6).ToList();
+                ViewBag.FeaturedAccessories = allAccessories.Take(8).ToList();
+                ViewBag.NewAccessories = allAccessories.OrderByDescending(a => a.CreatedAt).Take(8).ToList();
                 ViewBag.TotalAccessories = allAccessories.Count();
             }
             
-            // Get drone services if available
+            // Get drone services for single-card carousel
             var featuredServices = await _droneServicesService.GetAllDroneServicesAsync();
             if (featuredServices != null)
             {
-                ViewBag.FeaturedServices = featuredServices.Take(4).ToList();
+                // Take enough services for carousel
+                ViewBag.FeaturedServices = featuredServices.Take(10).ToList();
             }
         }
         catch (Exception ex)

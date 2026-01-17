@@ -4,7 +4,35 @@
     var role = ViewBag.Role as string;
 }
 
-<div class="container-fluid px-4">
+<!-- Video Background Section -->
+<div data-poster-url="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -poster-00001.jpg" 
+     data-video-urls="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.mp4,https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.webm" 
+     data-autoplay="true" 
+     data-loop="true" 
+     data-wf-ignore="true" 
+     class="background-video w-background-video w-background-video-atom">
+    
+    <video id="services-video-bg" 
+           autoplay="" 
+           loop="" 
+           style="background-image:url('https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -poster-00001.jpg')" 
+           muted="" 
+           playsinline="" 
+           data-wf-ignore="true" 
+           data-object-fit="cover">
+        
+        <source src="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.mp4" 
+                data-wf-ignore="true" 
+                type="video/mp4">
+        
+        <source src="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.webm" 
+                data-wf-ignore="true" 
+                type="video/webm">
+    </video>
+</div>
+
+<!-- Main Content -->
+<div class="container-fluid px-4 main-content-container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="h3 mb-0">
@@ -179,27 +207,82 @@
 </div>
 
 <style>
+    /* Video Background Styles */
+    .background-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+    
+    .background-video video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+    }
+    
+    /* Dark overlay for better text readability */
+    .background-video::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1;
+    }
+    
+    .background-video video {
+        z-index: 0;
+    }
+    
+    /* Main content container styling */
+    .main-content-container {
+        background-color: rgba(255, 255, 255, 0.98);
+        border-radius: 15px;
+        margin-top: 30px;
+        padding: 25px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(5px);
+    }
+    
+    /* Card styling */
     .card {
         border-radius: 12px;
         transition: all 0.3s ease;
         overflow: hidden;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .hover-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08) !important;
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2) !important;
+        border-color: rgba(102, 126, 234, 0.5);
     }
     
     .bg-primary {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     
     .bg-success {
         background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%) !important;
-    }
-    
-    .bg-info {
-        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     
     .btn-warning {
@@ -215,11 +298,13 @@
     .btn-warning:hover {
         background: linear-gradient(135deg, #ffdd00 0%, #fbb034 100%);
         transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(251, 176, 52, 0.3);
     }
     
     .btn-outline-primary, .btn-outline-info, .btn-outline-danger {
         font-size: 0.875rem;
         padding: 0.25rem 0.75rem;
+        background-color: rgba(255, 255, 255, 0.8);
     }
     
     .badge {
@@ -243,5 +328,60 @@
     .card-text {
         font-size: 0.9rem;
         color: #666;
+    }
+    
+    /* Header styling */
+    h1 {
+        color: #333;
+        text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Input styling */
+    .input-group {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .input-group-text {
+        background-color: rgba(248, 249, 250, 0.9);
+        border-right: none;
+    }
+    
+    .form-control, .form-select {
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .main-content-container {
+            margin-top: 15px;
+            padding: 15px;
+        }
+        
+        .background-video::after {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .hover-card:hover {
+            transform: translateY(-3px);
+        }
+    }
+    
+    /* Animation for page load */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .main-content-container {
+        animation: fadeInUp 0.6s ease-out;
     }
 </style>

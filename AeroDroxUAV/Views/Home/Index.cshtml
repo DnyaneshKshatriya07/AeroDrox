@@ -1,4 +1,4 @@
-﻿﻿@{
+﻿﻿﻿@{
     ViewData["Title"] = "AeroDrox UAV - Precision Aerial Solutions";
     
     // Helper function to check if user is logged in
@@ -37,9 +37,21 @@
         z-index: 2;
     }
     
-    /* Sections */
-    .section-padding {
+    /* Reset default margins and paddings */
+    .full-width-section {
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
         padding: 80px 0;
+        overflow: hidden;
+    }
+    
+    .full-width-container {
+        max-width: 100%;
+        padding: 0 15px;
     }
     
     .section-title {
@@ -89,6 +101,7 @@
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         padding: 60px 0;
+        width: 100%;
     }
     
     .stat-item {
@@ -132,21 +145,21 @@
     }
 
     .btn-gradient-success {
-    background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
-    border: none;
-    color: white;
-    padding: 12px 30px;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
+        background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
 
-.btn-gradient-success:hover {
-    background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(32, 201, 151, 0.4);
-    color: white;
-}
+    .btn-gradient-success:hover {
+        background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(32, 201, 151, 0.4);
+        color: white;
+    }
     
     /* Gradient Buttons */
     .btn-gradient-primary {
@@ -182,33 +195,52 @@
         transform: translateY(-3px);
     }
     
-    /* Drone Suvidha's Carousel */
+    /* 4 cards per row */
+    .row-cols-4 {
+        row-gap: 30px;
+    }
+    
+    /* ===== UPDATED DRONE SUVICHA CAROUSEL - SINGLE CARD FOCUS ===== */
+    /* Updated Drone Suvidha's Carousel - Single Card Focus */
     .services-carousel-container {
         position: relative;
-        padding: 20px 0;
+        padding: 40px 0;
+        overflow: hidden; /* Hides cards not in the center view */
+        max-width: 600px; /* Adjust this to match your preferred card width */
+        margin: 0 auto;
     }
-    
+
     .services-carousel {
         display: flex;
-        transition: transform 0.5s ease;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     .carousel-slide {
-        flex: 0 0 33.333%;
-        padding: 15px;
-        transition: all 0.3s ease;
+        flex: 0 0 100%; /* Show exactly 1 card at a time */
+        padding: 20px;
+        transition: all 0.5s ease;
+        opacity: 0.4;
+        transform: scale(0.85);
     }
-    
+
+    /* Highlighting the active center card */
     .carousel-slide.center {
+        opacity: 1;
         transform: scale(1.05);
         z-index: 2;
     }
-    
+
     .carousel-slide.center .card {
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        border: 2px solid #667eea;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        border: 3px solid #667eea;
+    }
+
+    /* Pause indicator for users */
+    .services-carousel-container:hover {
+        cursor: grab;
     }
     
+    /* Navigation buttons */
     .carousel-nav {
         position: absolute;
         top: 50%;
@@ -216,11 +248,12 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
-        z-index: 3;
+        padding: 0 10px;
+        z-index: 10;
     }
     
     .carousel-nav button {
-        background: rgba(102, 126, 234, 0.8);
+        background: rgba(102, 126, 234, 0.9);
         border: none;
         color: white;
         width: 50px;
@@ -229,6 +262,9 @@
         font-size: 1.5rem;
         cursor: pointer;
         transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .carousel-nav button:hover {
@@ -236,6 +272,7 @@
         transform: scale(1.1);
     }
     
+    /* Dots indicator */
     .carousel-dots {
         display: flex;
         justify-content: center;
@@ -256,10 +293,146 @@
         background: #667eea;
         transform: scale(1.3);
     }
+
+    /* Background image sections - FULL WIDTH */
+    .drone-suvidha-section {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%), 
+                    url('/background/HomeFarmBG.jpg') no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        color: white;
+        position: relative;
+        margin: 0;
+        padding: 0;
+    }
+
+    .customized-drones-section {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%), 
+                    url('/background/HomeCustomeBG.png') no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        color: white;
+        position: relative;
+        margin: 0;
+        padding: 0;
+    }
+
+    .drone-bazaar-section {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%), 
+                    url('/background/HomeAccessBG.jpg') no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        color: white;
+        position: relative;
+        margin: 0;
+        padding: 0;
+    }
+
+    .new-arrivals-section {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%), 
+                    url('/background/HomeNewBG.jpg') no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        color: white;
+        position: relative;
+        margin: 0;
+        padding: 0;
+    }
+
+    .section-content-wrapper {
+        padding: 80px 0;
+        background: rgba(0, 0, 0, 0.5);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+    }
+
+    /* Remove all margins from containers and rows */
+    .container-fluid {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+        padding-right: 15px !important;
+        padding-left: 15px !important;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    /* Adjust text colors for better visibility on backgrounds */
+    .drone-suvidha-section .text-muted,
+    .customized-drones-section .text-muted,
+    .drone-bazaar-section .text-muted,
+    .new-arrivals-section .text-muted {
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    .drone-suvidha-section .card,
+    .customized-drones-section .card,
+    .drone-bazaar-section .card,
+    .new-arrivals-section .card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+    }
+
+    .drone-suvidha-section .section-title,
+    .customized-drones-section .section-title,
+    .drone-bazaar-section .section-title,
+    .new-arrivals-section .section-title {
+        color: white;
+    }
+
+    .drone-suvidha-section .section-title::after,
+    .customized-drones-section .section-title::after,
+    .drone-bazaar-section .section-title::after,
+    .new-arrivals-section .section-title::after {
+        background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+    }
+
+    /* Remove body margins */
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
     
-    /* 4 cards per row */
-    .row-cols-4 {
-        row-gap: 30px;
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .services-carousel-container {
+            max-width: 450px;
+        }
+        
+        .section-content-wrapper {
+            padding: 60px 0;
+        }
+    }
+    
+    @@media (max-width: 576px) {
+        .services-carousel-container {
+            max-width: 350px;
+            padding: 30px 0;
+        }
+        
+        .carousel-nav button {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+        }
+        
+        .section-content-wrapper {
+            padding: 40px 0;
+        }
     }
     
 </style>
@@ -278,7 +451,7 @@
                 Professional drones and services for industrial, commercial, and recreational applications.
             </p>
             <div class="mt-4 animate__animated animate__fadeInUp animate__delay-3s">
-                <a href="#products" class="btn btn-gradient-primary btn-lg me-3">
+                <a href="#featured-drones" class="btn btn-gradient-primary btn-lg me-3">
                     <i class="fas fa-drone me-2"></i>Explore Products
                 </a>
                 <a href="#contact" class="btn btn-gradient-outline btn-lg">
@@ -369,464 +542,483 @@
     </div>
 </section>
 
-<!-- Drone Services Section - Now "Our Drone Suvidha's" -->
+<!-- ===== UPDATED DRONE SUVICHA CAROUSEL - SINGLE CARD FOCUS ===== -->
 @if (ViewBag.FeaturedServices != null && ((IEnumerable<AeroDroxUAV.Models.DroneServices>)ViewBag.FeaturedServices).Any())
 {
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="h1 mb-3">
-                    <i class="fas fa-concierge-bell text-primary me-2"></i>Our Drone Suvidha's
-                </h2>
-                <p class="text-muted lead mb-4">Professional drone solutions for various industries</p>
-                <a href="/DroneServices/Index" class="btn btn-outline-primary">
-                    <i class="fas fa-eye me-2"></i>View All Services
-                </a>
-            </div>
-
-            <div class="services-carousel-container">
-                <div class="carousel-nav">
-                    <button class="carousel-prev" id="carouselPrev">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="carousel-next" id="carouselNext">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+    <section class="drone-suvidha-section" id="drone-suvidha">
+        <div class="section-content-wrapper">
+            <div class="container section-content">
+                <div class="text-center mb-5">
+                    <h2 class="section-title display-5 fw-bold">
+                        <i class="fas fa-concierge-bell text-primary me-2"></i>Our Drone Suvidha's
+                    </h2>
+                    <p class="lead mb-4">Professional drone solutions for various industries</p>
+                    <a href="/DroneServices/Index" class="btn btn-outline-light">
+                        <i class="fas fa-eye me-2"></i>View All Services
+                    </a>
                 </div>
-                
-                <div class="services-carousel" id="servicesCarousel">
-                    @{
-                        var services = (IEnumerable<AeroDroxUAV.Models.DroneServices>)ViewBag.FeaturedServices;
-                        var serviceIndex = 0;
-                    }
-                    @foreach (var service in services)
-                    {
-                        <div class="carousel-slide @(serviceIndex == 1 ? "center" : "")" data-index="@serviceIndex">
-                            <div class="card h-100 border-0 shadow-sm hover-card">
-                                @if (!string.IsNullOrEmpty(service.ImageUrl))
-                                {
-                                    <img src="@service.ImageUrl" class="card-img-top" alt="@service.Name" 
-                                         style="height: 200px; object-fit: cover;">
-                                }
-                                else
-                                {
-                                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
-                                         style="height: 200px;">
-                                        <i class="fas fa-concierge-bell fa-3x text-white"></i>
-                                    </div>
-                                }
-                                
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h5 class="card-title mb-0">@service.Name</h5>
-                                        <span class="badge bg-primary">@service.Category</span>
-                                    </div>
-                                    <p class="card-text mb-3" style="height: 60px; overflow: hidden;">
-                                        @service.Description
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <a href="/Contact/Index" class="btn btn-warning btn-sm">
-                                            <i class="fas fa-calendar-check me-1"></i>Book Now
-                                        </a>
-                                        <a href="/DroneServices/Details/@service.Id" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-eye me-1"></i>View Details
-                                        </a>
+
+                <div class="services-carousel-container" id="carouselWrapper">
+                    <div class="carousel-nav">
+                        <button class="carousel-prev" id="carouselPrev">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-next" id="carouselNext">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="services-carousel" id="servicesCarousel">
+                        @{
+                            var services = (IEnumerable<AeroDroxUAV.Models.DroneServices>)ViewBag.FeaturedServices;
+                            var serviceIndex = 0;
+                        }
+                        @foreach (var service in services)
+                        {
+                            <div class="carousel-slide @(serviceIndex == 0 ? "center" : "")" data-index="@serviceIndex">
+                                <div class="card h-100 border-0 shadow-lg">
+                                    @if (!string.IsNullOrEmpty(service.ImageUrl))
+                                    {
+                                        <img src="@service.ImageUrl" class="card-img-top" alt="@service.Name" style="height: 250px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                                            <i class="fas fa-concierge-bell fa-3x text-white"></i>
+                                        </div>
+                                    }
+                                    
+                                    <div class="card-body text-center">
+                                        <div class="mb-3">
+                                            <h5 class="card-title fw-bold mb-2">@service.Name</h5>
+                                            <span class="badge bg-primary">@service.Category</span>
+                                        </div>
+                                        <p class="card-text mb-4" style="height: 80px; overflow: hidden;">
+                                            @if (!string.IsNullOrEmpty(service.Description))
+                                            {
+                                                if (service.Description.Length > 120)
+                                                {
+                                                    @service.Description.Substring(0, 120)@:...
+                                                }
+                                                else
+                                                {
+                                                    @service.Description
+                                                }
+                                            }
+                                        </p>
+                                        <div class="d-flex justify-content-center gap-3">
+                                            <a href="/Contact/Index" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-calendar-check me-1"></i>Book Now
+                                            </a>
+                                            <a href="/DroneServices/Details/@service.Id" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye me-1"></i>View Details
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        serviceIndex++;
-                    }
-                </div>
-                
-                <div class="carousel-dots" id="carouselDots">
-                    @for (int i = 0; i < Math.Ceiling(services.Count() / 3.0); i++)
-                    {
-                        <div class="carousel-dot @(i == 0 ? "active" : "")" data-slide="@i"></div>
-                    }
+                            serviceIndex++;
+                        }
+                    </div>
+                    
+                    <div class="carousel-dots" id="carouselDots">
+                        @if (services != null)
+                        {
+                            for (int i = 0; i < services.Count(); i++)
+                            {
+                                <div class="carousel-dot @(i == 0 ? "active" : "")" data-slide="@i"></div>
+                            }
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 }
 
-<!-- Featured Drones Section - Customized Drones (No changes) -->
-<section id="featured-drones" class="section-padding">
-    <div class="container">
-        <h2 class="section-title display-5 fw-bold">Customized Drones</h2>
-        <p class="text-center text-muted mb-5 fs-5">
-            Top-rated drones chosen by our experts
-        </p>
-        
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @if (ViewBag.FeaturedDrones != null)
-            {
-                @foreach(var drone in ViewBag.FeaturedDrones)
+<!-- Featured Drones Section - Customized Drones -->
+<section id="featured-drones" class="customized-drones-section">
+    <div class="section-content-wrapper">
+        <div class="container section-content">
+            <h2 class="section-title display-5 fw-bold">Customized Drones</h2>
+            <p class="text-center mb-5 fs-5">
+                Top-rated drones chosen by our experts
+            </p>
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @if (ViewBag.FeaturedDrones != null)
                 {
-                    @if (drone != null)
+                    @foreach(var drone in ViewBag.FeaturedDrones)
                     {
-                        <div class="col">
-                            <div class="card product-card shadow-sm h-100">
-                                <!-- Image -->
-                                <div class="position-relative">
-                                    @if (!string.IsNullOrEmpty(drone.ImageUrl))
-                                    {
-                                        <img src="@drone.ImageUrl" class="card-img-top" 
-                                             alt="@drone.Name" style="height: 220px; object-fit: cover;">
-                                    }
-                                    else
-                                    {
-                                        <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                                             class="card-img-top" 
-                                             alt="@drone.Name" style="height: 220px; object-fit: cover;">
-                                    }
-                                    
-                                    <!-- Featured Badge -->
-                                    <div class="position-absolute top-0 start-0 p-3">
-                                        <span class="badge bg-warning">
-                                            <i class="fas fa-star me-1"></i>Customized
-                                        </span>
-                                    </div>
-                                    
-                                    <!-- Price Badge -->
-                                    <div class="position-absolute top-0 end-0 p-3">
-                                        @if (drone.DiscountPrice != null && drone.DiscountPrice > 0)
+                        @if (drone != null)
+                        {
+                            <div class="col">
+                                <div class="card product-card shadow-lg h-100">
+                                    <!-- Image -->
+                                    <div class="position-relative">
+                                        @if (!string.IsNullOrEmpty(drone.ImageUrl))
                                         {
-                                            <span class="badge bg-danger fs-6">
-                                                <del class="text-light opacity-75">$@drone.Price.ToString("N2")</del> 
-                                                $@((drone.DiscountPrice ?? 0).ToString("N2"))
-                                            </span>
+                                            <img src="@drone.ImageUrl" class="card-img-top" 
+                                                 alt="@drone.Name" style="height: 220px; object-fit: cover;">
                                         }
                                         else
                                         {
-                                            <span class="badge bg-success fs-6">
-                                                $@drone.Price.ToString("N2")
+                                            <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                                 class="card-img-top" 
+                                                 alt="@drone.Name" style="height: 220px; object-fit: cover;">
+                                        }
+                                        
+                                        <!-- Featured Badge -->
+                                        <div class="position-absolute top-0 start-0 p-3">
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-star me-1"></i>Customized
                                             </span>
-                                        }
-                                    </div>
-                                </div>
-                                
-                                <!-- Card Body -->
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title fw-bold">@drone.Name</h5>
-                                    <div class="mb-3">
-                                        @if(!string.IsNullOrEmpty(drone.Category))
-                                        {
-                                            <span class="badge bg-info me-2">@drone.Category</span>
-                                        }
-                                        @if(!string.IsNullOrEmpty(drone.Condition))
-                                        {
-                                            <span class="badge @(drone.Condition == "New" ? "bg-success" : "bg-warning")">@drone.Condition</span>
-                                        }
-                                    </div>
-                                    <p class="card-text text-muted mb-4 flex-grow-1">
-                                        @if(!string.IsNullOrEmpty(drone.Description) && drone.Description.Length > 80)
-                                        {
-                                            @drone.Description.Substring(0, 80)@:...
-                                        }
-                                        else if (!string.IsNullOrEmpty(drone.Description))
-                                        {
-                                            @drone.Description
-                                        }
-                                    </p>
-                                    <div class="mt-auto">
-                                        <div class="d-grid gap-2">
-                                            @if(IsLoggedIn())
+                                        </div>
+                                        
+                                        <!-- Price Badge -->
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            @if (drone.DiscountPrice != null && drone.DiscountPrice > 0)
                                             {
-                                                <a href="/Drone/Details/@drone.Id" class="btn btn-primary">
-                                                    <i class="fas fa-info-circle me-2"></i>View Details
-                                                </a>
+                                                <span class="badge bg-danger fs-6">
+                                                    <del class="text-light opacity-75">$@drone.Price.ToString("N2")</del> 
+                                                    $@((drone.DiscountPrice ?? 0).ToString("N2"))
+                                                </span>
                                             }
                                             else
                                             {
-                                                <a href="/Drone/Index" class="btn btn-primary">
-                                                    <i class="fas fa-store me-2"></i>View All Drones
-                                                </a>
+                                                <span class="badge bg-success fs-6">
+                                                    $@drone.Price.ToString("N2")
+                                                </span>
                                             }
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Card Body -->
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title fw-bold">@drone.Name</h5>
+                                        <div class="mb-3">
+                                            @if(!string.IsNullOrEmpty(drone.Category))
+                                            {
+                                                <span class="badge bg-info me-2">@drone.Category</span>
+                                            }
+                                            @if(!string.IsNullOrEmpty(drone.Condition))
+                                            {
+                                                <span class="badge @(drone.Condition == "New" ? "bg-success" : "bg-warning")">@drone.Condition</span>
+                                            }
+                                        </div>
+                                        <p class="card-text mb-4 flex-grow-1">
+                                            @if(!string.IsNullOrEmpty(drone.Description) && drone.Description.Length > 80)
+                                            {
+                                                @drone.Description.Substring(0, 80)@:...
+                                            }
+                                            else if (!string.IsNullOrEmpty(drone.Description))
+                                            {
+                                                @drone.Description
+                                            }
+                                        </p>
+                                        <div class="mt-auto">
+                                            <div class="d-grid gap-2">
+                                                @if(IsLoggedIn())
+                                                {
+                                                    <a href="/Drone/Details/@drone.Id" class="btn btn-primary">
+                                                        <i class="fas fa-info-circle me-2"></i>View Details
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/Drone/Index" class="btn btn-primary">
+                                                        <i class="fas fa-store me-2"></i>View All Drones
+                                                    </a>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        }
+                    }
+                    
+                    @if (ViewBag.FeaturedDrones.Count == 0)
+                    {
+                        <div class="col-12">
+                            <div class="text-center py-5">
+                                <i class="fas fa-drone fa-4x mb-3" style="color: rgba(255,255,255,0.7);"></i>
+                                <h4 class="text-white">No featured drones available</h4>
+                                <p>Check back soon for featured products</p>
+                            </div>
                         </div>
                     }
                 }
-                
-                @if (ViewBag.FeaturedDrones.Count == 0)
+                else
                 {
                     <div class="col-12">
                         <div class="text-center py-5">
-                            <i class="fas fa-drone fa-4x text-muted mb-3"></i>
-                            <h4>No featured drones available</h4>
-                            <p class="text-muted">Check back soon for featured products</p>
+                            <i class="fas fa-drone fa-4x mb-3" style="color: rgba(255,255,255,0.7);"></i>
+                            <h4 class="text-white">No featured drones available</h4>
+                            <p>Check back soon for featured products</p>
                         </div>
                     </div>
                 }
-            }
-            else
-            {
-                <div class="col-12">
-                    <div class="text-center py-5">
-                        <i class="fas fa-drone fa-4x text-muted mb-3"></i>
-                        <h4>No featured drones available</h4>
-                        <p class="text-muted">Check back soon for featured products</p>
-                    </div>
-                </div>
-            }
-        </div>
-        
-        <div class="text-center mt-5">
-            <a href="/Drone/Index" class="btn btn-gradient-primary btn-lg">
-                <i class="fas fa-store me-2"></i>Visit Full Store
-            </a>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="/Drone/Index" class="btn btn-gradient-primary btn-lg">
+                    <i class="fas fa-store me-2"></i>Visit Full Store
+                </a>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- Featured Accessories Section - Now "Drone Bazaar" with 4 cards per row -->
-<section id="featured-accessories" class="section-padding">
-    <div class="container">
-        <h2 class="section-title display-5 fw-bold">Drone Bazaar</h2>
-        <p class="text-center text-muted mb-5 fs-5">
-            Essential drone accessories for enhanced performance
-        </p>
-        
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            @if (ViewBag.FeaturedAccessories != null)
-            {
-                @foreach(var accessory in ViewBag.FeaturedAccessories)
+<section id="featured-accessories" class="drone-bazaar-section">
+    <div class="section-content-wrapper">
+        <div class="container section-content">
+            <h2 class="section-title display-5 fw-bold">Drone Bazaar</h2>
+            <p class="text-center mb-5 fs-5">
+                Essential drone accessories for enhanced performance
+            </p>
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                @if (ViewBag.FeaturedAccessories != null)
                 {
-                    @if (accessory != null)
+                    @foreach(var accessory in ViewBag.FeaturedAccessories)
                     {
-                        <div class="col">
-                            <div class="card product-card shadow-sm h-100">
-                                <!-- Image -->
-                                <div class="position-relative">
-                                    @if (!string.IsNullOrEmpty(accessory.ImageUrl))
-                                    {
-                                        <img src="@accessory.ImageUrl" class="card-img-top" 
-                                             alt="@accessory.Name" style="height: 220px; object-fit: cover;">
-                                    }
-                                    else
-                                    {
-                                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                                             class="card-img-top" 
-                                             alt="@accessory.Name" style="height: 220px; object-fit: cover;">
-                                    }
-                                    
-                                    <!-- Price Badge -->
-                                    <div class="position-absolute top-0 end-0 p-3">
-                                        @if (accessory.DiscountPrice != null && accessory.DiscountPrice > 0)
+                        @if (accessory != null)
+                        {
+                            <div class="col">
+                                <div class="card product-card shadow-lg h-100">
+                                    <!-- Image -->
+                                    <div class="position-relative">
+                                        @if (!string.IsNullOrEmpty(accessory.ImageUrl))
                                         {
-                                            <span class="badge bg-danger fs-6">
-                                                <del class="text-light opacity-75">$@accessory.Price.ToString("N2")</del> 
-                                                $@((accessory.DiscountPrice ?? 0).ToString("N2"))
-                                            </span>
+                                            <img src="@accessory.ImageUrl" class="card-img-top" 
+                                                 alt="@accessory.Name" style="height: 220px; object-fit: cover;">
                                         }
                                         else
                                         {
-                                            <span class="badge bg-primary fs-6">
-                                                $@accessory.Price.ToString("N2")
-                                            </span>
+                                            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                                 class="card-img-top" 
+                                                 alt="@accessory.Name" style="height: 220px; object-fit: cover;">
                                         }
-                                    </div>
-                                </div>
-                                
-                                <!-- Card Body -->
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title fw-bold">@accessory.Name</h5>
-                                    <div class="mb-3">
-                                        @if(!string.IsNullOrEmpty(accessory.Condition))
-                                        {
-                                            <span class="badge @(accessory.Condition == "New" ? "bg-success" : "bg-warning")">@accessory.Condition</span>
-                                        }
-                                    </div>
-                                    <p class="card-text text-muted mb-4 flex-grow-1">
-                                        @if(!string.IsNullOrEmpty(accessory.Description) && accessory.Description.Length > 80)
-                                        {
-                                            @accessory.Description.Substring(0, 80)@:...
-                                        }
-                                        else if (!string.IsNullOrEmpty(accessory.Description))
-                                        {
-                                            @accessory.Description
-                                        }
-                                    </p>
-                                    <div class="mt-auto">
-                                        <div class="d-grid gap-2">
-                                            @if(IsLoggedIn())
+                                        
+                                        <!-- Price Badge -->
+                                        <div class="position-absolute top-0 end-0 p-3">
+                                            @if (accessory.DiscountPrice != null && accessory.DiscountPrice > 0)
                                             {
-                                                <a href="/Accessories/Details/@accessory.Id" class="btn btn-success">
-                                                    <i class="fas fa-info-circle me-2"></i>View Details
-                                                </a>
+                                                <span class="badge bg-danger fs-6">
+                                                    <del class="text-light opacity-75">$@accessory.Price.ToString("N2")</del> 
+                                                    $@((accessory.DiscountPrice ?? 0).ToString("N2"))
+                                                </span>
                                             }
                                             else
                                             {
-                                                <a href="/Accessories/Index" class="btn btn-success">
-                                                    <i class="fas fa-tools me-2"></i>View All Accessories
-                                                </a>
+                                                <span class="badge bg-primary fs-6">
+                                                    $@accessory.Price.ToString("N2")
+                                                </span>
                                             }
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Card Body -->
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title fw-bold">@accessory.Name</h5>
+                                        <div class="mb-3">
+                                            @if(!string.IsNullOrEmpty(accessory.Condition))
+                                            {
+                                                <span class="badge @(accessory.Condition == "New" ? "bg-success" : "bg-warning")">@accessory.Condition</span>
+                                            }
+                                        </div>
+                                        <p class="card-text mb-4 flex-grow-1">
+                                            @if(!string.IsNullOrEmpty(accessory.Description) && accessory.Description.Length > 80)
+                                            {
+                                                @accessory.Description.Substring(0, 80)@:...
+                                            }
+                                            else if (!string.IsNullOrEmpty(accessory.Description))
+                                            {
+                                                @accessory.Description
+                                            }
+                                        </p>
+                                        <div class="mt-auto">
+                                            <div class="d-grid gap-2">
+                                                @if(IsLoggedIn())
+                                                {
+                                                    <a href="/Accessories/Details/@accessory.Id" class="btn btn-success">
+                                                        <i class="fas fa-info-circle me-2"></i>View Details
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/Accessories/Index" class="btn btn-success">
+                                                        <i class="fas fa-tools me-2"></i>View All Accessories
+                                                    </a>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        }
+                    }
+                    
+                    @if (ViewBag.FeaturedAccessories.Count == 0)
+                    {
+                        <div class="col-12">
+                            <div class="text-center py-5">
+                                <i class="fas fa-tools fa-4x mb-3" style="color: rgba(255,255,255,0.7);"></i>
+                                <h4 class="text-white">No featured accessories available</h4>
+                                <p>Check back soon for featured accessories</p>
+                            </div>
                         </div>
                     }
                 }
-                
-                @if (ViewBag.FeaturedAccessories.Count == 0)
+                else
                 {
                     <div class="col-12">
                         <div class="text-center py-5">
-                            <i class="fas fa-tools fa-4x text-muted mb-3"></i>
-                            <h4>No featured accessories available</h4>
-                            <p class="text-muted">Check back soon for featured accessories</p>
+                            <i class="fas fa-tools fa-4x mb-3" style="color: rgba(255,255,255,0.7);"></i>
+                            <h4 class="text-white">No featured accessories available</h4>
+                            <p>Check back soon for featured accessories</p>
                         </div>
                     </div>
                 }
-            }
-            else
-            {
-                <div class="col-12">
-                    <div class="text-center py-5">
-                        <i class="fas fa-tools fa-4x text-muted mb-3"></i>
-                        <h4>No featured accessories available</h4>
-                        <p class="text-muted">Check back soon for featured accessories</p>
-                    </div>
-                </div>
-            }
-        </div>
-        
-        <div class="text-center mt-5">
-            <a href="/Accessories/Index" class="btn btn-gradient-success btn-lg">
-                <i class="fas fa-tools me-2"></i>View All Accessories
-            </a>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="/Accessories/Index" class="btn btn-gradient-success btn-lg">
+                    <i class="fas fa-tools me-2"></i>View All Accessories
+                </a>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- New Arrivals Section with 4 cards per row -->
-<section id="new-arrivals" class="section-padding bg-light">
-    <div class="container">
-        <h2 class="section-title display-5 fw-bold">New Arrivals</h2>
-        <p class="text-center text-muted mb-5 fs-5">
-            Check out our latest drone additions
-        </p>
-        
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            @if (ViewBag.NewDrones != null)
-            {
-                @foreach(var drone in ViewBag.NewDrones)
+<section id="new-arrivals" class="new-arrivals-section">
+    <div class="section-content-wrapper">
+        <div class="container section-content">
+            <h2 class="section-title display-5 fw-bold">New Arrivals</h2>
+            <p class="text-center mb-5 fs-5">
+                Check out our latest drone additions
+            </p>
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                @if (ViewBag.NewDrones != null)
                 {
-                    @if (drone != null)
+                    @foreach(var drone in ViewBag.NewDrones)
                     {
-                        <div class="col">
-                            <div class="card product-card shadow-sm h-100">
-                                <!-- Image -->
-                                <div class="position-relative">
-                                    @if (!string.IsNullOrEmpty(drone.ImageUrl))
-                                    {
-                                        <img src="@drone.ImageUrl" class="card-img-top" 
-                                             alt="@drone.Name" style="height: 220px; object-fit: cover;">
-                                    }
-                                    else
-                                    {
-                                        <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                                             class="card-img-top" 
-                                             alt="@drone.Name" style="height: 220px; object-fit: cover;">
-                                    }
-                                    
-                                    <!-- New Badge -->
-                                    <div class="position-absolute top-0 start-0 p-3">
-                                        <span class="badge bg-danger">
-                                            <i class="fas fa-bolt me-1"></i>New
-                                        </span>
-                                    </div>
-                                    
-                                    <!-- Category Badge -->
-                                    @if(!string.IsNullOrEmpty(drone.Category))
-                                    {
-                                        <div class="position-absolute top-0 end-0 p-3">
-                                            <span class="badge bg-info">@drone.Category</span>
-                                        </div>
-                                    }
-                                </div>
-                                
-                                <!-- Card Body -->
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title fw-bold">@drone.Name</h5>
-                                    <div class="mb-3">
-                                        @if(!string.IsNullOrEmpty(drone.Category))
+                        @if (drone != null)
+                        {
+                            <div class="col">
+                                <div class="card product-card shadow-lg h-100">
+                                    <!-- Image -->
+                                    <div class="position-relative">
+                                        @if (!string.IsNullOrEmpty(drone.ImageUrl))
                                         {
-                                            <span class="badge bg-secondary me-2">@drone.Category</span>
-                                        }
-                                        @if (drone.DiscountPrice != null && drone.DiscountPrice > 0)
-                                        {
-                                            <span class="text-success fw-bold fs-5">
-                                                <del class="text-muted small">$@drone.Price.ToString("N2")</del> 
-                                                 $@((drone.DiscountPrice ?? 0).ToString("N2"))
-                                            </span>
+                                            <img src="@drone.ImageUrl" class="card-img-top" 
+                                                 alt="@drone.Name" style="height: 220px; object-fit: cover;">
                                         }
                                         else
                                         {
-                                            <span class="text-success fw-bold fs-5">$@drone.Price.ToString("N2")</span>
+                                            <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                                 class="card-img-top" 
+                                                 alt="@drone.Name" style="height: 220px; object-fit: cover;">
+                                        }
+                                        
+                                        <!-- New Badge -->
+                                        <div class="position-absolute top-0 start-0 p-3">
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-bolt me-1"></i>New
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Category Badge -->
+                                        @if(!string.IsNullOrEmpty(drone.Category))
+                                        {
+                                            <div class="position-absolute top-0 end-0 p-3">
+                                                <span class="badge bg-info">@drone.Category</span>
+                                            </div>
                                         }
                                     </div>
-                                    <p class="card-text text-muted mb-4 flex-grow-1">
-                                        @if(!string.IsNullOrEmpty(drone.Description) && drone.Description.Length > 80)
-                                        {
-                                            @drone.Description.Substring(0, 80)@:...
-                                        }
-                                        else if (!string.IsNullOrEmpty(drone.Description))
-                                        {
-                                            @drone.Description
-                                        }
-                                    </p>
-                                    <div class="mt-auto">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar-alt me-1"></i>
-                                                @drone.CreatedAt.ToString("MMM dd")
-                                            </small>
-                                            @if(IsLoggedIn())
+                                    
+                                    <!-- Card Body -->
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title fw-bold">@drone.Name</h5>
+                                        <div class="mb-3">
+                                            @if(!string.IsNullOrEmpty(drone.Category))
                                             {
-                                                <a href="/Drone/Details/@drone.Id" class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-eye me-1"></i>View
-                                                </a>
+                                                <span class="badge bg-secondary me-2">@drone.Category</span>
+                                            }
+                                            @if (drone.DiscountPrice != null && drone.DiscountPrice > 0)
+                                            {
+                                                <span class="text-success fw-bold fs-5">
+                                                    <del class="text-muted small">$@drone.Price.ToString("N2")</del> 
+                                                     $@((drone.DiscountPrice ?? 0).ToString("N2"))
+                                                </span>
                                             }
                                             else
                                             {
-                                                <a href="/Drone/Index" class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-store me-1"></i>Browse
-                                                </a>
+                                                <span class="text-success fw-bold fs-5">$@drone.Price.ToString("N2")</span>
                                             }
+                                        </div>
+                                        <p class="card-text mb-4 flex-grow-1">
+                                            @if(!string.IsNullOrEmpty(drone.Description) && drone.Description.Length > 80)
+                                            {
+                                                @drone.Description.Substring(0, 80)@:...
+                                            }
+                                            else if (!string.IsNullOrEmpty(drone.Description))
+                                            {
+                                                @drone.Description
+                                            }
+                                        </p>
+                                        <div class="mt-auto">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small>
+                                                    <i class="fas fa-calendar-alt me-1"></i>
+                                                    @drone.CreatedAt.ToString("MMM dd")
+                                                </small>
+                                                @if(IsLoggedIn())
+                                                {
+                                                    <a href="/Drone/Details/@drone.Id" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye me-1"></i>View
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="/Drone/Index" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-store me-1"></i>Browse
+                                                    </a>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        }
+                    }
+                    
+                    @if (ViewBag.NewDrones.Count == 0)
+                    {
+                        <div class="col-12">
+                            <div class="text-center py-5">
+                                <i class="fas fa-drone fa-4x mb-3" style="color: rgba(255,255,255,0.7);"></i>
+                                <h4 class="text-white">No new drones available</h4>
+                                <p>Check back soon for new arrivals</p>
+                            </div>
                         </div>
                     }
                 }
-                
-                @if (ViewBag.NewDrones.Count == 0)
+                else
                 {
                     <div class="col-12">
                         <div class="text-center py-5">
-                            <i class="fas fa-drone fa-4x text-muted mb-3"></i>
-                            <h4>No new drones available</h4>
-                            <p class="text-muted">Check back soon for new arrivals</p>
+                            <i class="fas fa-drone fa-4x mb-3" style="color: rgba(255,255,255,0.7);"></i>
+                            <h4 class="text-white">No new drones available</h4>
+                            <p>Check back soon for new arrivals</p>
                         </div>
                     </div>
                 }
-            }
-            else
-            {
-                <div class="col-12">
-                    <div class="text-center py-5">
-                        <i class="fas fa-drone fa-4x text-muted mb-3"></i>
-                        <h4>No new drones available</h4>
-                        <p class="text-muted">Check back soon for new arrivals</p>
-                    </div>
-                </div>
-            }
+            </div>
         </div>
     </div>
 </section>
@@ -1080,108 +1272,157 @@
                 });
             }
             
-            // Drone Suvidha's Carousel functionality
-            if ($('#servicesCarousel').length) {
-                const carousel = $('#servicesCarousel');
-                const slides = $('.carousel-slide');
-                const dots = $('.carousel-dot');
-                let currentIndex = 0;
-                const totalSlides = slides.length;
-                const slidesPerView = 3;
-                let autoSlideInterval;
-                
-                function updateCarousel() {
-                    // Remove center class from all slides
-                    slides.removeClass('center');
+            // ===== UPDATED DRONE SUVICHA CAROUSEL - SIMPLE & WORKING =====
+            $(function() {
+                if ($('#servicesCarousel').length) {
+                    console.log('Carousel found. Initializing...');
                     
-                    // Add center class to middle slide in viewport
-                    const centerIndex = currentIndex + 1;
-                    if (slides.eq(centerIndex).length) {
-                        slides.eq(centerIndex).addClass('center');
+                    const carousel = $('#servicesCarousel');
+                    const slides = $('.carousel-slide');
+                    const dots = $('.carousel-dot');
+                    let currentIndex = 0;
+                    const totalSlides = slides.length;
+                    let autoSlideInterval;
+                    
+                    // Function to update carousel
+                    function updateCarousel() {
+                        console.log('Updating carousel to index:', currentIndex);
+                        
+                        // Manage highlighting
+                        slides.removeClass('center');
+                        const currentSlide = slides.eq(currentIndex);
+                        currentSlide.addClass('center');
+                        
+                        // Slide logic (100% per slide for single view)
+                        const translateX = -currentIndex * 100;
+                        carousel.css('transform', `translateX(${translateX}%)`);
+                        
+                        // Update dots
+                        dots.removeClass('active');
+                        dots.eq(currentIndex).addClass('active');
                     }
                     
-                    // Calculate transform value
-                    const translateX = -currentIndex * (100 / slidesPerView);
-                    carousel.css('transform', `translateX(${translateX}%)`);
-                    
-                    // Update dots
-                    dots.removeClass('active');
-                    const dotIndex = Math.floor(currentIndex / slidesPerView);
-                    if (dots.eq(dotIndex).length) {
-                        dots.eq(dotIndex).addClass('active');
-                    }
-                }
-                
-                function nextSlide() {
-                    if (currentIndex < totalSlides - slidesPerView) {
-                        currentIndex++;
-                    } else {
-                        currentIndex = 0;
-                    }
-                    updateCarousel();
-                }
-                
-                function prevSlide() {
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                    } else {
-                        currentIndex = totalSlides - slidesPerView;
-                    }
-                    updateCarousel();
-                }
-                
-                function goToSlide(index) {
-                    currentIndex = index * slidesPerView;
-                    updateCarousel();
-                }
-                
-                // Initialize carousel
-                updateCarousel();
-                
-                // Start auto slide
-                function startAutoSlide() {
-                    autoSlideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
-                }
-                
-                function stopAutoSlide() {
-                    clearInterval(autoSlideInterval);
-                }
-                
-                // Event handlers
-                $('#carouselNext').on('click', function() {
-                    stopAutoSlide();
-                    nextSlide();
-                    startAutoSlide();
-                });
-                
-                $('#carouselPrev').on('click', function() {
-                    stopAutoSlide();
-                    prevSlide();
-                    startAutoSlide();
-                });
-                
-                dots.on('click', function() {
-                    stopAutoSlide();
-                    const slideIndex = $(this).data('slide');
-                    goToSlide(slideIndex);
-                    startAutoSlide();
-                });
-                
-                // Start auto slide on load
-                startAutoSlide();
-                
-                // Pause auto slide on hover
-                carousel.hover(stopAutoSlide, startAutoSlide);
-                
-                // Handle window resize
-                $(window).on('resize', function() {
-                    // Reset carousel for mobile
-                    if ($(window).width() < 768) {
-                        currentIndex = 0;
+                    // Next slide function
+                    function nextSlide() {
+                        console.log('Moving to next slide');
+                        // Cycle through slides (Right to Left movement)
+                        currentIndex = (currentIndex + 1) % totalSlides;
                         updateCarousel();
                     }
-                });
-            }
+                    
+                    // Previous slide function
+                    function prevSlide() {
+                        console.log('Moving to previous slide');
+                        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                        updateCarousel();
+                    }
+                    
+                    // Go to specific slide
+                    function goToSlide(index) {
+                        console.log('Going to slide:', index);
+                        currentIndex = index;
+                        updateCarousel();
+                    }
+                    
+                    // Auto slide function
+                    function startAutoSlide() {
+                        console.log('Starting auto slide');
+                        stopAutoSlide();
+                        // Automatic slide every 3.5 seconds
+                        autoSlideInterval = setInterval(nextSlide, 3500);
+                    }
+                    
+                    function stopAutoSlide() {
+                        console.log('Stopping auto slide');
+                        clearInterval(autoSlideInterval);
+                    }
+                    
+                    // Initialize and Start
+                    updateCarousel();
+                    startAutoSlide();
+                    
+                    // ===== EVENT HANDLERS =====
+                    
+                    // Next button click - FIXED
+                    $(document).on('click', '#carouselNext', function(e) {
+                        console.log('Next button clicked');
+                        e.preventDefault();
+                        e.stopPropagation();
+                        stopAutoSlide();
+                        nextSlide();
+                        startAutoSlide();
+                    });
+                    
+                    // Previous button click - FIXED
+                    $(document).on('click', '#carouselPrev', function(e) {
+                        console.log('Previous button clicked');
+                        e.preventDefault();
+                        e.stopPropagation();
+                        stopAutoSlide();
+                        prevSlide();
+                        startAutoSlide();
+                    });
+                    
+                    // Dot click
+                    $(document).on('click', '.carousel-dot', function() {
+                        const slideIndex = parseInt($(this).data('slide'));
+                        console.log('Dot clicked, going to slide:', slideIndex);
+                        stopAutoSlide();
+                        goToSlide(slideIndex);
+                        startAutoSlide();
+                    });
+                    
+                    // Pause on Hover
+                    $('#carouselWrapper').on('mouseenter', function() {
+                        console.log('Mouse entered, pausing carousel');
+                        stopAutoSlide();
+                    }).on('mouseleave', function() {
+                        console.log('Mouse left, resuming carousel');
+                        startAutoSlide();
+                    });
+                    
+                    // Touch swipe support
+                    let touchStartX = 0;
+                    let touchEndX = 0;
+                    
+                    $('#carouselWrapper').on('touchstart', function(e) {
+                        touchStartX = e.originalEvent.touches[0].clientX;
+                        stopAutoSlide();
+                    });
+                    
+                    $('#carouselWrapper').on('touchend', function(e) {
+                        touchEndX = e.originalEvent.changedTouches[0].clientX;
+                        const swipeThreshold = 50;
+                        const diff = touchStartX - touchEndX;
+                        
+                        if (Math.abs(diff) > swipeThreshold) {
+                            if (diff > 0) {
+                                // Swipe left - next slide
+                                nextSlide();
+                            } else {
+                                // Swipe right - previous slide
+                                prevSlide();
+                            }
+                        }
+                        startAutoSlide();
+                    });
+                    
+                    // Handle window resize
+                    $(window).on('resize', function() {
+                        updateCarousel();
+                    });
+                    
+                    // Make sure buttons are clickable
+                    $('#carouselNext, #carouselPrev').css({
+                        'cursor': 'pointer',
+                        'pointer-events': 'auto'
+                    });
+                    
+                    console.log('Carousel initialized successfully with', totalSlides, 'slides');
+                } else {
+                    console.log('Carousel not found');
+                }
+            });
         });
     </script>
 }

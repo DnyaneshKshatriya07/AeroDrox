@@ -5,6 +5,22 @@
       "PackagePath": "staticwebassets/AeroDroxUAV.bundle.scp.css"
     },
     {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/background/HomeAccessBG.jpg",
+      "PackagePath": "staticwebassets/background/HomeAccessBG.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/background/HomeCustomeBG.png",
+      "PackagePath": "staticwebassets/background/HomeCustomeBG.png"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/background/HomeFarmBG.jpg",
+      "PackagePath": "staticwebassets/background/HomeFarmBG.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/background/HomeNewBG.jpg",
+      "PackagePath": "staticwebassets/background/HomeNewBG.jpg"
+    },
+    {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
     },
@@ -13,12 +29,20 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/1fb34ea6-a846-4ff4-a2ad-3b857e738bc4_wallpaper.jpeg",
+      "PackagePath": "staticwebassets/images/services/1fb34ea6-a846-4ff4-a2ad-3b857e738bc4_wallpaper.jpeg"
+    },
+    {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/351c56b4-6f8a-4ae1-a519-e92d57600a17_AeroDrox Vima.jpeg",
       "PackagePath": "staticwebassets/images/services/351c56b4-6f8a-4ae1-a519-e92d57600a17_AeroDrox Vima.jpeg"
     },
     {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/7c5174d5-1759-4076-95ce-1c7ea469c959_Motors.webp",
       "PackagePath": "staticwebassets/images/services/7c5174d5-1759-4076-95ce-1c7ea469c959_Motors.webp"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/92d477d1-55ef-41d2-b33b-1bb182742fd2_about-vision.jpg",
+      "PackagePath": "staticwebassets/images/services/92d477d1-55ef-41d2-b33b-1bb182742fd2_about-vision.jpg"
     },
     {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/9d0fc5d4-7513-4026-90ef-d988d00b6379_AeroDrox Vima.jpeg",
