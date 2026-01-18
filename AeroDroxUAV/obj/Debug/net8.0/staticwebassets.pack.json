@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets/background/HomeNewBG.jpg"
     },
     {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/background/logo.ico",
+      "PackagePath": "staticwebassets/background/logo.ico"
+    },
+    {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
     },
