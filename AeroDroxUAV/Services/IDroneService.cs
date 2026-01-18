@@ -14,5 +14,6 @@ namespace AeroDroxUAV.Services
         Task<IEnumerable<Drone>> GetFeaturedDronesAsync();
         Task<IEnumerable<Drone>> GetDronesByCategoryAsync(string category);
         Task UpdateStockQuantityAsync(int droneId, int quantity);
+        Task<IEnumerable<Drone>> GetHomepageDronesAsync(); // NEW METHOD
     }
 }

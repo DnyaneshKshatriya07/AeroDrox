@@ -12,6 +12,7 @@ namespace AeroDroxUAV.Models
         public string? Condition { get; set; } // New field: New, Refurbished, Used
         public int StockQuantity { get; set; } = 0;
         public bool IsFeatured { get; set; } = false;
+        public bool ShowOnHomepage { get; set; } = false; // NEW FIELD: Add to Home Page
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public double? DiscountPrice { get; set; } // New field: Optional discount price
         

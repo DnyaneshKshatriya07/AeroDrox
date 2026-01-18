@@ -58,5 +58,14 @@ namespace AeroDroxUAV.Repositories
                 .Where(d => d.IsFeatured)
                 .ToListAsync();
         }
+
+        // NEW METHOD: Get drones for homepage
+        public async Task<IEnumerable<Drone>> GetHomepageDronesAsync()
+        {
+            return await _context.Drones
+                .Where(d => d.ShowOnHomepage)
+                .OrderByDescending(d => d.CreatedAt)
+                .ToListAsync();
+        }
     }
 }

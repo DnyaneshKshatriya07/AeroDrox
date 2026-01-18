@@ -42,12 +42,19 @@ public class HomeController : Controller
         
         try
         {
-            // Get featured drones
+            // Get featured drones (customized drones)
             var allDrones = await _droneService.GetAllDronesAsync();
             if (allDrones != null)
             {
                 ViewBag.FeaturedDrones = allDrones.Where(d => d.IsFeatured).Take(6).ToList();
-                ViewBag.NewDrones = allDrones.OrderByDescending(d => d.CreatedAt).Take(8).ToList();
+                
+                // UPDATED: Get New Arrivals - only show drones with ShowOnHomepage = true
+                ViewBag.NewDrones = allDrones
+                    .Where(d => d.ShowOnHomepage) // Only drones marked for homepage
+                    .OrderByDescending(d => d.CreatedAt)
+                    .Take(8)
+                    .ToList();
+                    
                 ViewBag.TotalDrones = allDrones.Count();
             }
             

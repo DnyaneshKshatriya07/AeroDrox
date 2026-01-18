@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "KbyU2U7sylVgODSMAwwSZN6QGYWojSEAodjmqfFxvWk=",
+  "Hash": "BrXvvpSkelfQn56dscnW+hMEwm1JVPQrIjJoSGHHXZ0=",
   "Source": "AeroDroxUAV",
   "BasePath": "_content/AeroDroxUAV",
   "Mode": "Default",
@@ -1592,6 +1592,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/uploads/drones/9f1f9469-3cbf-4067-9fc1-9935ec155fe7_Untitled.png"
+    },
+    {
+      "Identity": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/drones/a0c953e6-bc0e-4436-aa79-86660cc85d56_about-whyus.jpg",
+      "SourceId": "AeroDroxUAV",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/",
+      "BasePath": "_content/AeroDroxUAV",
+      "RelativePath": "uploads/drones/a0c953e6-bc0e-4436-aa79-86660cc85d56_about-whyus.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/drones/a0c953e6-bc0e-4436-aa79-86660cc85d56_about-whyus.jpg"
     },
     {
       "Identity": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/drones/c70f9a07-47a8-411b-8125-49a8c302a898_ic_launcher.png",

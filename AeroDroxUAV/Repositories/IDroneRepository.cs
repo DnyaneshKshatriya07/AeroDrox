@@ -14,5 +14,6 @@ namespace AeroDroxUAV.Repositories
         // Optional methods
         Task<IEnumerable<Drone>> GetByCategoryAsync(string category);
         Task<IEnumerable<Drone>> GetFeaturedAsync();
+        Task<IEnumerable<Drone>> GetHomepageDronesAsync(); // NEW METHOD
     }
 }

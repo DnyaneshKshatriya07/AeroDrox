@@ -67,5 +67,11 @@ namespace AeroDroxUAV.Services
                 await _droneRepository.SaveChangesAsync();
             }
         }
+
+        // NEW METHOD: Get drones for homepage
+        public async Task<IEnumerable<Drone>> GetHomepageDronesAsync()
+        {
+            return await _droneRepository.GetHomepageDronesAsync();
+        }
     }
 }

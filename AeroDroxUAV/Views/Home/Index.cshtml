@@ -1,4 +1,4 @@
-﻿﻿﻿@{
+﻿﻿﻿﻿﻿@{
     ViewData["Title"] = "AeroDrox UAV - Precision Aerial Solutions";
     
     // Helper function to check if user is logged in
@@ -408,6 +408,20 @@
         margin: 0;
         padding: 0;
         overflow-x: hidden;
+    }
+    
+    /* Homepage Indicator Badge */
+    .homepage-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        z-index: 1;
     }
     
     /* Responsive adjustments */
@@ -896,17 +910,17 @@
     </div>
 </section>
 
-<!-- New Arrivals Section with 4 cards per row -->
+<!-- New Arrivals Section with 4 cards per row - UPDATED: Only show drones with ShowOnHomepage = true -->
 <section id="new-arrivals" class="new-arrivals-section">
     <div class="section-content-wrapper">
         <div class="container section-content">
             <h2 class="section-title display-5 fw-bold">New Arrivals</h2>
             <p class="text-center mb-5 fs-5">
-                Check out our latest drone additions
+                Latest drones added to our collection
             </p>
             
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                @if (ViewBag.NewDrones != null)
+                @if (ViewBag.NewDrones != null && ((IEnumerable<AeroDroxUAV.Models.Drone>)ViewBag.NewDrones).Any())
                 {
                     @foreach(var drone in ViewBag.NewDrones)
                     {
@@ -928,11 +942,9 @@
                                                  alt="@drone.Name" style="height: 220px; object-fit: cover;">
                                         }
                                         
-                                        <!-- New Badge -->
-                                        <div class="position-absolute top-0 start-0 p-3">
-                                            <span class="badge bg-danger">
-                                                <i class="fas fa-bolt me-1"></i>New
-                                            </span>
+                                        <!-- Homepage Badge -->
+                                        <div class="homepage-badge">
+                                            <i class="fas fa-home me-1"></i>On Homepage
                                         </div>
                                         
                                         <!-- Category Badge -->
@@ -999,28 +1011,27 @@
                             </div>
                         }
                     }
-                    
-                    @if (ViewBag.NewDrones.Count == 0)
-                    {
-                        <div class="col-12">
-                            <div class="text-center py-5">
-                                <i class="fas fa-drone fa-4x mb-3" style="color: rgba(255,255,255,0.7);"></i>
-                                <h4 class="text-white">No new drones available</h4>
-                                <p>Check back soon for new arrivals</p>
-                            </div>
-                        </div>
-                    }
                 }
                 else
                 {
                     <div class="col-12">
                         <div class="text-center py-5">
                             <i class="fas fa-drone fa-4x mb-3" style="color: rgba(255,255,255,0.7);"></i>
-                            <h4 class="text-white">No new drones available</h4>
-                            <p>Check back soon for new arrivals</p>
+                            <h4 class="text-white">No new arrivals available</h4>
+                            <p class="mb-4">Drones will appear here when marked "Add to Home Page" in drone settings</p>
+                            <div class="alert alert-info d-inline-block">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Only drones with "Add to Home Page" enabled appear in this section
+                            </div>
                         </div>
                     </div>
                 }
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="/Drone/Index" class="btn btn-gradient-primary btn-lg">
+                    <i class="fas fa-store me-2"></i>View All Drones
+                </a>
             </div>
         </div>
     </div>
@@ -1138,7 +1149,7 @@
                                     <label for="email" class="form-label fw-semibold">
                                         <i class="fas fa-envelope me-2"></i>Email Address
                                     </label>
-                                    <input type="email" name="email" id="email" class="form-control form-control-lg" 
+                                    <input type="email" name="email" id="email" class="form-form-control form-control-lg" 
                                            placeholder="john@example.com" required>
                                 </div>
                                 
