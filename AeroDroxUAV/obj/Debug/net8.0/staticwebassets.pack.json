@@ -41,12 +41,20 @@
       "PackagePath": "staticwebassets/images/services/351c56b4-6f8a-4ae1-a519-e92d57600a17_AeroDrox Vima.jpeg"
     },
     {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/4da0b665-6000-4ab2-a5ec-e75bef5a376c_HomeNewBG.jpg",
+      "PackagePath": "staticwebassets/images/services/4da0b665-6000-4ab2-a5ec-e75bef5a376c_HomeNewBG.jpg"
+    },
+    {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/7c5174d5-1759-4076-95ce-1c7ea469c959_Motors.webp",
       "PackagePath": "staticwebassets/images/services/7c5174d5-1759-4076-95ce-1c7ea469c959_Motors.webp"
     },
     {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/92d477d1-55ef-41d2-b33b-1bb182742fd2_about-vision.jpg",
       "PackagePath": "staticwebassets/images/services/92d477d1-55ef-41d2-b33b-1bb182742fd2_about-vision.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/9aa42bf0-4be8-44bf-8a9a-d26ae34c73a8_HomeAccessBG.jpg",
+      "PackagePath": "staticwebassets/images/services/9aa42bf0-4be8-44bf-8a9a-d26ae34c73a8_HomeAccessBG.jpg"
     },
     {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/images/services/9d0fc5d4-7513-4026-90ef-d988d00b6379_AeroDrox Vima.jpeg",
@@ -355,6 +363,22 @@
     {
       "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/drones/c70f9a07-47a8-411b-8125-49a8c302a898_ic_launcher.png",
       "PackagePath": "staticwebassets/uploads/drones/c70f9a07-47a8-411b-8125-49a8c302a898_ic_launcher.png"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/videos/services/609d617b-3534-43c4-9bc3-b48f6598696e_Mappingmp4.mp4",
+      "PackagePath": "staticwebassets/videos/services/609d617b-3534-43c4-9bc3-b48f6598696e_Mappingmp4.mp4"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/videos/services/a832482b-bcc1-41c7-b71e-d1a153a2416e_Mappingmp4.mp4",
+      "PackagePath": "staticwebassets/videos/services/a832482b-bcc1-41c7-b71e-d1a153a2416e_Mappingmp4.mp4"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/videos/services/b6f60847-62ca-4b1c-860d-1c0578fb51f8_Mappingmp4.mp4",
+      "PackagePath": "staticwebassets/videos/services/b6f60847-62ca-4b1c-860d-1c0578fb51f8_Mappingmp4.mp4"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/videos/services/c5e26993-1236-4590-a2fd-05cbe5a050e5_synergy 2025 Auditorium.mp4",
+      "PackagePath": "staticwebassets/videos/services/c5e26993-1236-4590-a2fd-05cbe5a050e5_synergy 2025 Auditorium.mp4"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AeroDroxUAV.Microsoft.AspNetCore.StaticWebAssets.props",

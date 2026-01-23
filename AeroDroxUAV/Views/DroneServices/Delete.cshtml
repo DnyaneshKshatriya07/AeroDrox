@@ -38,16 +38,26 @@
                             <small class="text-muted d-block mt-1 small">@Model.Category</small>
                         </h4>
                         
-                        <!-- Service Image -->
-                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        <!-- Service Media Preview -->
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl) || !string.IsNullOrEmpty(Model.VideoUrl))
                         {
                             <div class="text-center mb-3">
-                                <img src="@Model.ImageUrl" class="img-fluid rounded" style="max-height: 150px;" alt="@Model.Name">
+                                @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                                {
+                                    <video class="img-fluid rounded" style="max-height: 150px;" controls>
+                                        <source src="@Model.VideoUrl" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                }
+                                else if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                {
+                                    <img src="@Model.ImageUrl" class="img-fluid rounded" style="max-height: 150px;" alt="@Model.Name">
+                                }
                             </div>
                         }
                         
                         <div class="row text-center">
-                            <div class="col-md-6 mb-2">
+                            <div class="col-md-4 mb-2">
                                 <div class="p-2 bg-white rounded shadow-sm">
                                     <h6 class="text-muted small mb-1">
                                         <i class="fas fa-layer-group me-1"></i>Category
@@ -55,7 +65,15 @@
                                     <span class="badge bg-info">@Model.Category</span>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-2">
+                            <div class="col-md-4 mb-2">
+                                <div class="p-2 bg-white rounded shadow-sm">
+                                    <h6 class="text-muted small mb-1">
+                                        <i class="fas fa-clock me-1"></i>Duration
+                                    </h6>
+                                    <span class="badge bg-warning small">@(string.IsNullOrEmpty(Model.Duration) ? "N/A" : Model.Duration)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
                                 <div class="p-2 bg-white rounded shadow-sm">
                                     <h6 class="text-muted small mb-1">
                                         <i class="fas fa-toggle-on me-1"></i>Status
@@ -98,11 +116,12 @@
                             <div class="alert alert-danger border-danger small">
                                 <i class="fas fa-users me-2"></i>
                                 <strong>Note:</strong> This suvidha may have active bookings.
-                                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                @if (!string.IsNullOrEmpty(Model.ImageUrl) || !string.IsNullOrEmpty(Model.VideoUrl))
                                 {
                                     <div class="mt-1">
-                                        <i class="fas fa-image me-2"></i>
-                                        <strong>Image will also be deleted:</strong> @Model.ImageUrl
+                                        <i class="fas @(!string.IsNullOrEmpty(Model.VideoUrl) ? "fa-video" : "fa-image") me-2"></i>
+                                        <strong>Media file will also be deleted:</strong> 
+                                        @(!string.IsNullOrEmpty(Model.VideoUrl) ? Model.VideoUrl : Model.ImageUrl)
                                     </div>
                                 }
                             </div>
@@ -112,6 +131,7 @@
                     <form method="post" asp-controller="DroneServices" asp-action="Delete" id="deleteForm">
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="ImageUrl" />
+                        <input type="hidden" asp-for="VideoUrl" />
                         
                         <div class="text-center">
                             <h5 class="mb-3 text-danger h6">
@@ -139,10 +159,10 @@
                             <p class="text-muted mt-3 small">
                                 <i class="fas fa-info-circle me-1"></i>
                                 This action will permanently remove the suvidha and all associated data.
-                                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                @if (!string.IsNullOrEmpty(Model.ImageUrl) || !string.IsNullOrEmpty(Model.VideoUrl))
                                 {
-                                    <br /><i class="fas fa-image me-1"></i>
-                                    <text>The suvidha image file will also be deleted from the server.</text>
+                                    <br /><i class="fas @(!string.IsNullOrEmpty(Model.VideoUrl) ? "fa-video" : "fa-image") me-1"></i>
+                                    <text>The @(!string.IsNullOrEmpty(Model.VideoUrl) ? "video" : "image") file will also be deleted from the server.</text>
                                 }
                             </p>
                         </div>

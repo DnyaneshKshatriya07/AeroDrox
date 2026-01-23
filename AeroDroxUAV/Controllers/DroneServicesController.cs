@@ -10,7 +10,7 @@ namespace AeroDroxUAV.Controllers
     public class DroneServicesController : Controller
     {
         private readonly IDroneServicesService _droneServicesService;
-        private readonly IWebHostEnvironment _webHostEnvironment; // Added for file paths
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public DroneServicesController(IDroneServicesService droneServicesService, IWebHostEnvironment webHostEnvironment)
         {
@@ -49,7 +49,7 @@ namespace AeroDroxUAV.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(DroneServices droneServices, IFormFile imageFile)
+        public async Task<IActionResult> Create(DroneServices droneServices, IFormFile? imageFile, IFormFile? videoFile)
         {
             if (!IsLoggedIn() || !IsAdmin()) return Unauthorized();
 
@@ -58,7 +58,13 @@ namespace AeroDroxUAV.Controllers
                 // Handle Image Upload
                 if (imageFile != null && imageFile.Length > 0)
                 {
-                    droneServices.ImageUrl = await SaveImage(imageFile);
+                    droneServices.ImageUrl = await SaveFile(imageFile, "images/services");
+                }
+
+                // Handle Video Upload
+                if (videoFile != null && videoFile.Length > 0)
+                {
+                    droneServices.VideoUrl = await SaveFile(videoFile, "videos/services");
                 }
 
                 await _droneServicesService.CreateDroneServicesAsync(droneServices);
@@ -77,7 +83,7 @@ namespace AeroDroxUAV.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(DroneServices droneServices, IFormFile? imageFile)
+        public async Task<IActionResult> Edit(DroneServices droneServices, IFormFile? imageFile, IFormFile? videoFile)
         {
             if (!IsLoggedIn() || !IsAdmin()) return Unauthorized();
 
@@ -86,7 +92,13 @@ namespace AeroDroxUAV.Controllers
                 // If a new image is uploaded, replace the old one
                 if (imageFile != null && imageFile.Length > 0)
                 {
-                    droneServices.ImageUrl = await SaveImage(imageFile);
+                    droneServices.ImageUrl = await SaveFile(imageFile, "images/services");
+                }
+
+                // If a new video is uploaded, replace the old one
+                if (videoFile != null && videoFile.Length > 0)
+                {
+                    droneServices.VideoUrl = await SaveFile(videoFile, "videos/services");
                 }
 
                 await _droneServicesService.UpdateDroneServicesAsync(droneServices);
@@ -95,24 +107,24 @@ namespace AeroDroxUAV.Controllers
             return View(droneServices);
         }
 
-        // Helper Method to Save Image
-        private async Task<string> SaveImage(IFormFile imageFile)
+        // Helper Method to Save Files (Images or Videos)
+        private async Task<string> SaveFile(IFormFile file, string folderPath)
         {
-            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/services");
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
             
             // Ensure directory exists
             if (!Directory.Exists(uploadsFolder)) 
                 Directory.CreateDirectory(uploadsFolder);
 
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(file.FileName);
             string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                await imageFile.CopyToAsync(fileStream);
+                await file.CopyToAsync(fileStream);
             }
 
-            return "/images/services/" + uniqueFileName;
+            return $"/{folderPath}/{uniqueFileName}";
         }
 
         public async Task<IActionResult> Delete(int id)

@@ -10,12 +10,39 @@
         <!-- Service Details Card -->
         <div class="col-lg-8">
             <div class="card shadow border-0 mb-3">
-                <!-- Service Image -->
-                <div class="position-relative" style="height: 300px; overflow: hidden; border-radius: 12px 12px 0 0;">
-                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                <!-- Service Media (Image or Video) with Autoplay -->
+                <div class="position-relative" style="height: 400px; overflow: hidden; border-radius: 12px 12px 0 0;">
+                    @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                    {
+                        <video class="w-100 h-100" 
+                               style="object-fit: cover; background-color: #000;"
+                               autoplay 
+                               muted 
+                               loop 
+                               playsinline
+                               controls>
+                            <source src="@Model.VideoUrl" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        
+                        <!-- Video Badge -->
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-dark">
+                                <i class="fas fa-video me-1"></i>Video
+                            </span>
+                        </div>
+                    }
+                    else if (!string.IsNullOrEmpty(Model.ImageUrl))
                     {
                         <img src="@Model.ImageUrl" class="w-100 h-100" alt="@Model.Name" 
                              style="object-fit: cover;">
+                            
+                        <!-- Image Badge -->
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-info">
+                                <i class="fas fa-image me-1"></i>Image
+                            </span>
+                        </div>
                     }
                     else
                     {
@@ -25,7 +52,7 @@
                     }
                     
                     <!-- Category Badge -->
-                    <div class="position-absolute top-0 start-0 m-3">
+                    <div class="position-absolute top-0 start-0 m-3" style="margin-left: 120px !important;">
                         <span class="badge bg-primary">@Model.Category</span>
                     </div>
                     
@@ -48,6 +75,19 @@
                 
                 <div class="card-body p-4">
                     <h1 class="h3 mb-2">@Model.Name</h1>
+                    
+                    <!-- Service Duration -->
+                    @if (!string.IsNullOrEmpty(Model.Duration))
+                    {
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-1">
+                                <i class="fas fa-clock me-2"></i>Duration:
+                            </h6>
+                            <span class="badge bg-warning text-dark fs-6">
+                                <i class="fas fa-clock me-1"></i>@Model.Duration
+                            </span>
+                        </div>
+                    }
                     
                     <!-- Service Description -->
                     <div class="mb-4">
@@ -134,7 +174,16 @@
                                 <i class="fas fa-clock me-2 text-muted fa-sm"></i>
                                 <span class="fw-semibold">Duration</span>
                             </div>
-                            <span class="small">2-4 Hours</span>
+                            <span class="small">@(string.IsNullOrEmpty(Model.Duration) ? "2-4 Hours" : Model.Duration)</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2">
+                            <div>
+                                <i class="fas fa-image me-2 text-muted fa-sm"></i>
+                                <span class="fw-semibold">Media Type</span>
+                            </div>
+                            <span class="badge @(!string.IsNullOrEmpty(Model.VideoUrl) ? "bg-dark" : "bg-info") small">
+                                @(!string.IsNullOrEmpty(Model.VideoUrl) ? "Video" : "Image")
+                            </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2">
                             <div>
@@ -217,6 +266,18 @@
         background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%) !important;
     }
     
+    .bg-warning {
+        background: linear-gradient(135deg, #fbb034 0%, #ffdd00 100%) !important;
+    }
+    
+    .bg-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    }
+    
+    .bg-dark {
+        background: linear-gradient(135deg, #343a40 0%, #212529 100%) !important;
+    }
+    
     .bg-light {
         background-color: #f8f9fa !important;
     }
@@ -247,5 +308,9 @@
     .list-group-item {
         background-color: transparent;
         font-size: 0.9rem;
+    }
+    
+    video {
+        background-color: #000;
     }
 </style>

@@ -23,6 +23,7 @@
                     <form method="post" asp-controller="DroneServices" asp-action="Edit" enctype="multipart/form-data" id="editServiceForm">
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="ImageUrl" />
+                        <input type="hidden" asp-for="VideoUrl" />
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -51,29 +52,111 @@
                             </div>
                         </div>
 
-                        <!-- Image Upload -->
-                        <div class="mb-3">
-                            <label for="imageFile" class="form-label fw-semibold small">
-                                <i class="fas fa-image me-2"></i>Suvidha Image
-                            </label>
-                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="Duration" class="form-control form-control-sm" 
+                                           id="duration" placeholder="e.g., 2-4 Hours, 1 Day, etc." required />
+                                    <label for="duration" class="small">
+                                        <i class="fas fa-clock me-2"></i>Duration
+                                    </label>
+                                    <div class="form-text small">
+                                        Enter duration (e.g., "2-4 Hours", "1 Day", "1 Week")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Media Upload Section -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">
+                                <i class="fas fa-images me-2 text-primary"></i>Media Upload
+                                <small class="text-muted ms-2">(Choose either Image or Video)</small>
+                            </h6>
+                            
+                            <!-- Current Media Preview -->
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl) || !string.IsNullOrEmpty(Model.VideoUrl))
                             {
-                                <div class="mb-2">
-                                    <p class="text-muted small mb-1">Current Image:</p>
-                                    <img src="@Model.ImageUrl" class="img-thumbnail" style="max-height: 120px;">
-                                    <div class="form-text small mt-1">
-                                        Upload a new image to replace the current one (Reccomenadtion: JPG, PNG, max 5MB, sqaure size (2000 x 1000 pixels) for best view)
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light py-2">
+                                        <h6 class="mb-0 small">
+                                            <i class="fas fa-eye me-2"></i>Current Media
+                                        </h6>
+                                    </div>
+                                    <div class="card-body p-3">
+                                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                        {
+                                            <div class="mb-2">
+                                                <p class="text-muted small mb-1">Current Image:</p>
+                                                <img src="@Model.ImageUrl" class="img-thumbnail" style="max-height: 120px;">
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                                        {
+                                            <div>
+                                                <p class="text-muted small mb-1">Current Video:</p>
+                                                <video class="img-thumbnail" style="max-height: 120px; max-width: 100%;" controls>
+                                                    <source src="@Model.VideoUrl" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             }
-                            <input type="file" class="form-control form-control-sm" id="imageFile" name="imageFile" 
-                                   accept="image/*" onchange="previewImage(this);">
-                            <div class="form-text small">
-                                Leave empty to keep current image
+                            
+                            <!-- Image Upload -->
+                            <div class="card mb-3">
+                                <div class="card-header bg-light py-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="mediaType" id="imageOption" value="image" onclick="toggleMediaType()">
+                                        <label class="form-check-label fw-semibold small" for="imageOption">
+                                            <i class="fas fa-image me-2 text-primary"></i>Update Image
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3" id="imageUploadSection" style="display: none;">
+                                    <div class="mb-2">
+                                        <label for="imageFile" class="form-label small mb-1">Choose New Image File:</label>
+                                        <input type="file" class="form-control form-control-sm" id="imageFile" name="imageFile" 
+                                               accept="image/*" onchange="previewMedia(this, 'image')">
+                                    </div>
+                                    <div class="form-text small">
+                                        Recommended: JPG, PNG, max 5MB, aspect ratio 16:9 for best view
+                                    </div>
+                                    <div class="mt-2" id="imagePreview" style="display: none;">
+                                        <p class="text-muted small mb-1">New Image Preview:</p>
+                                        <img id="imagePreviewImg" class="img-thumbnail" style="max-height: 120px;">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mt-2" id="imagePreview" style="display: none;">
-                                <p class="text-muted small mb-1">New Image Preview:</p>
-                                <img id="preview" class="img-thumbnail" style="max-height: 120px;">
+                            
+                            <!-- Video Upload -->
+                            <div class="card">
+                                <div class="card-header bg-light py-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="mediaType" id="videoOption" value="video" onclick="toggleMediaType()">
+                                        <label class="form-check-label fw-semibold small" for="videoOption">
+                                            <i class="fas fa-video me-2 text-success"></i>Update Video
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3" id="videoUploadSection" style="display: none;">
+                                    <div class="mb-2">
+                                        <label for="videoFile" class="form-label small mb-1">Choose New Video File:</label>
+                                        <input type="file" class="form-control form-control-sm" id="videoFile" name="videoFile" 
+                                               accept="video/*" onchange="previewMedia(this, 'video')">
+                                    </div>
+                                    <div class="form-text small">
+                                        Recommended: MP4, WebM, max 50MB, duration under 2 minutes
+                                    </div>
+                                    <div class="mt-2" id="videoPreview" style="display: none;">
+                                        <p class="text-muted small mb-1">New Video Preview:</p>
+                                        <video id="videoPreviewPlayer" class="img-thumbnail" style="max-height: 120px; max-width: 100%;" controls>
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -165,22 +248,71 @@
             });
         });
 
-        function previewImage(input) {
-            const preview = document.getElementById('preview');
-            const imagePreview = document.getElementById('imagePreview');
+        function toggleMediaType() {
+            const imageOption = document.getElementById('imageOption');
+            const videoOption = document.getElementById('videoOption');
+            const imageUploadSection = document.getElementById('imageUploadSection');
+            const videoUploadSection = document.getElementById('videoUploadSection');
+            const imageFileInput = document.getElementById('imageFile');
+            const videoFileInput = document.getElementById('videoFile');
             
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    imagePreview.style.display = 'block';
-                }
-                
-                reader.readAsDataURL(input.files[0]);
+            if (imageOption.checked) {
+                imageUploadSection.style.display = 'block';
+                videoUploadSection.style.display = 'none';
+                videoFileInput.value = ''; // Clear video file input
+                document.getElementById('videoPreview').style.display = 'none';
+            } else if (videoOption.checked) {
+                imageUploadSection.style.display = 'none';
+                videoUploadSection.style.display = 'block';
+                imageFileInput.value = ''; // Clear image file input
+                document.getElementById('imagePreview').style.display = 'none';
             } else {
-                preview.src = '';
-                imagePreview.style.display = 'none';
+                imageUploadSection.style.display = 'none';
+                videoUploadSection.style.display = 'none';
+                imageFileInput.value = '';
+                videoFileInput.value = '';
+                document.getElementById('imagePreview').style.display = 'none';
+                document.getElementById('videoPreview').style.display = 'none';
+            }
+        }
+
+        function previewMedia(input, type) {
+            if (type === 'image') {
+                const preview = document.getElementById('imagePreviewImg');
+                const imagePreview = document.getElementById('imagePreview');
+                
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    }
+                    
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    preview.src = '';
+                    imagePreview.style.display = 'none';
+                }
+            } else if (type === 'video') {
+                const preview = document.getElementById('videoPreviewPlayer');
+                const videoPreview = document.getElementById('videoPreview');
+                
+                if (input.files && input.files[0]) {
+                    const file = input.files[0];
+                    const url = URL.createObjectURL(file);
+                    
+                    preview.src = url;
+                    videoPreview.style.display = 'block';
+                    
+                    // Clean up URL when video is loaded
+                    preview.onload = function() {
+                        URL.revokeObjectURL(url);
+                    }
+                } else {
+                    preview.src = '';
+                    videoPreview.style.display = 'none';
+                }
             }
         }
     </script>
@@ -193,6 +325,10 @@
         .card {
             border-radius: 12px;
             overflow: hidden;
+        }
+        
+        .card .card {
+            border: 1px solid #dee2e6;
         }
         
         .form-control-sm, .form-select-sm {
@@ -228,6 +364,11 @@
         
         .form-text.small {
             font-size: 0.8rem;
+        }
+        
+        .form-check-input:checked {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
         }
     </style>
 }

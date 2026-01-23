@@ -91,19 +91,46 @@
         {
             <div class="col-lg-6 col-md-12 mb-4">
                 <div class="card h-100 border-0 shadow-sm hover-card">
-                    <!-- Service Image -->
+                    <!-- Service Media -->
                     <div class="position-relative" style="height: 180px; overflow: hidden;">
-                        @if (!string.IsNullOrEmpty(service.ImageUrl))
+                        @if (!string.IsNullOrEmpty(service.VideoUrl))
                         {
-                            <img src="@service.ImageUrl" class="card-img-top" alt="@service.Name" 
-                                 style="height: 100%; width: 100%; object-fit: cover;">
+                                            <!-- Video with Autoplay -->
+                                            <video class="w-100 h-100" 
+                                                   style="object-fit: cover; background-color: #000;"
+                                                   autoplay 
+                                                   muted 
+                                                   loop 
+                                                   playsinline
+                                                   onmouseover="this.play()" 
+                                                   onmouseout="this.play()">
+                                                <source src="@service.VideoUrl" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                            <!-- Video Badge -->
+                                            <div class="position-absolute top-0 start-0 m-2">
+                                                <span class="badge bg-dark small">
+                                                    <i class="fas fa-video me-1"></i>Video
+                                                </span>
+                                            </div>
+                        }
+                        else if (!string.IsNullOrEmpty(service.ImageUrl))
+                        {
+                                            <img src="@service.ImageUrl" class="card-img-top" alt="@service.Name" 
+                                                 style="height: 100%; width: 100%; object-fit: cover;">
+                                            <!-- Image Badge -->
+                                            <div class="position-absolute top-0 start-0 m-2">
+                                                <span class="badge bg-info small">
+                                                    <i class="fas fa-image me-1"></i>Image
+                                                </span>
+                                            </div>
                         }
                         else
                         {
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
-                                 style="height: 100%;">
-                                <i class="fas fa-concierge-bell fa-2x text-muted"></i>
-                            </div>
+                                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                                                 style="height: 100%;">
+                                                <i class="fas fa-concierge-bell fa-2x text-muted"></i>
+                                            </div>
                         }
                         
                         <!-- Status Badge -->
@@ -126,10 +153,36 @@
                         <div class="position-absolute top-0 start-0 m-2">
                             <span class="badge bg-primary small">@service.Category</span>
                         </div>
+                        
+                        <!-- Media Type Badge -->
+                        <div class="position-absolute bottom-0 start-0 m-2">
+                            @if(!string.IsNullOrEmpty(service.VideoUrl))
+                            {
+                                <span class="badge bg-dark small">
+                                    <i class="fas fa-video me-1"></i>Video
+                                </span>
+                            }
+                            else if(!string.IsNullOrEmpty(service.ImageUrl))
+                            {
+                                <span class="badge bg-info small">
+                                    <i class="fas fa-image me-1"></i>Image
+                                </span>
+                            }
+                        </div>
                     </div>
                     
                     <div class="card-body p-3">
                         <h5 class="card-title mb-2">@service.Name</h5>
+                        
+                        <!-- Duration Badge -->
+                        @if(!string.IsNullOrEmpty(service.Duration))
+                        {
+                            <div class="mb-2">
+                                <span class="badge bg-warning text-dark small">
+                                    <i class="fas fa-clock me-1"></i>@service.Duration
+                                </span>
+                            </div>
+                        }
                         
                         <p class="card-text text-truncate-3 mb-3" style="height: 4.5em; overflow: hidden;">
                             @service.Description
@@ -285,6 +338,10 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     
+    .bg-warning {
+        background: linear-gradient(135deg, #fbb034 0%, #ffdd00 100%) !important;
+    }
+    
     .btn-warning {
         background: linear-gradient(135deg, #fbb034 0%, #ffdd00 100%);
         border: none;
@@ -351,6 +408,11 @@
     .form-control, .form-select {
         background-color: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Video styling */
+    video {
+        background-color: #000;
     }
     
     /* Responsive adjustments */
