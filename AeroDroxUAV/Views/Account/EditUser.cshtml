@@ -22,24 +22,35 @@
                         </div>
                     }
 
-                    <form asp-action="EditUser" method="post">
+                    <form asp-action="EditUser" method="post" id="editUserForm">
                         <input type="hidden" asp-for="Id" />
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input asp-for="Username" class="form-control" />
-                                    <label asp-for="Username" class="control-label"></label>
+                                    <input asp-for="Username" class="form-control" 
+                                           pattern="[a-zA-Z0-9]{1,15}" 
+                                           title="Username must be 1-15 characters long and can only contain letters and numbers (no symbols)"
+                                           maxlength="15" required />
+                                    <label asp-for="Username">Username</label>
                                     <small class="form-text text-muted">
-                                        Changing the username requires the new name to be unique.
+                                        <i class="fas fa-info-circle me-1"></i>Username must be 1-15 characters (letters and numbers only) and unique.
                                     </small>
+                                    <span asp-validation-for="Username" class="text-danger"></span>
                                 </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input asp-for="FullName" class="form-control" />
-                                    <label asp-for="FullName" class="control-label"></label>
+                                    <input asp-for="FullName" class="form-control" 
+                                           pattern="[A-Za-z\s]{1,40}"
+                                           title="Full Name must contain only letters and spaces, maximum 40 characters"
+                                           maxlength="40" required />
+                                    <label asp-for="FullName">Full Name</label>
+                                    <small class="form-text text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>Only letters and spaces allowed, maximum 40 characters.
+                                    </small>
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -47,21 +58,63 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input asp-for="Email" class="form-control" type="email" />
-                                    <label asp-for="Email" class="control-label"></label>
+                                    <input asp-for="Email" class="form-control" type="email" 
+                                           pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$"
+                                           title="Please enter a valid email address"
+                                           required />
+                                    <label asp-for="Email">Email</label>
                                     <small class="form-text text-muted">
-                                        Email must be unique.
+                                        <i class="fas fa-info-circle me-1"></i>Email must be valid and unique.
                                     </small>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input asp-for="MobileNumber" class="form-control" pattern="[0-9]{10}" />
-                                    <label asp-for="MobileNumber" class="control-label"></label>
+                                    <input asp-for="MobileNumber" class="form-control" 
+                                           pattern="[6-9][0-9]{9}"
+                                           title="Mobile number must start with 6-9 and be exactly 10 digits"
+                                           maxlength="10" required />
+                                    <label asp-for="MobileNumber">Mobile Number</label>
                                     <small class="form-text text-muted">
-                                        Mobile number must be unique and 10 digits.
+                                        <i class="fas fa-info-circle me-1"></i>10-digit number starting with 6-9, must be unique.
                                     </small>
+                                    <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating position-relative">
+                                    <input type="password" name="Password" id="Password" class="form-control" 
+                                           pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$!%*?&])[A-Za-z\d@@$!%*?&]{8,}"
+                                           title="Password must be at least 8 characters with at least one uppercase letter, one lowercase letter, one number, and one special character"
+                                           minlength="8" />
+                                    <label for="Password">New Password (optional)</label>
+                                    <span class="position-absolute end-0 top-0 mt-3 me-3" style="cursor: pointer;" onclick="togglePasswordVisibility('Password')">
+                                        <i class="fas fa-eye" id="togglePassword"></i>
+                                    </span>
+                                    <small class="form-text text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>Minimum 8 characters with at least: 1 uppercase, 1 lowercase, 1 number, 1 special character.
+                                    </small>
+                                    <span id="passwordError" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating position-relative">
+                                    <input type="password" id="ConfirmPassword" class="form-control" 
+                                           title="Please confirm your password" />
+                                    <label for="ConfirmPassword">Confirm Password</label>
+                                    <span class="position-absolute end-0 top-0 mt-3 me-3" style="cursor: pointer;" onclick="togglePasswordVisibility('ConfirmPassword')">
+                                        <i class="fas fa-eye" id="toggleConfirmPassword"></i>
+                                    </span>
+                                    <small class="form-text text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>Re-enter your new password.
+                                    </small>
+                                    <span id="confirmPasswordError" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -69,28 +122,20 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input type="password" name="Password" class="form-control" 
-                                           pattern=".{6,}" title="Minimum 6 characters" />
-                                    <label for="Password" class="control-label">New Password (optional)</label>
-                                    <small class="form-text text-muted">
-                                        Leave blank to keep the current password. Minimum 6 characters.
-                                    </small>
-                                    <div class="mt-2">
-                                        <input type="checkbox" id="showPasswordEdit" class="form-check-input">
-                                        <label for="showPasswordEdit" class="form-check-label small">Show Password</label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <div class="form-floating">
-                                    <select name="Role" class="form-control">
+                                    <select name="Role" class="form-control" id="Role">
                                         @foreach (var role in roles)
                                         {
-                                            <option value="@role" selected="@(Model.Role == role)">@role</option>
+                                            if (Model.Role == role)
+                                            {
+                                                <option value="@role" selected="selected">@role</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@role">@role</option>
+                                            }
                                         }
                                     </select>
-                                    <label for="Role" class="control-label">Role</label>
+                                    <label for="Role">Role</label>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +144,7 @@
                         
                         <div class="d-flex justify-content-between">
                             <div>
-                                <button type="submit" class="btn btn-primary me-2">
+                                <button type="submit" class="btn btn-primary me-2" id="submitBtn">
                                     <i class="fas fa-save me-2"></i>Save Changes
                                 </button>
                                 <a asp-action="UserManagement" class="btn btn-secondary">
@@ -108,7 +153,7 @@
                             </div>
                             <div class="text-muted small">
                                 <i class="fas fa-info-circle me-1"></i>
-                                Created: @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                                Created: @(Model.CreatedAt.ToString("yyyy-MM-dd HH:mm"))
                             </div>
                         </div>
                     </form>
@@ -119,22 +164,110 @@
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
-        $(document).ready(function() {
-            // Toggle password visibility
-            $('#showPasswordEdit').change(function() {
-                var passwordInput = $('input[name="Password"]');
-                if ($(this).is(':checked')) {
-                    passwordInput.attr('type', 'text');
-                } else {
-                    passwordInput.attr('type', 'password');
-                }
-            });
+        // Mobile number formatting and validation
+        document.getElementById('MobileNumber').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
             
-            // Mobile number formatting
-            $('#MobileNumber').on('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
-            });
+            // Check if number starts with valid digit (6-9)
+            if (this.value.length > 0) {
+                var firstDigit = this.value.charAt(0);
+                if (firstDigit < '6' || firstDigit > '9') {
+                    this.setCustomValidity('Mobile number must start with 6, 7, 8, or 9');
+                } else {
+                    this.setCustomValidity('');
+                }
+            }
         });
+
+        // Username validation - prevent symbols
+        document.getElementById('Username').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 15);
+        });
+
+        // Full Name validation - only letters and spaces
+        document.getElementById('FullName').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^A-Za-z\s]/g, '').slice(0, 40);
+        });
+
+        // Password validation
+        function validatePassword() {
+            var password = document.getElementById('Password').value;
+            var confirmPassword = document.getElementById('ConfirmPassword').value;
+            var isValid = true;
+
+            // Clear previous errors
+            document.getElementById('passwordError').innerHTML = '';
+            document.getElementById('confirmPasswordError').innerHTML = '';
+
+            // Only validate if password field is not empty
+            if (password.length > 0) {
+                var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$!%*?&])[A-Za-z\d@@$!%*?&]{8,}$/;
+                
+                if (!passwordRegex.test(password)) {
+                    document.getElementById('passwordError').innerHTML = 'Password must contain at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 special character';
+                    isValid = false;
+                }
+
+                // Check if passwords match
+                if (password !== confirmPassword) {
+                    document.getElementById('confirmPasswordError').innerHTML = 'Passwords do not match';
+                    isValid = false;
+                }
+            } else if (confirmPassword.length > 0) {
+                // If password is empty but confirm password is not
+                document.getElementById('confirmPasswordError').innerHTML = 'Please enter a password first';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        document.getElementById('Password').addEventListener('input', validatePassword);
+        document.getElementById('ConfirmPassword').addEventListener('input', validatePassword);
+
+        // Form submission validation
+        document.getElementById('editUserForm').addEventListener('submit', function(e) {
+            var passwordValid = validatePassword();
+            
+            // Check if any required fields are empty
+            var username = document.getElementById('Username').value;
+            var fullName = document.getElementById('FullName').value;
+            var email = document.getElementById('Email').value;
+            var mobile = document.getElementById('MobileNumber').value;
+
+            if (!username || !fullName || !email || !mobile) {
+                e.preventDefault();
+                alert('Please fill in all required fields');
+                return false;
+            }
+
+            if (!passwordValid) {
+                e.preventDefault();
+                return false;
+            }
+
+            return true;
+        });
+
+        // Toggle password visibility function
+        function togglePasswordVisibility(fieldId) {
+            var field = document.getElementById(fieldId);
+            var icon = event.currentTarget.querySelector('i');
+            
+            if (field.type === "password") {
+                field.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
     </script>
+    
+    <!-- Add Font Awesome if not already included -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 }

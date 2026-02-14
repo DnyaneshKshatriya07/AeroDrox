@@ -3,6 +3,186 @@
     ViewData["Title"] = "My Profile";
 }
 
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+        border: none;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 2px solid #e0e0e0;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .form-control.is-valid {
+        border-color: #28a745;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        padding-right: calc(1.5em + 0.75rem);
+    }
+    
+    .form-control.is-invalid {
+        border-color: #dc3545;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        padding-right: calc(1.5em + 0.75rem);
+    }
+    
+    .validation-hint {
+        font-size: 0.8rem;
+        margin-top: 4px;
+        color: #6c757d;
+    }
+    
+    .validation-hint.valid {
+        color: #28a745 !important;
+    }
+    
+    .validation-hint.invalid {
+        color: #dc3545 !important;
+    }
+    
+    .password-strength {
+        margin-top: 8px;
+        padding: 8px;
+        border-radius: 4px;
+        background: #f8f9fa;
+        font-size: 0.8rem;
+    }
+    
+    .strength-bar {
+        height: 4px;
+        margin-top: 5px;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+    
+    .strength-bar.weak {
+        width: 25%;
+        background: #dc3545;
+    }
+    
+    .strength-bar.medium {
+        width: 50%;
+        background: #ffc107;
+    }
+    
+    .strength-bar.strong {
+        width: 75%;
+        background: #28a745;
+    }
+    
+    .strength-bar.very-strong {
+        width: 100%;
+        background: #20c997;
+    }
+    
+    .password-requirements {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0 0;
+        font-size: 0.75rem;
+    }
+    
+    .password-requirements li {
+        margin: 2px 0;
+        color: #666;
+    }
+    
+    .password-requirements li.valid {
+        color: #28a745;
+    }
+    
+    .password-requirements li.invalid {
+        color: #dc3545;
+    }
+    
+    .password-requirements li i {
+        width: 16px;
+        margin-right: 5px;
+    }
+    
+    .btn {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .progress {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        border-radius: 10px;
+    }
+    
+    .modal-content {
+        border-radius: 15px;
+        border: none;
+    }
+    
+    .modal-header {
+        border-radius: 15px 15px 0 0;
+        border: none;
+    }
+    
+    .rounded-circle {
+        border: 5px solid #f8f9fa;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .border-bottom {
+        border-color: #dee2e6 !important;
+    }
+    
+    .input-group-text {
+        border-radius: 10px 0 0 10px;
+    }
+    
+    .input-group .form-control {
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .toggle-password {
+        border-radius: 0 10px 10px 0;
+    }
+    
+    .character-count {
+        font-size: 0.75rem;
+        text-align: right;
+        color: #6c757d;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row">
         <!-- Left Column - Profile Card -->
@@ -83,7 +263,7 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form asp-action="UpdatePassword" method="post" id="passwordForm">
+                    <form asp-action="UpdatePassword" method="post" id="passwordForm" novalidate>
                         @if (TempData["PasswordError"] != null)
                         {
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -92,39 +272,66 @@
                             </div>
                         }
                         
+                        @if (TempData["PasswordSuccess"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>@TempData["PasswordSuccess"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+                        
                         <div class="mb-3">
-                            <label class="form-label">Current Password</label>
+                            <label class="form-label">Current Password <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <input type="password" name="CurrentPassword" class="form-control" required>
-                                <button type="button" class="btn btn-outline-secondary toggle-password">
+                                <input type="password" name="CurrentPassword" id="currentPassword" class="form-control" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="currentPassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
+                            </div>
+                            <div class="validation-hint" id="currentPasswordHint">
+                                <i class="fas fa-info-circle"></i> Enter your current password
                             </div>
                         </div>
                         
                         <div class="mb-3">
-                            <label class="form-label">New Password</label>
+                            <label class="form-label">New Password <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <input type="password" name="NewPassword" class="form-control" 
-                                       pattern=".{6,}" title="Minimum 6 characters" required>
-                                <button type="button" class="btn btn-outline-secondary toggle-password">
+                                <input type="password" name="NewPassword" id="newPassword" class="form-control" 
+                                       minlength="8" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="newPassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
-                            <small class="text-muted">Minimum 6 characters</small>
+                            <div class="validation-hint" id="newPasswordHint">
+                                <i class="fas fa-info-circle"></i> Minimum 8 characters with uppercase, lowercase, number & special character
+                            </div>
+                            <div class="password-strength" id="passwordStrength" style="display:none;">
+                                <div>Password Strength: <span id="strengthText">Weak</span></div>
+                                <div class="strength-bar" id="strengthBar"></div>
+                                <ul class="password-requirements" id="passwordRequirements">
+                                    <li id="reqLength"><i class="far fa-circle"></i> At least 8 characters</li>
+                                    <li id="reqUpper"><i class="far fa-circle"></i> At least 1 uppercase letter</li>
+                                    <li id="reqLower"><i class="far fa-circle"></i> At least 1 lowercase letter</li>
+                                    <li id="reqNumber"><i class="far fa-circle"></i> At least 1 number</li>
+                                    <li id="reqSpecial"><i class="far fa-circle"></i> At least 1 special character</li>
+                                </ul>
+                            </div>
                         </div>
                         
                         <div class="mb-3">
-                            <label class="form-label">Confirm New Password</label>
+                            <label class="form-label">Confirm New Password <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <input type="password" name="ConfirmPassword" class="form-control" required>
-                                <button type="button" class="btn btn-outline-secondary toggle-password">
+                                <input type="password" name="ConfirmPassword" id="confirmPassword" class="form-control" required>
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="confirmPassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
+                            <div class="validation-hint" id="confirmPasswordHint">
+                                <i class="fas fa-info-circle"></i> Passwords must match
+                            </div>
                         </div>
                         
-                        <button type="submit" class="btn btn-warning w-100">
+                        <button type="submit" class="btn btn-warning w-100" id="updatePasswordBtn" disabled>
                             <i class="fas fa-sync-alt me-2"></i>Update Password
                         </button>
                     </form>
@@ -157,7 +364,7 @@
                         </div>
                     }
 
-                    <form asp-action="MyProfile" method="post">
+                    <form asp-action="MyProfile" method="post" id="profileForm" novalidate>
                         <div class="row">
                             <!-- Personal Information -->
                             <div class="col-12 mb-4">
@@ -167,44 +374,69 @@
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Full Name *</label>
-                                <input type="text" name="FullName" class="form-control" 
-                                       value="@Model.FullName" required>
+                                <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" name="FullName" id="fullName" class="form-control" 
+                                       value="@Model.FullName" 
+                                       maxlength="50"
+                                       pattern="^[a-zA-Z\s]+$"
+                                       title="Full name can only contain letters and spaces"
+                                       required>
+                                <div class="validation-hint" id="fullNameHint">
+                                    <i class="fas fa-info-circle"></i> Only letters and spaces allowed (max 50)
+                                </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Email Address *</label>
-                                <input type="email" name="Email" class="form-control" 
-                                       value="@Model.Email" required>
+                                <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" name="Email" id="email" class="form-control" 
+                                       value="@Model.Email" 
+                                       maxlength="254"
+                                       required>
+                                <div class="validation-hint" id="emailHint">
+                                    <i class="fas fa-info-circle"></i> Enter a valid email address
+                                </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Mobile Number *</label>
-                                <input type="tel" name="MobileNumber" class="form-control" 
-                                       value="@Model.MobileNumber" pattern="[0-9]{10}" required>
-                                <small class="text-muted">10-digit number only</small>
+                                <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                                <input type="tel" name="MobileNumber" id="mobileNumber" class="form-control" 
+                                       value="@Model.MobileNumber" 
+                                       maxlength="10"
+                                       pattern="[6-9][0-9]{9}"
+                                       title="Please enter a valid 10-digit mobile number starting with 6-9"
+                                       required>
+                                <div class="validation-hint" id="mobileHint">
+                                    <i class="fas fa-info-circle"></i> 10-digit number starting with 6-9
+                                </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Gender</label>
-                                <select name="Gender" class="form-select">
+                                <select name="Gender" id="gender" class="form-select">
                                     <option value="">Select Gender</option>
                                     <option value="Male" selected="@(Model.Gender == "Male")">Male</option>
                                     <option value="Female" selected="@(Model.Gender == "Female")">Female</option>
                                     <option value="Other" selected="@(Model.Gender == "Other")">Other</option>
                                     <option value="Prefer not to say" selected="@(Model.Gender == "Prefer not to say")">Prefer not to say</option>
                                 </select>
+                                <div class="validation-hint" id="genderHint">
+                                    <i class="fas fa-info-circle"></i> Select your gender (optional)
+                                </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Date of Birth</label>
-                                <input type="date" name="DateOfBirth" class="form-control" 
-                                       value="@(Model.DateOfBirth?.ToString("yyyy-MM-dd"))">
+                                <input type="date" name="DateOfBirth" id="dateOfBirth" class="form-control" 
+                                       value="@(Model.DateOfBirth?.ToString("yyyy-MM-dd"))"
+                                       max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")">
+                                <div class="validation-hint" id="dobHint">
+                                    <i class="fas fa-info-circle"></i> You must be at least 18 years old
+                                </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Username</label>
-                                <input type="text" class="form-control" value="@Model.Username" readonly>
+                                <input type="text" class="form-control" value="@Model.Username" readonly disabled>
                                 <small class="text-muted">Username cannot be changed</small>
                             </div>
                         </div>
@@ -219,32 +451,51 @@
                             
                             <div class="col-12 mb-3">
                                 <label class="form-label">Address</label>
-                                <textarea name="Address" class="form-control" rows="3">@Model.Address</textarea>
+                                <textarea name="Address" id="address" class="form-control" rows="3" 
+                                          maxlength="200">@Model.Address</textarea>
+                                <div class="d-flex justify-content-between">
+                                    <div class="validation-hint" id="addressHint">
+                                        <i class="fas fa-info-circle"></i> Max 200 characters (optional)
+                                    </div>
+                                    <div class="character-count" id="addressCount">@(Model.Address?.Length ?? 0)/200</div>
+                                </div>
                             </div>
                             
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">City</label>
-                                <input type="text" name="City" class="form-control" value="@Model.City">
+                                <input type="text" name="City" id="city" class="form-control" 
+                                       value="@Model.City" maxlength="50">
+                                <div class="validation-hint" id="cityHint">
+                                    <i class="fas fa-info-circle"></i> Max 50 characters (optional)
+                                </div>
                             </div>
                             
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">State</label>
-                                <input type="text" name="State" class="form-control" value="@Model.State">
+                                <input type="text" name="State" id="state" class="form-control" 
+                                       value="@Model.State" maxlength="50">
+                                <div class="validation-hint" id="stateHint">
+                                    <i class="fas fa-info-circle"></i> Max 50 characters (optional)
+                                </div>
                             </div>
                             
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Pin Code</label>
-                                <input type="text" name="PinCode" class="form-control" 
-                                       value="@Model.PinCode" pattern="[0-9]{6}" 
+                                <input type="text" name="PinCode" id="pinCode" class="form-control" 
+                                       value="@Model.PinCode" 
+                                       maxlength="6"
+                                       pattern="[0-9]{6}" 
                                        title="6-digit pin code">
-                                <small class="text-muted">6-digit number only</small>
+                                <div class="validation-hint" id="pinHint">
+                                    <i class="fas fa-info-circle"></i> 6-digit number only (optional)
+                                </div>
                             </div>
                         </div>
 
                         <div class="row mt-4">
                             <div class="col-12">
                                 <div class="d-flex justify-content-between">
-                                    <button type="submit" class="btn btn-success px-4">
+                                    <button type="submit" class="btn btn-success px-4" id="saveProfileBtn">
                                         <i class="fas fa-save me-2"></i>Save Changes
                                     </button>
                                     <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
@@ -363,15 +614,18 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data">
+            <form asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data" id="uploadForm" novalidate>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Select Profile Picture</label>
-                        <input type="file" name="profilePicture" class="form-control" accept=".jpg,.jpeg,.png,.gif" required>
-                        <small class="text-muted">Maximum file size: 5MB. Allowed formats: JPG, JPEG, PNG, GIF</small>
+                        <label class="form-label">Select Profile Picture <span class="text-danger">*</span></label>
+                        <input type="file" name="profilePicture" id="profilePicture" class="form-control" 
+                               accept=".jpg,.jpeg,.png,.gif" required>
+                        <div class="validation-hint" id="fileHint">
+                            <i class="fas fa-info-circle"></i> Max 5MB. Allowed: JPG, JPEG, PNG, GIF
+                        </div>
                     </div>
                     <div class="text-center">
-                        <div class="border rounded p-3 mb-3">
+                        <div class="border rounded p-3 mb-3" id="imagePreview">
                             <i class="fas fa-image fa-3x text-muted mb-3"></i>
                             <p class="mb-0">Preview will appear here</p>
                         </div>
@@ -381,7 +635,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Cancel
                     </button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" id="uploadBtn" disabled>
                         <i class="fas fa-upload me-2"></i>Upload
                     </button>
                 </div>
@@ -395,7 +649,8 @@
         $(document).ready(function() {
             // Toggle password visibility
             $('.toggle-password').click(function() {
-                var input = $(this).closest('.input-group').find('input');
+                var targetId = $(this).data('target');
+                var input = $('#' + targetId);
                 var icon = $(this).find('i');
                 
                 if (input.attr('type') === 'password') {
@@ -407,119 +662,335 @@
                 }
             });
             
-            // Preview selected profile picture
-            $('input[name="profilePicture"]').change(function() {
-                var file = this.files[0];
+            // ========== PROFILE FORM VALIDATION ==========
+            function validateFullName(name) {
+                const pattern = /^[a-zA-Z\s]+$/;
+                return pattern.test(name) && name.length <= 50 && name.trim().length > 0;
+            }
+            
+            function validateEmail(email) {
+                const pattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                return pattern.test(email) && email.length <= 254;
+            }
+            
+            function validateMobile(mobile) {
+                const pattern = /^[6-9][0-9]{9}$/;
+                return pattern.test(mobile);
+            }
+            
+            function validateDOB(dob) {
+                if (!dob) return true; // Optional
+                const birthDate = new Date(dob);
+                const today = new Date();
+                const age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    return age - 1 >= 18;
+                }
+                return age >= 18;
+            }
+            
+            function validatePinCode(pin) {
+                if (!pin) return true; // Optional
+                const pattern = /^[0-9]{6}$/;
+                return pattern.test(pin);
+            }
+            
+            function showHint(element, isValid, validMsg, invalidMsg, infoMsg) {
+                const hint = $(element).siblings('.validation-hint');
+                if ($(element).val().trim().length === 0 && $(element).prop('required')) {
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> ' + infoMsg);
+                } else if (!$(element).prop('required') && $(element).val().trim().length === 0) {
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> ' + infoMsg);
+                } else if (isValid) {
+                    hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> ' + validMsg);
+                } else {
+                    hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> ' + invalidMsg);
+                }
+            }
+            
+            function updateFieldStyle(element, isValid, optional = false) {
+                if (!optional && $(element).val().trim().length === 0) {
+                    $(element).removeClass('is-valid is-invalid');
+                } else if (optional && $(element).val().trim().length === 0) {
+                    $(element).removeClass('is-valid is-invalid');
+                } else if (isValid) {
+                    $(element).removeClass('is-invalid').addClass('is-valid');
+                } else {
+                    $(element).removeClass('is-valid').addClass('is-invalid');
+                }
+            }
+            
+            // Full Name validation
+            $('#fullName').on('input', function() {
+                const value = $(this).val();
+                const isValid = validateFullName(value);
+                updateFieldStyle(this, isValid);
+                showHint(this, isValid, 'Valid name', 'Only letters and spaces allowed', 'Only letters and spaces allowed (max 50)');
+            });
+            
+            // Email validation
+            $('#email').on('input', function() {
+                const value = $(this).val();
+                const isValid = validateEmail(value);
+                updateFieldStyle(this, isValid);
+                showHint(this, isValid, 'Valid email', 'Please enter a valid email', 'Enter a valid email address');
+            });
+            
+            // Mobile validation
+            $('#mobileNumber').on('input', function() {
+                let value = $(this).val().replace(/\D/g, '').slice(0, 10);
+                $(this).val(value);
+                const isValid = validateMobile(value);
+                updateFieldStyle(this, isValid);
+                showHint(this, isValid, 'Valid mobile number', 'Must be 10 digits starting with 6-9', '10-digit number starting with 6-9');
+            });
+            
+            // DOB validation
+            $('#dateOfBirth').on('change', function() {
+                const value = $(this).val();
+                const isValid = validateDOB(value);
+                updateFieldStyle(this, isValid, true);
+                showHint(this, isValid, 'Valid date', 'You must be at least 18 years old', 'You must be at least 18 years old');
+            });
+            
+            // Address character count
+            $('#address').on('input', function() {
+                const length = $(this).val().length;
+                $('#addressCount').text(length + '/200');
+                if (length > 200) {
+                    $(this).val($(this).val().substring(0, 200));
+                    $('#addressCount').text('200/200');
+                }
+            });
+            
+            // City validation
+            $('#city').on('input', function() {
+                const value = $(this).val();
+                const isValid = value.length <= 50;
+                updateFieldStyle(this, isValid, true);
+            });
+            
+            // State validation
+            $('#state').on('input', function() {
+                const value = $(this).val();
+                const isValid = value.length <= 50;
+                updateFieldStyle(this, isValid, true);
+            });
+            
+            // Pin Code validation
+            $('#pinCode').on('input', function() {
+                let value = $(this).val().replace(/\D/g, '').slice(0, 6);
+                $(this).val(value);
+                const isValid = validatePinCode(value);
+                updateFieldStyle(this, isValid, true);
+                showHint(this, isValid, 'Valid pin code', 'Must be 6 digits', '6-digit number only (optional)');
+            });
+            
+            // ========== PASSWORD VALIDATION ==========
+            function checkPasswordStrength(password) {
+                const requirements = {
+                    length: password.length >= 8,
+                    upper: /[A-Z]/.test(password),
+                    lower: /[a-z]/.test(password),
+                    number: /[0-9]/.test(password),
+                    special: /[^A-Za-z0-9]/.test(password)
+                };
+                
+                $('#reqLength i').attr('class', requirements.length ? 'fas fa-check-circle' : 'far fa-circle');
+                $('#reqUpper i').attr('class', requirements.upper ? 'fas fa-check-circle' : 'far fa-circle');
+                $('#reqLower i').attr('class', requirements.lower ? 'fas fa-check-circle' : 'far fa-circle');
+                $('#reqNumber i').attr('class', requirements.number ? 'fas fa-check-circle' : 'far fa-circle');
+                $('#reqSpecial i').attr('class', requirements.special ? 'fas fa-check-circle' : 'far fa-circle');
+                
+                $('#reqLength').toggleClass('valid', requirements.length).toggleClass('invalid', !requirements.length && password.length > 0);
+                $('#reqUpper').toggleClass('valid', requirements.upper).toggleClass('invalid', !requirements.upper && password.length > 0);
+                $('#reqLower').toggleClass('valid', requirements.lower).toggleClass('invalid', !requirements.lower && password.length > 0);
+                $('#reqNumber').toggleClass('valid', requirements.number).toggleClass('invalid', !requirements.number && password.length > 0);
+                $('#reqSpecial').toggleClass('valid', requirements.special).toggleClass('invalid', !requirements.special && password.length > 0);
+                
+                const strengthCount = Object.values(requirements).filter(Boolean).length;
+                const strengthBar = $('#strengthBar');
+                const strengthText = $('#strengthText');
+                
+                strengthBar.removeClass('weak medium strong very-strong');
+                
+                if (password.length === 0) {
+                    $('#passwordStrength').hide();
+                    return 0;
+                }
+                
+                $('#passwordStrength').show();
+                
+                if (strengthCount <= 2) {
+                    strengthBar.addClass('weak');
+                    strengthText.text('Weak').css('color', '#dc3545');
+                } else if (strengthCount === 3) {
+                    strengthBar.addClass('medium');
+                    strengthText.text('Medium').css('color', '#ffc107');
+                } else if (strengthCount === 4) {
+                    strengthBar.addClass('strong');
+                    strengthText.text('Strong').css('color', '#28a745');
+                } else if (strengthCount === 5) {
+                    strengthBar.addClass('very-strong');
+                    strengthText.text('Very Strong').css('color', '#20c997');
+                }
+                
+                return strengthCount;
+            }
+            
+            $('#newPassword').on('input', function() {
+                const password = $(this).val();
+                checkPasswordStrength(password);
+                checkPasswordsMatch();
+            });
+            
+            function checkPasswordsMatch() {
+                const newPass = $('#newPassword').val();
+                const confirm = $('#confirmPassword').val();
+                const hint = $('#confirmPasswordHint');
+                
+                if (confirm.length > 0) {
+                    if (newPass === confirm && newPass.length >= 8) {
+                        $('#confirmPassword').removeClass('is-invalid').addClass('is-valid');
+                        hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Passwords match');
+                        return true;
+                    } else {
+                        $('#confirmPassword').removeClass('is-valid').addClass('is-invalid');
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Passwords do not match');
+                        return false;
+                    }
+                } else {
+                    $('#confirmPassword').removeClass('is-valid is-invalid');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Passwords must match');
+                    return false;
+                }
+            }
+            
+            $('#confirmPassword').on('input', checkPasswordsMatch);
+            
+            function isPasswordFormValid() {
+                const currentPass = $('#currentPassword').val();
+                const newPass = $('#newPassword').val();
+                const confirm = $('#confirmPassword').val();
+                
+                const currentValid = currentPass.length > 0;
+                const strengthCount = checkPasswordStrength(newPass);
+                const newValid = strengthCount === 5;
+                const confirmValid = newPass === confirm && newPass.length >= 8;
+                
+                return currentValid && newValid && confirmValid;
+            }
+            
+            function updatePasswordButton() {
+                const isValid = isPasswordFormValid();
+                $('#updatePasswordBtn').prop('disabled', !isValid);
+            }
+            
+            $('#currentPassword, #newPassword, #confirmPassword').on('input', updatePasswordButton);
+            
+            // ========== PROFILE FORM SUBMISSION ==========
+            function isProfileFormValid() {
+                const fullNameValid = validateFullName($('#fullName').val());
+                const emailValid = validateEmail($('#email').val());
+                const mobileValid = validateMobile($('#mobileNumber').val());
+                const dobValid = validateDOB($('#dateOfBirth').val());
+                const pinValid = validatePinCode($('#pinCode').val());
+                
+                return fullNameValid && emailValid && mobileValid && dobValid && pinValid;
+            }
+            
+            $('#profileForm').submit(function(e) {
+                e.preventDefault();
+                
+                if (!isProfileFormValid()) {
+                    // Trigger validation on all fields
+                    $('#fullName').trigger('input');
+                    $('#email').trigger('input');
+                    $('#mobileNumber').trigger('input');
+                    $('#dateOfBirth').trigger('change');
+                    
+                    // Scroll to first error
+                    $('html, body').animate({
+                        scrollTop: $('.is-invalid:first').offset().top - 100
+                    }, 500);
+                    
+                    return false;
+                }
+                
+                const btn = $('#saveProfileBtn');
+                btn.html('<i class="fas fa-spinner fa-spin me-2"></i>Saving...').prop('disabled', true);
+                this.submit();
+            });
+            
+            $('#passwordForm').submit(function(e) {
+                e.preventDefault();
+                
+                if (!isPasswordFormValid()) {
+                    return false;
+                }
+                
+                const btn = $('#updatePasswordBtn');
+                btn.html('<i class="fas fa-spinner fa-spin me-2"></i>Updating...').prop('disabled', true);
+                this.submit();
+            });
+            
+            // ========== PROFILE PICTURE UPLOAD ==========
+            $('#profilePicture').on('change', function() {
+                const file = this.files[0];
+                const hint = $('#fileHint');
+                const uploadBtn = $('#uploadBtn');
+                
                 if (file) {
-                    var reader = new FileReader();
+                    // Check file size (5MB max)
+                    if (file.size > 5 * 1024 * 1024) {
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> File too large. Max 5MB');
+                        uploadBtn.prop('disabled', true);
+                        return;
+                    }
+                    
+                    // Check file type
+                    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                    if (!validTypes.includes(file.type)) {
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Invalid file type. Allowed: JPG, JPEG, PNG, GIF');
+                        uploadBtn.prop('disabled', true);
+                        return;
+                    }
+                    
+                    hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Valid file');
+                    uploadBtn.prop('disabled', false);
+                    
+                    // Show preview
+                    const reader = new FileReader();
                     reader.onload = function(e) {
-                        var previewDiv = $(this).closest('.modal-body').find('.border.rounded');
-                        previewDiv.html('<img src="' + e.target.result + '" class="img-fluid rounded" alt="Preview">');
-                    }.bind(this);
+                        $('#imagePreview').html('<img src="' + e.target.result + '" class="img-fluid rounded" alt="Preview" style="max-height: 200px;">');
+                    };
                     reader.readAsDataURL(file);
+                } else {
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Max 5MB. Allowed: JPG, JPEG, PNG, GIF');
+                    uploadBtn.prop('disabled', true);
+                    $('#imagePreview').html('<i class="fas fa-image fa-3x text-muted mb-3"></i><p class="mb-0">Preview will appear here</p>');
                 }
             });
             
-            // Mobile number validation
-            $('input[name="MobileNumber"]').on('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
-            });
-            
-            // Pin code validation
-            $('input[name="PinCode"]').on('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
-            });
-            
-            // Form validation
-            $('form').submit(function(e) {
-                var form = $(this);
-                if (form[0].checkValidity() === false) {
+            $('#uploadForm').submit(function(e) {
+                const file = $('#profilePicture')[0].files[0];
+                if (!file) {
                     e.preventDefault();
-                    e.stopPropagation();
+                    return false;
                 }
-                form.addClass('was-validated');
             });
             
             // Auto-close alerts after 5 seconds
             setTimeout(function() {
                 $('.alert').alert('close');
             }, 5000);
+            
+            // Initial validation
+            $('#fullName').trigger('input');
+            $('#email').trigger('input');
+            $('#mobileNumber').trigger('input');
+            $('#dateOfBirth').trigger('change');
         });
     </script>
-    
-    <style>
-        .card {
-            border-radius: 15px;
-            overflow: hidden;
-        }
-        
-        .card-header {
-            border-radius: 15px 15px 0 0 !important;
-            border: none;
-        }
-        
-        .form-control, .form-select {
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
-            padding: 10px 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-        }
-        
-        .btn {
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .progress {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            border-radius: 10px;
-        }
-        
-        .modal-content {
-            border-radius: 15px;
-            border: none;
-        }
-        
-        .modal-header {
-            border-radius: 15px 15px 0 0;
-            border: none;
-        }
-        
-        .rounded-circle {
-            border: 5px solid #f8f9fa;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .border-bottom {
-            border-color: #dee2e6 !important;
-        }
-        
-        .input-group-text {
-            border-radius: 10px 0 0 10px;
-        }
-        
-        .input-group .form-control {
-            border-radius: 0 10px 10px 0;
-        }
-        
-        .toggle-password {
-            border-radius: 0 10px 10px 0;
-        }
-    </style>
 }
