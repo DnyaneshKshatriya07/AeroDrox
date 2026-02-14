@@ -18,5 +18,6 @@ namespace AeroDroxUAV.Services
                                      string? address, string? city, string? state, string? pinCode, 
                                      DateTime? dateOfBirth, string? gender, string? profilePicture);
         Task<bool> UpdatePasswordAsync(int userId, string currentPassword, string newPassword);
+        Task<bool> CheckIfUserExistsAsync(string username, string email, string mobileNumber);
     }
 }

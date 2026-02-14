@@ -1,0 +1,254 @@
+@{
+    ViewData["Title"] = "Terms and Conditions";
+    Layout = "_Layout";
+}
+
+<style>
+    .terms-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 40px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .terms-card {
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 15px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        animation: slideIn 0.6s ease-out;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .terms-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 30px 20px;
+        text-align: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .terms-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('/background/logo.png') center/contain no-repeat;
+        opacity: 0.1;
+    }
+    
+    .terms-content {
+        padding: 40px;
+        background: white;
+    }
+    
+    .terms-title {
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        position: relative;
+    }
+    
+    .terms-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 2px;
+    }
+    
+    .terms-section {
+        margin-bottom: 30px;
+    }
+    
+    .terms-section h3 {
+        color: #444;
+        font-weight: 600;
+        margin-bottom: 15px;
+        font-size: 1.3rem;
+    }
+    
+    .terms-section p {
+        color: #666;
+        line-height: 1.8;
+        margin-bottom: 10px;
+    }
+    
+    .terms-section ul {
+        color: #666;
+        line-height: 1.8;
+        padding-left: 20px;
+    }
+    
+    .terms-section li {
+        margin-bottom: 8px;
+    }
+    
+    .btn-back {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        margin-top: 20px;
+    }
+    
+    .btn-back:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        color: white;
+    }
+    
+    .last-updated {
+        color: #999;
+        font-style: italic;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    @@media (max-width: 768px) {
+        .terms-content {
+            padding: 25px;
+        }
+    }
+</style>
+
+<div class="terms-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="terms-card">
+                    <div class="terms-header">
+                        <h1 class="display-4 fw-bold mb-3">Terms and Conditions</h1>
+                        <p class="lead mb-0">Please read these terms carefully before using our services</p>
+                    </div>
+                    
+                    <div class="terms-content">
+                        <h2 class="terms-title">AeroDrox UAV Terms of Service</h2>
+                        
+                        <div class="terms-section">
+                            <h3>1. Acceptance of Terms</h3>
+                            <p>By accessing or using the AeroDrox UAV website and services, you agree to be bound by these Terms and Conditions. If you do not agree to all the terms and conditions, you may not access the website or use our services.</p>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>2. User Accounts</h3>
+                            <p>When you create an account with us, you must provide accurate, complete, and current information. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account.</p>
+                            <ul>
+                                <li>You are responsible for maintaining the confidentiality of your account and password.</li>
+                                <li>You agree to accept responsibility for all activities that occur under your account.</li>
+                                <li>You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</li>
+                                <li>We reserve the right to refuse service, terminate accounts, or remove content at our sole discretion.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>3. Privacy Policy</h3>
+                            <p>Your use of our service is also governed by our Privacy Policy. Please review our Privacy Policy to understand our practices regarding the collection and use of your personal information.</p>
+                            <p>By using our services, you consent to the collection and use of your information as set forth in the Privacy Policy.</p>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>4. User Responsibilities</h3>
+                            <ul>
+                                <li>You must comply with all applicable laws and regulations.</li>
+                                <li>You may not use our services for any illegal or unauthorized purpose.</li>
+                                <li>You may not violate any laws in your jurisdiction.</li>
+                                <li>You may not transmit any worms, viruses, or code of a destructive nature.</li>
+                                <li>You may not attempt to gain unauthorized access to any portion of the service.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>5. Purchases and Payments</h3>
+                            <p>If you wish to purchase any product or service made available through our platform, you may be asked to supply certain information relevant to your purchase.</p>
+                            <ul>
+                                <li>All prices are subject to change without notice.</li>
+                                <li>We reserve the right to refuse or cancel any order for any reason.</li>
+                                <li>We may require additional verification or information before accepting any order.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>6. Intellectual Property</h3>
+                            <p>The service and its original content, features, and functionality are and will remain the exclusive property of AeroDrox UAV and its licensors. The service is protected by copyright, trademark, and other laws.</p>
+                            <p>You may not:</p>
+                            <ul>
+                                <li>Copy, modify, or create derivative works based on our content.</li>
+                                <li>Reverse engineer any aspect of our services.</li>
+                                <li>Use our trademarks without prior written permission.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>7. Termination</h3>
+                            <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+                            <p>Upon termination, your right to use the service will immediately cease. If you wish to terminate your account, you may simply discontinue using the service.</p>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>8. Limitation of Liability</h3>
+                            <p>In no event shall AeroDrox UAV, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:</p>
+                            <ul>
+                                <li>Your use or inability to use the service.</li>
+                                <li>Any conduct or content of any third party on the service.</li>
+                                <li>Any content obtained from the service.</li>
+                                <li>Unauthorized access, use or alteration of your transmissions or content.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>9. Changes to Terms</h3>
+                            <p>We reserve the right to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect.</p>
+                            <p>By continuing to access or use our service after those revisions become effective, you agree to be bound by the revised terms.</p>
+                        </div>
+                        
+                        <div class="terms-section">
+                            <h3>10. Contact Us</h3>
+                            <p>If you have any questions about these Terms, please contact us:</p>
+                            <ul>
+                                <li>By email: support@aerodrox.com</li>
+                                <li>By phone: +91 1234567890</li>
+                                <li>By mail: AeroDrox UAV, Drone Technology Park, Bengaluru, India</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="last-updated">
+                            <p>Last Updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button onclick="window.close()" class="btn-back">
+                                <i class="fas fa-arrow-left me-2"></i>Close Window
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.terms-card').addClass('animate__animated animate__fadeIn');
+        });
+    </script>
+}

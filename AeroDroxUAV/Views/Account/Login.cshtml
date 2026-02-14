@@ -108,6 +108,14 @@
         transform: translateY(-1px);
     }
     
+    .form-input.error {
+        border-color: #dc3545 !important;
+    }
+    
+    .form-input.valid {
+        border-color: #28a745 !important;
+    }
+    
     .form-input::placeholder {
         color: #aaa;
         font-size: 0.9rem;
@@ -121,7 +129,9 @@
         color: #667eea;
         opacity: 0.7;
         font-size: 0.9rem;
-        pointer-events: none;
+        cursor: pointer;
+        pointer-events: auto;
+        z-index: 10;
     }
     
     .btn-submit {
@@ -147,6 +157,11 @@
     
     .btn-submit:active {
         transform: translateY(0);
+    }
+    
+    .btn-submit:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
     }
     
     .link-text {
@@ -211,29 +226,6 @@
         width: 100%;
     }
     
-    .remember-me {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 20px;
-        color: #555;
-        font-size: 0.9rem;
-    }
-    
-    .remember-me input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-        border: 2px solid #e0e0e0;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-    }
-    
-    .remember-me input[type="checkbox"]:checked {
-        background-color: #667eea;
-        border-color: #667eea;
-    }
-    
     .error-message {
         background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
         color: white;
@@ -289,14 +281,25 @@
         text-transform: uppercase;
     }
     
-    .row-custom {
-        display: flex;
-        align-items: center;
-        gap: 15px;
+    .validation-hint {
+        font-size: 0.75rem;
+        margin-top: 4px;
+        color: #666;
+        display: none;
     }
-</style>
-
-<style>
+    
+    .validation-hint.show {
+        display: block;
+    }
+    
+    .validation-hint.valid {
+        color: #28a745;
+    }
+    
+    .validation-hint.invalid {
+        color: #dc3545;
+    }
+    
     @@keyframes slideInRight {
         from {
             opacity: 0;
@@ -344,38 +347,43 @@
                             </div>
                         }
                         
-                        <form method="post" asp-controller="Account" asp-action="Login" id="loginForm">
+                        <form method="post" asp-controller="Account" asp-action="Login" id="loginForm" novalidate>
                             <!-- Email Input -->
                             <div class="input-group-custom">
-                                <label class="input-label">Email Address</label>
-                                <input type="text" name="LoginId" class="form-input" 
-                                       placeholder="Enter email address" required>
+                                <label class="input-label">Email Address <span style="color:#dc3545;">*</span></label>
+                                <input type="email" name="LoginId" class="form-input" 
+                                       placeholder="Enter your email address" 
+                                       id="loginEmail"
+                                       required>
                                 <i class="fas fa-envelope input-icon"></i>
+                                <div class="validation-hint" id="emailHint">
+                                    <i class="fas fa-info-circle"></i> Please enter a valid email address
+                                </div>
                             </div>
                             
                             <!-- Password Input -->
                             <div class="input-group-custom">
-                                <label class="input-label">Password</label>
+                                <label class="input-label">Password <span style="color:#dc3545;">*</span></label>
                                 <input type="password" name="Password" class="form-input" 
-                                       id="loginPassword" placeholder="Enter password" required>
-                                <i class="fas fa-lock input-icon" id="passwordIcon"></i>
+                                       id="loginPassword" placeholder="Enter your password" 
+                                       required>
+                                <i class="fas fa-eye input-icon" id="passwordIcon"></i>
+                                <div class="validation-hint" id="passwordHint">
+                                    <i class="fas fa-info-circle"></i> Password is required
+                                </div>
                             </div>
                             
-                            <!-- Remember Me & Forgot Password -->
-                            <div class="row-custom">
-                                <div class="remember-me">
-                                    <input type="checkbox" id="rememberMe" name="RememberMe">
-                                    <label for="rememberMe">Remember me</label>
-                                </div>
-                                <div class="forgot-password">
-                                    <a href="#">
-                                        Forgot Password?
-                                    </a>
-                                </div>
+                            <!-- Forgot Password Link -->
+                            <!--
+                            <div class="forgot-password">
+                                <a href="#">
+                                    <i class="fas fa-key me-1"></i>Forgot Password?
+                                </a>
                             </div>
+                            -->
                             
                             <!-- Submit Button -->
-                            <button type="submit" class="btn-submit">
+                            <button type="submit" class="btn-submit" id="submitBtn">
                                 <i class="fas fa-sign-in-alt me-2"></i>Sign In
                             </button>
                         </form>
@@ -396,31 +404,17 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Show/Hide password
-            $('#loginPassword').on('input', function() {
-                const icon = $('#passwordIcon');
-                const password = $(this).val();
+            // Toggle password visibility
+            $('#passwordIcon').on('click', function() {
+                const passwordInput = $('#loginPassword');
+                const icon = $(this);
                 
-                if (password.length > 0) {
-                    icon.removeClass('fa-lock').addClass('fa-eye');
-                    icon.css('cursor', 'pointer');
-                    icon.css('pointer-events', 'auto');
-                    
-                    icon.off('click').on('click', function() {
-                        const passwordInput = $('#loginPassword');
-                        if (passwordInput.attr('type') === 'password') {
-                            passwordInput.attr('type', 'text');
-                            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-                        } else {
-                            passwordInput.attr('type', 'password');
-                            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-                        }
-                    });
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
                 } else {
-                    icon.removeClass('fa-eye fa-eye-slash').addClass('fa-lock');
-                    icon.css('cursor', 'default');
-                    icon.css('pointer-events', 'none');
-                    icon.off('click');
+                    passwordInput.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
                 }
             });
             
@@ -429,32 +423,95 @@
                 $('input[name="LoginId"]').focus();
             }, 300);
             
-            // Form submission
+            // Real-time email validation
+            $('#loginEmail').on('input', function() {
+                const email = $(this).val();
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                const hint = $('#emailHint');
+                
+                if (email.length > 0) {
+                    if (emailPattern.test(email)) {
+                        $(this).removeClass('error').addClass('valid');
+                        hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Valid email address');
+                    } else {
+                        $(this).removeClass('valid').addClass('error');
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Please enter a valid email address');
+                    }
+                } else {
+                    $(this).removeClass('valid error');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Please enter a valid email address');
+                }
+            });
+            
+            // Real-time password validation
+            $('#loginPassword').on('input', function() {
+                const password = $(this).val();
+                const hint = $('#passwordHint');
+                
+                if (password.length > 0) {
+                    if (password.length >= 8) {
+                        $(this).removeClass('error').addClass('valid');
+                        hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Valid password');
+                    } else {
+                        $(this).removeClass('valid').addClass('error');
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Password must be at least 8 characters');
+                    }
+                } else {
+                    $(this).removeClass('valid error');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Password is required');
+                }
+            });
+            
+            // Form submission with validation
             $('#loginForm').submit(function(e) {
                 e.preventDefault();
                 
-                const loginId = $('input[name="LoginId"]').val().trim();
-                const password = $('input[name="Password"]').val().trim();
+                const email = $('#loginEmail').val().trim();
+                const password = $('#loginPassword').val().trim();
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 
-                if (!loginId || !password) {
-                    $('input').each(function() {
-                        if (!$(this).val().trim()) {
-                            $(this).addClass('animate__animated animate__shakeX');
-                            setTimeout(() => {
-                                $(this).removeClass('animate__animated animate__shakeX');
-                            }, 500);
-                        }
+                let isValid = true;
+                
+                // Validate email
+                if (!email) {
+                    $('#loginEmail').addClass('error');
+                    $('#emailHint').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Email is required');
+                    isValid = false;
+                } else if (!emailPattern.test(email)) {
+                    $('#loginEmail').addClass('error');
+                    $('#emailHint').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Please enter a valid email address');
+                    isValid = false;
+                }
+                
+                // Validate password
+                if (!password) {
+                    $('#loginPassword').addClass('error');
+                    $('#passwordHint').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Password is required');
+                    isValid = false;
+                } else if (password.length < 8) {
+                    $('#loginPassword').addClass('error');
+                    $('#passwordHint').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Password must be at least 8 characters');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    // Shake invalid fields
+                    $('.form-input.error').each(function() {
+                        $(this).addClass('animate__animated animate__shakeX');
+                        setTimeout(() => {
+                            $(this).removeClass('animate__animated animate__shakeX');
+                        }, 500);
                     });
-                    
                     return false;
                 }
                 
-                const btn = $(this).find('button[type="submit"]');
+                // Submit form
+                const btn = $('#submitBtn');
                 btn.html('<i class="fas fa-spinner fa-spin me-2"></i>Signing In...').prop('disabled', true);
                 
                 setTimeout(() => {
                     this.submit();
-                }, 1000);
+                }, 800);
                 
                 return true;
             });

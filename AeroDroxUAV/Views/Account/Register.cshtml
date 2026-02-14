@@ -109,6 +109,15 @@
         transform: translateY(-1px);
     }
     
+    .form-input.error {
+        border-color: #dc3545 !important;
+        background-color: #fff8f8;
+    }
+    
+    .form-input.valid {
+        border-color: #28a745 !important;
+    }
+    
     .form-input::placeholder {
         color: #aaa;
         font-size: 0.9rem;
@@ -122,7 +131,9 @@
         color: #667eea;
         opacity: 0.7;
         font-size: 0.9rem;
-        pointer-events: none;
+        cursor: pointer;
+        pointer-events: auto;
+        z-index: 10;
     }
     
     .btn-submit {
@@ -141,13 +152,19 @@
         margin-top: 15px;
     }
     
-    .btn-submit:hover {
+    .btn-submit:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
     }
     
-    .btn-submit:active {
+    .btn-submit:active:not(:disabled) {
         transform: translateY(0);
+    }
+    
+    .btn-submit:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: linear-gradient(135deg, #999 0%, #777 100%);
     }
     
     .link-text {
@@ -289,6 +306,96 @@
         text-decoration: underline;
     }
     
+    .validation-hint {
+        font-size: 0.75rem;
+        margin-top: 4px;
+        color: #666;
+        display: none;
+    }
+    
+    .validation-hint.show {
+        display: block;
+    }
+    
+    .validation-hint.valid {
+        color: #28a745;
+    }
+    
+    .validation-hint.invalid {
+        color: #dc3545;
+    }
+    
+    .password-strength {
+        margin-top: 8px;
+        padding: 8px;
+        border-radius: 4px;
+        background: #f8f9fa;
+        font-size: 0.8rem;
+    }
+    
+    .strength-bar {
+        height: 4px;
+        margin-top: 5px;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+    
+    .strength-bar.weak {
+        width: 25%;
+        background: #dc3545;
+    }
+    
+    .strength-bar.medium {
+        width: 50%;
+        background: #ffc107;
+    }
+    
+    .strength-bar.strong {
+        width: 75%;
+        background: #28a745;
+    }
+    
+    .strength-bar.very-strong {
+        width: 100%;
+        background: #20c997;
+    }
+    
+    .password-requirements {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0 0;
+        font-size: 0.75rem;
+    }
+    
+    .password-requirements li {
+        margin: 2px 0;
+        color: #666;
+    }
+    
+    .password-requirements li.valid {
+        color: #28a745;
+    }
+    
+    .password-requirements li.invalid {
+        color: #dc3545;
+    }
+    
+    .password-requirements li i {
+        width: 16px;
+        margin-right: 5px;
+    }
+    
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
     @@media (max-width: 768px) {
         .col-custom {
             min-width: 100%;
@@ -304,19 +411,6 @@
         
         .register-header {
             padding: 20px 15px;
-        }
-    }
-</style>
-
-<style>
-    @@keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
         }
     }
 </style>
@@ -356,24 +450,36 @@
                             </div>
                         }
                         
-                        <form method="post" asp-controller="Account" asp-action="Register" id="registerForm">
+                        <form method="post" asp-controller="Account" asp-action="Register" id="registerForm" novalidate>
                             <!-- Row 1: Full Name & Username -->
                             <div class="row-custom">
                                 <div class="col-custom">
                                     <div class="input-group-custom">
-                                        <label class="input-label">Full Name</label>
+                                        <label class="input-label">Full Name <span style="color:#dc3545;">*</span></label>
                                         <input type="text" name="FullName" class="form-input" 
-                                               placeholder="Enter full name" required>
+                                               id="fullName"
+                                               placeholder="Enter full name" 
+                                               maxlength="40"
+                                               required>
                                         <i class="fas fa-user input-icon"></i>
+                                        <div class="validation-hint" id="fullNameHint">
+                                            <i class="fas fa-info-circle"></i> Only letters and spaces allowed (max 40)
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-custom">
                                     <div class="input-group-custom">
-                                        <label class="input-label">Username</label>
+                                        <label class="input-label">Username <span style="color:#dc3545;">*</span></label>
                                         <input type="text" name="Username" class="form-input" 
-                                               placeholder="Choose username" required>
+                                               id="username"
+                                               placeholder="Choose username" 
+                                               maxlength="15"
+                                               required>
                                         <i class="fas fa-at input-icon"></i>
+                                        <div class="validation-hint" id="usernameHint">
+                                            <i class="fas fa-info-circle"></i> Letters and numbers only (max 15)
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -382,19 +488,30 @@
                             <div class="row-custom">
                                 <div class="col-custom">
                                     <div class="input-group-custom">
-                                        <label class="input-label">Email Address</label>
+                                        <label class="input-label">Email Address <span style="color:#dc3545;">*</span></label>
                                         <input type="email" name="Email" class="form-input" 
-                                               placeholder="your@email.com" required>
+                                               id="email"
+                                               placeholder="your@email.com" 
+                                               required>
                                         <i class="fas fa-envelope input-icon"></i>
+                                        <div class="validation-hint" id="emailHint">
+                                            <i class="fas fa-info-circle"></i> Enter a valid email address
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-custom">
                                     <div class="input-group-custom">
-                                        <label class="input-label">Mobile Number</label>
+                                        <label class="input-label">Mobile Number <span style="color:#dc3545;">*</span></label>
                                         <input type="tel" name="MobileNumber" class="form-input" 
-                                               placeholder="9876543210" pattern="[0-9]{10}" required>
+                                               id="mobileNumber"
+                                               placeholder="9876543210" 
+                                               maxlength="10"
+                                               required>
                                         <i class="fas fa-phone input-icon"></i>
+                                        <div class="validation-hint" id="mobileHint">
+                                            <i class="fas fa-info-circle"></i> 10-digit number starting with 6-9
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -403,19 +520,35 @@
                             <div class="row-custom">
                                 <div class="col-custom">
                                     <div class="input-group-custom">
-                                        <label class="input-label">Password</label>
+                                        <label class="input-label">Password <span style="color:#dc3545;">*</span></label>
                                         <input type="password" name="Password" class="form-input" 
-                                               id="password" placeholder="Enter password" required>
-                                        <i class="fas fa-lock input-icon" id="passwordIcon"></i>
+                                               id="password" placeholder="Enter password" 
+                                               required>
+                                        <i class="fas fa-eye input-icon" id="passwordIcon"></i>
+                                        <div class="password-strength" id="passwordStrength" style="display:none;">
+                                            <div>Password Strength: <span id="strengthText">Weak</span></div>
+                                            <div class="strength-bar" id="strengthBar"></div>
+                                            <ul class="password-requirements" id="passwordRequirements">
+                                                <li id="reqLength"><i class="far fa-circle"></i> At least 8 characters</li>
+                                                <li id="reqUpper"><i class="far fa-circle"></i> At least 1 uppercase letter</li>
+                                                <li id="reqLower"><i class="far fa-circle"></i> At least 1 lowercase letter</li>
+                                                <li id="reqNumber"><i class="far fa-circle"></i> At least 1 number</li>
+                                                <li id="reqSpecial"><i class="far fa-circle"></i> At least 1 special character</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 <div class="col-custom">
                                     <div class="input-group-custom">
-                                        <label class="input-label">Confirm Password</label>
+                                        <label class="input-label">Confirm Password <span style="color:#dc3545;">*</span></label>
                                         <input type="password" name="ConfirmPassword" class="form-input" 
-                                               id="confirmPassword" placeholder="Confirm password" required>
-                                        <i class="fas fa-lock input-icon" id="confirmPasswordIcon"></i>
+                                               id="confirmPassword" placeholder="Confirm password" 
+                                               required>
+                                        <i class="fas fa-eye input-icon" id="confirmPasswordIcon"></i>
+                                        <div class="validation-hint" id="confirmPasswordHint">
+                                            <i class="fas fa-info-circle"></i> Passwords must match
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -440,12 +573,12 @@
                             <div class="form-check-custom">
                                 <input class="form-check-input" type="checkbox" id="terms" required>
                                 <label class="form-check-label" for="terms">
-                                    I agree to the <a href="#" class="text-primary">Terms & Conditions</a>
+                                    I agree to the <a asp-action="TermsAndConditions" class="text-primary">Terms & Conditions</a>
                                 </label>
                             </div>
                             
                             <!-- Submit Button -->
-                            <button type="submit" class="btn-submit">
+                            <button type="submit" class="btn-submit" id="submitBtn">
                                 <i class="fas fa-rocket me-2"></i>
                                 @(isAdmin ? "Create Account" : "Sign Up")
                             </button>
@@ -470,99 +603,280 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Password match check
+            // Toggle password visibility
+            $('#passwordIcon').on('click', function() {
+                const passwordInput = $('#password');
+                const icon = $(this);
+                
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+            
+            $('#confirmPasswordIcon').on('click', function() {
+                const confirmInput = $('#confirmPassword');
+                const icon = $(this);
+                
+                if (confirmInput.attr('type') === 'password') {
+                    confirmInput.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    confirmInput.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+            
+            // Full Name validation
+            $('#fullName').on('input', function() {
+                const value = $(this).val();
+                const pattern = /^[a-zA-Z\s]*$/;
+                const hint = $('#fullNameHint');
+                
+                if (value.length > 0) {
+                    if (pattern.test(value) && value.length <= 40) {
+                        $(this).removeClass('error').addClass('valid');
+                        hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Valid full name');
+                        hint.show();
+                    } else {
+                        $(this).removeClass('valid').addClass('error');
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Only letters and spaces allowed (max 40)');
+                        hint.show();
+                    }
+                } else {
+                    $(this).removeClass('valid error');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Only letters and spaces allowed (max 40)');
+                    hint.show();
+                }
+            });
+            
+            // Username validation
+            $('#username').on('input', function() {
+                const value = $(this).val();
+                const pattern = /^[a-zA-Z0-9]*$/;
+                const hint = $('#usernameHint');
+                
+                if (value.length > 0) {
+                    if (pattern.test(value) && value.length <= 15) {
+                        $(this).removeClass('error').addClass('valid');
+                        hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Valid username');
+                        hint.show();
+                    } else {
+                        $(this).removeClass('valid').addClass('error');
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Only letters and numbers allowed (max 15)');
+                        hint.show();
+                    }
+                } else {
+                    $(this).removeClass('valid error');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Letters and numbers only (max 15)');
+                    hint.show();
+                }
+            });
+            
+            // Email validation - FIXED: Used double @@ in regex
+            $('#email').on('input', function() {
+                const value = $(this).val();
+                const pattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                const hint = $('#emailHint');
+                
+                if (value.length > 0) {
+                    if (pattern.test(value)) {
+                        $(this).removeClass('error').addClass('valid');
+                        hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Valid email address');
+                        hint.show();
+                    } else {
+                        $(this).removeClass('valid').addClass('error');
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Please enter a valid email address');
+                        hint.show();
+                    }
+                } else {
+                    $(this).removeClass('valid error');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Enter a valid email address');
+                    hint.show();
+                }
+            });
+            
+            // Mobile number validation
+            $('#mobileNumber').on('input', function() {
+                let value = $(this).val();
+                const hint = $('#mobileHint');
+                
+                // Remove non-digits
+                value = value.replace(/\D/g, '');
+                $(this).val(value);
+                
+                const pattern = /^[6-9][0-9]{9}$/;
+                
+                if (value.length > 0) {
+                    if (pattern.test(value)) {
+                        $(this).removeClass('error').addClass('valid');
+                        hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Valid mobile number');
+                        hint.show();
+                    } else {
+                        $(this).removeClass('valid').addClass('error');
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Enter a valid 10-digit number starting with 6-9');
+                        hint.show();
+                    }
+                } else {
+                    $(this).removeClass('valid error');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> 10-digit number starting with 6-9');
+                    hint.show();
+                }
+            });
+            
+            // Password strength checker
+            function checkPasswordStrength(password) {
+                const requirements = {
+                    length: password.length >= 8,
+                    upper: /[A-Z]/.test(password),
+                    lower: /[a-z]/.test(password),
+                    number: /[0-9]/.test(password),
+                    special: /[^A-Za-z0-9]/.test(password)
+                };
+                
+                // Update requirement icons
+                $('#reqLength i').attr('class', requirements.length ? 'fas fa-check-circle' : 'far fa-circle');
+                $('#reqUpper i').attr('class', requirements.upper ? 'fas fa-check-circle' : 'far fa-circle');
+                $('#reqLower i').attr('class', requirements.lower ? 'fas fa-check-circle' : 'far fa-circle');
+                $('#reqNumber i').attr('class', requirements.number ? 'fas fa-check-circle' : 'far fa-circle');
+                $('#reqSpecial i').attr('class', requirements.special ? 'fas fa-check-circle' : 'far fa-circle');
+                
+                $('#reqLength').toggleClass('valid', requirements.length).toggleClass('invalid', !requirements.length && password.length > 0);
+                $('#reqUpper').toggleClass('valid', requirements.upper).toggleClass('invalid', !requirements.upper && password.length > 0);
+                $('#reqLower').toggleClass('valid', requirements.lower).toggleClass('invalid', !requirements.lower && password.length > 0);
+                $('#reqNumber').toggleClass('valid', requirements.number).toggleClass('invalid', !requirements.number && password.length > 0);
+                $('#reqSpecial').toggleClass('valid', requirements.special).toggleClass('invalid', !requirements.special && password.length > 0);
+                
+                // Calculate strength
+                const strengthCount = Object.values(requirements).filter(Boolean).length;
+                const strengthBar = $('#strengthBar');
+                const strengthText = $('#strengthText');
+                
+                strengthBar.removeClass('weak medium strong very-strong');
+                
+                if (password.length === 0) {
+                    $('#passwordStrength').hide();
+                    return 0;
+                }
+                
+                $('#passwordStrength').show();
+                
+                if (strengthCount <= 2) {
+                    strengthBar.addClass('weak');
+                    strengthText.text('Weak').css('color', '#dc3545');
+                } else if (strengthCount === 3) {
+                    strengthBar.addClass('medium');
+                    strengthText.text('Medium').css('color', '#ffc107');
+                } else if (strengthCount === 4) {
+                    strengthBar.addClass('strong');
+                    strengthText.text('Strong').css('color', '#28a745');
+                } else if (strengthCount === 5) {
+                    strengthBar.addClass('very-strong');
+                    strengthText.text('Very Strong').css('color', '#20c997');
+                }
+                
+                return strengthCount;
+            }
+            
+            $('#password').on('input', function() {
+                const password = $(this).val();
+                checkPasswordStrength(password);
+                checkPasswordMatch();
+            });
+            
+            // Confirm password validation
             function checkPasswordMatch() {
                 const password = $('#password').val();
                 const confirm = $('#confirmPassword').val();
-                const confirmIcon = $('#confirmPasswordIcon');
+                const hint = $('#confirmPasswordHint');
                 
-                if (confirm.length === 0) {
-                    confirmIcon.css('color', '#667eea');
-                    confirmIcon.removeClass('fa-check').addClass('fa-lock');
-                    return false;
-                }
-                
-                if (password === confirm) {
-                    confirmIcon.css('color', '#28a745');
-                    confirmIcon.removeClass('fa-lock').addClass('fa-check');
-                    return true;
+                if (confirm.length > 0) {
+                    if (password === confirm && password.length >= 8) {
+                        $('#confirmPassword').removeClass('error').addClass('valid');
+                        hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Passwords match');
+                        hint.show();
+                        return true;
+                    } else {
+                        $('#confirmPassword').removeClass('valid').addClass('error');
+                        hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> Passwords do not match');
+                        hint.show();
+                        return false;
+                    }
                 } else {
-                    confirmIcon.css('color', '#dc3545');
-                    confirmIcon.removeClass('fa-check').addClass('fa-lock');
+                    $('#confirmPassword').removeClass('valid error');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Passwords must match');
+                    hint.show();
                     return false;
                 }
             }
             
-            $('#password, #confirmPassword').on('input', checkPasswordMatch);
-            
-            // Show/Hide password toggle
-            $('#password').on('input', function() {
-                const icon = $('#passwordIcon');
-                const password = $(this).val();
-                
-                if (password.length > 0) {
-                    icon.removeClass('fa-lock').addClass('fa-eye');
-                    icon.css('cursor', 'pointer');
-                    icon.css('pointer-events', 'auto');
-                    
-                    icon.off('click').on('click', function() {
-                        const passwordInput = $('#password');
-                        if (passwordInput.attr('type') === 'password') {
-                            passwordInput.attr('type', 'text');
-                            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-                        } else {
-                            passwordInput.attr('type', 'password');
-                            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-                        }
-                    });
-                } else {
-                    icon.removeClass('fa-eye fa-eye-slash').addClass('fa-lock');
-                    icon.css('cursor', 'default');
-                    icon.css('pointer-events', 'none');
-                    icon.off('click');
-                }
+            $('#confirmPassword').on('input', function() {
+                checkPasswordMatch();
             });
             
-            // Form submission
+            // Form submission - FIXED: Used double @@ in regex
             $('#registerForm').submit(function(e) {
                 e.preventDefault();
                 
-                if (!this.checkValidity()) {
-                    e.stopPropagation();
-                    $(this).addClass('was-validated');
+                // Get all values
+                const fullName = $('#fullName').val().trim();
+                const username = $('#username').val().trim();
+                const email = $('#email').val().trim();
+                const mobile = $('#mobileNumber').val().trim();
+                const password = $('#password').val();
+                const confirm = $('#confirmPassword').val();
+                const terms = $('#terms').is(':checked');
+                
+                // Validate all fields
+                const fullNameValid = /^[a-zA-Z\s]+$/.test(fullName) && fullName.length <= 40 && fullName.length > 0;
+                const usernameValid = /^[a-zA-Z0-9]+$/.test(username) && username.length <= 15 && username.length > 0;
+                const emailValid = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+                const mobileValid = /^[6-9][0-9]{9}$/.test(mobile);
+                
+                // Check password strength (need all 5 requirements)
+                const passwordReqs = {
+                    length: password.length >= 8,
+                    upper: /[A-Z]/.test(password),
+                    lower: /[a-z]/.test(password),
+                    number: /[0-9]/.test(password),
+                    special: /[^A-Za-z0-9]/.test(password)
+                };
+                const passwordStrength = Object.values(passwordReqs).filter(Boolean).length === 5;
+                const passwordsMatch = password === confirm && password.length >= 8;
+                
+                let errorMessages = [];
+                
+                if (!fullNameValid) errorMessages.push("Full name must contain only letters and spaces (max 40 characters)");
+                if (!usernameValid) errorMessages.push("Username must contain only letters and numbers (max 15 characters)");
+                if (!emailValid) errorMessages.push("Please enter a valid email address");
+                if (!mobileValid) errorMessages.push("Mobile number must be a valid 10-digit number starting with 6-9");
+                if (!passwordStrength) errorMessages.push("Password must be at least 8 characters and contain uppercase, lowercase, number, and special character");
+                if (!passwordsMatch) errorMessages.push("Passwords do not match");
+                if (!terms) errorMessages.push("You must agree to the Terms & Conditions");
+                
+                if (errorMessages.length > 0) {
+                    alert("Please fix the following errors:\n\n- " + errorMessages.join("\n- "));
                     
-                    $(this).find(':invalid').each(function() {
-                        $(this).addClass('animate__animated animate__shakeX');
-                        setTimeout(() => {
-                            $(this).removeClass('animate__animated animate__shakeX');
-                        }, 500);
-                    });
+                    // Highlight invalid fields
+                    if (!fullNameValid) $('#fullName').addClass('error');
+                    if (!usernameValid) $('#username').addClass('error');
+                    if (!emailValid) $('#email').addClass('error');
+                    if (!mobileValid) $('#mobileNumber').addClass('error');
+                    if (!passwordStrength) $('#password').addClass('error');
+                    if (!passwordsMatch) $('#confirmPassword').addClass('error');
                     
                     return false;
                 }
                 
-                if (!checkPasswordMatch()) {
-                    $('#confirmPassword').addClass('animate__animated animate__shakeX');
-                    setTimeout(() => {
-                        $('#confirmPassword').removeClass('animate__animated animate__shakeX');
-                    }, 500);
-                    return false;
-                }
-                
-                if (!$('#terms').is(':checked')) {
-                    $('#terms').addClass('animate__animated animate__shakeX');
-                    setTimeout(() => {
-                        $('#terms').removeClass('animate__animated animate__shakeX');
-                    }, 500);
-                    return false;
-                }
-                
-                const btn = $(this).find('button[type="submit"]');
+                // If all validations pass, submit the form
+                const btn = $('#submitBtn');
                 btn.html('<i class="fas fa-spinner fa-spin me-2"></i>Processing...').prop('disabled', true);
                 
-                setTimeout(() => {
-                    this.submit();
-                }, 800);
+                // Actually submit the form
+                this.submit();
                 
                 return true;
             });

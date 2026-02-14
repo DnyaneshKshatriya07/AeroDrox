@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System;
+using System.Text.RegularExpressions;
 
 public class AccountController : Controller
 {
@@ -33,110 +34,94 @@ public class AccountController : Controller
         return View();
     }
 
-    // [HttpPost]
-    // public async Task<IActionResult> Login(string LoginId, string Password)
-    // {
-    //     SetNoCacheHeaders();
-    //     var user = await _userService.AuthenticateAsync(LoginId, Password);
-
-    //     if(user != null)
-    //     {
-    //         // Update last login time
-    //         user.LastLoginAt = DateTime.UtcNow;
-    //         await _userService.UpdateUserAsync(user, user.Username, user.FullName, user.Email, user.MobileNumber, "", user.Role);
-            
-    //         HttpContext.Session.SetString("Username", user.Username);
-    //         HttpContext.Session.SetString("FullName", user.FullName);
-    //         HttpContext.Session.SetString("Email", user.Email);
-    //         HttpContext.Session.SetString("Role", user.Role);
-    //         HttpContext.Session.SetInt32("UserId", user.Id);
-            
-    //         return RedirectToAction("Index", "Drone");
-    //     }
-    //     else
-    //     {
-    //         ViewBag.Error = "Invalid email/mobile number or password";
-    //         return View();
-    //     }
-    // }
-
-    // ===================================
-// BUY AND BOOK ACTIONS
-// ===================================
-
-[HttpGet]
-public IActionResult BuyProduct(int productId, string productType = "drone")
-{
-    // Store the intended product to buy in session
-    HttpContext.Session.SetString("BuyProductId", productId.ToString());
-    HttpContext.Session.SetString("BuyProductType", productType);
-    
-    // Redirect to login
-    TempData["Message"] = "Please login to complete your purchase.";
-    return RedirectToAction("Login");
-}
-
-[HttpGet]
-public IActionResult BookService(int serviceId)
-{
-    // Store the intended service to book in session
-    HttpContext.Session.SetString("BookServiceId", serviceId.ToString());
-    
-    // Redirect to login
-    TempData["Message"] = "Please login to book this service.";
-    return RedirectToAction("Login");
-}
-
-// Update Login POST action to redirect after login
-[HttpPost]
-public async Task<IActionResult> Login(string LoginId, string Password)
-{
-    SetNoCacheHeaders();
-    var user = await _userService.AuthenticateAsync(LoginId, Password);
-
-    if(user != null)
+    [HttpGet]
+    public IActionResult BuyProduct(int productId, string productType = "drone")
     {
-        // Update last login time
-        user.LastLoginAt = DateTime.UtcNow;
-        await _userService.UpdateUserAsync(user, user.Username, user.FullName, user.Email, user.MobileNumber, "", user.Role);
+        HttpContext.Session.SetString("BuyProductId", productId.ToString());
+        HttpContext.Session.SetString("BuyProductType", productType);
         
-        HttpContext.Session.SetString("Username", user.Username);
-        HttpContext.Session.SetString("FullName", user.FullName);
-        HttpContext.Session.SetString("Email", user.Email);
-        HttpContext.Session.SetString("Role", user.Role);
-        HttpContext.Session.SetInt32("UserId", user.Id);
+        TempData["Message"] = "Please login to complete your purchase.";
+        return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+    public IActionResult BookService(int serviceId)
+    {
+        HttpContext.Session.SetString("BookServiceId", serviceId.ToString());
         
-        // Check if user was trying to buy something before login
-        var buyProductId = HttpContext.Session.GetString("BuyProductId");
-        var buyProductType = HttpContext.Session.GetString("BuyProductType");
-        var bookServiceId = HttpContext.Session.GetString("BookServiceId");
+        TempData["Message"] = "Please login to book this service.";
+        return RedirectToAction("Login");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(string LoginId, string Password)
+    {
+        SetNoCacheHeaders();
         
-        // Clear the session values
-        HttpContext.Session.Remove("BuyProductId");
-        HttpContext.Session.Remove("BuyProductType");
-        HttpContext.Session.Remove("BookServiceId");
+        // Server-side validation
+        var errors = new List<string>();
         
-        // Redirect to appropriate page
-        if (!string.IsNullOrEmpty(buyProductId))
+        if (string.IsNullOrEmpty(LoginId))
         {
-            if (buyProductType == "accessory")
-                return RedirectToAction("Details", "Accessories", new { id = int.Parse(buyProductId) });
-            else
-                return RedirectToAction("Details", "Drone", new { id = int.Parse(buyProductId) });
+            errors.Add("Email is required.");
         }
-        else if (!string.IsNullOrEmpty(bookServiceId))
+        else if (!IsValidEmail(LoginId))
         {
-            return RedirectToAction("Details", "DroneServices", new { id = int.Parse(bookServiceId) });
+            errors.Add("Please enter a valid email address.");
         }
         
-        return RedirectToAction("Index", "Drone");
+        if (string.IsNullOrEmpty(Password))
+        {
+            errors.Add("Password is required.");
+        }
+        
+        if (errors.Any())
+        {
+            ViewBag.Error = string.Join(" ", errors);
+            return View();
+        }
+
+        var user = await _userService.AuthenticateAsync(LoginId, Password);
+
+        if (user != null)
+        {
+            user.LastLoginAt = DateTime.UtcNow;
+            await _userService.UpdateUserAsync(user, user.Username, user.FullName, user.Email, user.MobileNumber, "", user.Role);
+            
+            HttpContext.Session.SetString("Username", user.Username);
+            HttpContext.Session.SetString("FullName", user.FullName);
+            HttpContext.Session.SetString("Email", user.Email);
+            HttpContext.Session.SetString("Role", user.Role);
+            HttpContext.Session.SetInt32("UserId", user.Id);
+            
+            var buyProductId = HttpContext.Session.GetString("BuyProductId");
+            var buyProductType = HttpContext.Session.GetString("BuyProductType");
+            var bookServiceId = HttpContext.Session.GetString("BookServiceId");
+            
+            HttpContext.Session.Remove("BuyProductId");
+            HttpContext.Session.Remove("BuyProductType");
+            HttpContext.Session.Remove("BookServiceId");
+            
+            if (!string.IsNullOrEmpty(buyProductId))
+            {
+                if (buyProductType == "accessory")
+                    return RedirectToAction("Details", "Accessories", new { id = int.Parse(buyProductId) });
+                else
+                    return RedirectToAction("Details", "Drone", new { id = int.Parse(buyProductId) });
+            }
+            else if (!string.IsNullOrEmpty(bookServiceId))
+            {
+                return RedirectToAction("Details", "DroneServices", new { id = int.Parse(bookServiceId) });
+            }
+            
+            return RedirectToAction("Index", "Drone");
+        }
+        else
+        {
+            ViewBag.Error = "Invalid email or password";
+            return View();
+        }
     }
-    else
-    {
-        ViewBag.Error = "Invalid email/mobile number or password";
-        return View();
-    }
-}
 
     public IActionResult Logout()
     {
@@ -144,16 +129,11 @@ public async Task<IActionResult> Login(string LoginId, string Password)
         return RedirectToAction("Login");
     }
 
-    // ===================================
-    // REGISTER ACTIONS
-    // ===================================
-
     [HttpGet]
     public IActionResult Register()
     {
         SetNoCacheHeaders();
         
-        // Pass a flag to the view to conditionally show role selection options
         ViewBag.IsAdminLoggedIn = HttpContext.Session.GetString("Role") == "Admin";
         
         return View();
@@ -164,33 +144,113 @@ public async Task<IActionResult> Login(string LoginId, string Password)
     {
         SetNoCacheHeaders();
         
-        // Validate passwords match
-        if (Password != ConfirmPassword)
+        // Comprehensive validation
+        var errors = new List<string>();
+        
+        // Validate Full Name
+        if (string.IsNullOrEmpty(FullName))
         {
-            ViewBag.Error = "Passwords do not match.";
-            ViewBag.IsAdminLoggedIn = HttpContext.Session.GetString("Role") == "Admin";
-            return View("Register");
+            errors.Add("Full name is required.");
         }
-
-        // Validate email format
-        if (!IsValidEmail(Email))
+        else if (!Regex.IsMatch(FullName, @"^[a-zA-Z\s]+$"))
         {
-            ViewBag.Error = "Please enter a valid email address.";
-            ViewBag.IsAdminLoggedIn = HttpContext.Session.GetString("Role") == "Admin";
-            return View("Register");
+            errors.Add("Full name can only contain letters and spaces.");
         }
-
-        // Validate mobile number format (basic validation)
-        if (!IsValidMobileNumber(MobileNumber))
+        else if (FullName.Length > 40)
         {
-            ViewBag.Error = "Please enter a valid 10-digit mobile number.";
+            errors.Add("Full name cannot exceed 40 characters.");
+        }
+        
+        // Validate Username
+        if (string.IsNullOrEmpty(Username))
+        {
+            errors.Add("Username is required.");
+        }
+        else if (!Regex.IsMatch(Username, @"^[a-zA-Z0-9]+$"))
+        {
+            errors.Add("Username can only contain letters and numbers (no symbols).");
+        }
+        else if (Username.Length > 15)
+        {
+            errors.Add("Username cannot exceed 15 characters.");
+        }
+        else
+        {
+            // Check duplicate username
+            var existingUser = await _userService.GetUserByEmailOrMobileAsync(Username);
+            if (existingUser != null)
+            {
+                errors.Add("Username already exists. Please choose a different username.");
+            }
+        }
+        
+        // Validate Email
+        if (string.IsNullOrEmpty(Email))
+        {
+            errors.Add("Email is required.");
+        }
+        else if (!IsValidEmail(Email))
+        {
+            errors.Add("Please enter a valid email address.");
+        }
+        else
+        {
+            // Check duplicate email
+            var existingEmail = await _userService.GetUserByEmailOrMobileAsync(Email);
+            if (existingEmail != null)
+            {
+                errors.Add("Email already registered. Please use a different email or login.");
+            }
+        }
+        
+        // Validate Mobile Number
+        if (string.IsNullOrEmpty(MobileNumber))
+        {
+            errors.Add("Mobile number is required.");
+        }
+        else if (!Regex.IsMatch(MobileNumber, @"^[6-9][0-9]{9}$"))
+        {
+            errors.Add("Please enter a valid 10-digit mobile number starting with 6-9.");
+        }
+        else
+        {
+            // Check duplicate mobile number
+            var existingMobile = await _userService.GetUserByEmailOrMobileAsync(MobileNumber);
+            if (existingMobile != null)
+            {
+                errors.Add("Mobile number already registered. Please use a different number.");
+            }
+        }
+        
+        // Validate Password
+        if (string.IsNullOrEmpty(Password))
+        {
+            errors.Add("Password is required.");
+        }
+        else if (!IsValidPassword(Password))
+        {
+            errors.Add("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+        }
+        
+        // Validate Confirm Password
+        if (string.IsNullOrEmpty(ConfirmPassword))
+        {
+            errors.Add("Please confirm your password.");
+        }
+        else if (Password != ConfirmPassword)
+        {
+            errors.Add("Passwords do not match.");
+        }
+        
+        if (errors.Any())
+        {
+            ViewBag.Error = string.Join(" ", errors);
             ViewBag.IsAdminLoggedIn = HttpContext.Session.GetString("Role") == "Admin";
             return View("Register");
         }
 
         string finalRole = "User";
 
-        // Security Logic: Only allow creating an Admin if the current session belongs to an Admin
         if (Role == "Admin")
         {
             if (HttpContext.Session.GetString("Role") != "Admin")
@@ -208,34 +268,26 @@ public async Task<IActionResult> Login(string LoginId, string Password)
         {
             if (finalRole == "Admin")
             {
-                // Admin created by another admin: Stay logged in and redirect
                 return RedirectToAction("UserManagement");
             }
-            // Standard User created: Redirect to Login page
-            TempData["Success"] = "Registration successful! Please login with your email or mobile number.";
+            TempData["Success"] = "Registration successful! Please login with your email.";
             return RedirectToAction("Login");
         }
         else
         {
-            ViewBag.Error = "Username, email, or mobile number already exists. Please choose different credentials.";
+            ViewBag.Error = "Registration failed. Please try again.";
             ViewBag.IsAdminLoggedIn = HttpContext.Session.GetString("Role") == "Admin";
             return View("Register");
         }
     }
-
-    // ===================================
-    // USER MANAGEMENT ACTIONS (ADMIN ONLY)
-    // ===================================
 
     [HttpGet]
     public async Task<IActionResult> UserManagement(string filter = "All")
     {
         SetNoCacheHeaders();
 
-        // Check if the user is an Admin
         if (HttpContext.Session.GetString("Role") != "Admin")
         {
-            // Not an admin, redirect them away
             return RedirectToAction("Index", "Home");
         }
 
@@ -263,7 +315,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
     public async Task<IActionResult> DeleteUser(int id)
     {
         SetNoCacheHeaders();
-        // Security check: Only Admins can delete
         if (HttpContext.Session.GetString("Role") != "Admin")
         {
             return RedirectToAction("Index", "Home");
@@ -273,7 +324,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
 
         if (userToDelete != null)
         {
-            // Prevent Admin from deleting themselves
             if (userToDelete.Username == HttpContext.Session.GetString("Username"))
             {
                 TempData["Error"] = "You cannot delete your own admin account.";
@@ -296,7 +346,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
             TempData["Error"] = "User not found.";
         }
 
-        // Redirect back to the user list
         return RedirectToAction("UserManagement");
     }
 
@@ -304,7 +353,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
     public async Task<IActionResult> EditUser(int id)
     {
         SetNoCacheHeaders();
-        // Security check: Only Admins can edit
         if (HttpContext.Session.GetString("Role") != "Admin")
         {
             return RedirectToAction("Index", "Home");
@@ -324,7 +372,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
     public async Task<IActionResult> EditUser(int Id, string Username, string FullName, string Email, string MobileNumber, string Password, string Role)
     {
         SetNoCacheHeaders();
-        // Security check: Only Admins can edit
         if (HttpContext.Session.GetString("Role") != "Admin")
         {
             return RedirectToAction("Index", "Home");
@@ -337,7 +384,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
             return RedirectToAction("UserManagement");
         }
 
-        // Prevent Admin from demoting or changing their own account role/username
         if (userToUpdate.Username == HttpContext.Session.GetString("Username"))
         {
             if (userToUpdate.Role != Role || userToUpdate.Username != Username)
@@ -352,7 +398,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
         if (success)
         {
             TempData["Success"] = $"User '{Username}' updated successfully.";
-            // If the currently logged-in user updated their own password, clear session and re-login
             if (userToUpdate.Username == HttpContext.Session.GetString("Username") && !string.IsNullOrEmpty(Password))
             {
                 HttpContext.Session.Clear();
@@ -367,10 +412,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
 
         return RedirectToAction("UserManagement");
     }
-
-    // ===================================
-    // MY PROFILE ACTIONS
-    // ===================================
 
     [HttpGet]
     public async Task<IActionResult> MyProfile()
@@ -416,18 +457,42 @@ public async Task<IActionResult> Login(string LoginId, string Password)
             return RedirectToAction("Login");
         }
 
-        // Validate email format
-        if (!IsValidEmail(Email))
+        var errors = new List<string>();
+
+        if (string.IsNullOrEmpty(FullName))
         {
-            TempData["Error"] = "Please enter a valid email address.";
-            var user = await _userService.GetUserByIdAsync(userId.Value);
-            return View(user);
+            errors.Add("Full name is required.");
+        }
+        else if (!Regex.IsMatch(FullName, @"^[a-zA-Z\s]+$"))
+        {
+            errors.Add("Full name can only contain letters and spaces.");
+        }
+        else if (FullName.Length > 40)
+        {
+            errors.Add("Full name cannot exceed 40 characters.");
         }
 
-        // Validate mobile number format
-        if (!IsValidMobileNumber(MobileNumber))
+        if (string.IsNullOrEmpty(Email))
         {
-            TempData["Error"] = "Please enter a valid 10-digit mobile number.";
+            errors.Add("Email is required.");
+        }
+        else if (!IsValidEmail(Email))
+        {
+            errors.Add("Please enter a valid email address.");
+        }
+
+        if (string.IsNullOrEmpty(MobileNumber))
+        {
+            errors.Add("Mobile number is required.");
+        }
+        else if (!Regex.IsMatch(MobileNumber, @"^[6-9][0-9]{9}$"))
+        {
+            errors.Add("Please enter a valid 10-digit mobile number starting with 6-9.");
+        }
+
+        if (errors.Any())
+        {
+            TempData["Error"] = string.Join(" ", errors);
             var user = await _userService.GetUserByIdAsync(userId.Value);
             return View(user);
         }
@@ -443,12 +508,11 @@ public async Task<IActionResult> Login(string LoginId, string Password)
             PinCode,
             DateOfBirth,
             Gender,
-            null // We'll handle profile picture separately
+            null
         );
 
         if (success)
         {
-            // Update session data
             HttpContext.Session.SetString("FullName", FullName);
             HttpContext.Session.SetString("Email", Email);
             
@@ -479,15 +543,34 @@ public async Task<IActionResult> Login(string LoginId, string Password)
             return RedirectToAction("Login");
         }
 
-        if (NewPassword != ConfirmPassword)
+        var errors = new List<string>();
+
+        if (string.IsNullOrEmpty(CurrentPassword))
         {
-            TempData["PasswordError"] = "New passwords do not match.";
-            return RedirectToAction("MyProfile");
+            errors.Add("Current password is required.");
         }
 
-        if (string.IsNullOrEmpty(NewPassword) || NewPassword.Length < 6)
+        if (string.IsNullOrEmpty(NewPassword))
         {
-            TempData["PasswordError"] = "New password must be at least 6 characters long.";
+            errors.Add("New password is required.");
+        }
+        else if (!IsValidPassword(NewPassword))
+        {
+            errors.Add("New password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+        }
+
+        if (string.IsNullOrEmpty(ConfirmPassword))
+        {
+            errors.Add("Please confirm your new password.");
+        }
+        else if (NewPassword != ConfirmPassword)
+        {
+            errors.Add("New passwords do not match.");
+        }
+
+        if (errors.Any())
+        {
+            TempData["PasswordError"] = string.Join(" ", errors);
             return RedirectToAction("MyProfile");
         }
 
@@ -495,8 +578,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
         
         if (success)
         {
-            TempData["Success"] = "Password updated successfully!";
-            // Clear session and redirect to login if user changed their own password
             if (HttpContext.Session.GetInt32("UserId") == userId.Value)
             {
                 HttpContext.Session.Clear();
@@ -534,7 +615,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
             return RedirectToAction("MyProfile");
         }
 
-        // Validate file type
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
         var fileExtension = Path.GetExtension(profilePicture.FileName).ToLowerInvariant();
         
@@ -544,7 +624,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
             return RedirectToAction("MyProfile");
         }
 
-        // Validate file size (max 5MB)
         if (profilePicture.Length > 5 * 1024 * 1024)
         {
             TempData["Error"] = "Profile picture must be less than 5MB.";
@@ -553,11 +632,9 @@ public async Task<IActionResult> Login(string LoginId, string Password)
 
         try
         {
-            // Generate unique filename
             var fileName = $"profile_{userId.Value}_{Guid.NewGuid()}{fileExtension}";
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "profiles");
             
-            // Create directory if it doesn't exist
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);
@@ -565,17 +642,14 @@ public async Task<IActionResult> Login(string LoginId, string Password)
 
             var filePath = Path.Combine(uploadsFolder, fileName);
 
-            // Save the file
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await profilePicture.CopyToAsync(stream);
             }
 
-            // Get user and update profile picture path
             var user = await _userService.GetUserByIdAsync(userId.Value);
             if (user != null)
             {
-                // Delete old profile picture if exists
                 if (!string.IsNullOrEmpty(user.ProfilePicture))
                 {
                     var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.ProfilePicture.TrimStart('/'));
@@ -585,7 +659,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
                     }
                 }
 
-                // Update profile picture in database
                 var profilePicturePath = $"/uploads/profiles/{fileName}";
                 var success = await _userService.UpdateProfileAsync(
                     userId.Value,
@@ -619,7 +692,6 @@ public async Task<IActionResult> Login(string LoginId, string Password)
         return RedirectToAction("MyProfile");
     }
 
-    // Helper methods for validation
     private bool IsValidEmail(string email)
     {
         try
@@ -633,11 +705,22 @@ public async Task<IActionResult> Login(string LoginId, string Password)
         }
     }
 
-    private bool IsValidMobileNumber(string mobileNumber)
+    private bool IsValidPassword(string password)
     {
-        // Basic validation for 10-digit number
-        return !string.IsNullOrEmpty(mobileNumber) && 
-               mobileNumber.Length == 10 && 
-               mobileNumber.All(char.IsDigit);
+        if (string.IsNullOrEmpty(password) || password.Length < 8)
+            return false;
+            
+        bool hasUpper = password.Any(char.IsUpper);
+        bool hasLower = password.Any(char.IsLower);
+        bool hasDigit = password.Any(char.IsDigit);
+        bool hasSpecial = password.Any(ch => !char.IsLetterOrDigit(ch));
+        
+        return hasUpper && hasLower && hasDigit && hasSpecial;
+    }
+
+    [HttpGet]
+    public IActionResult TermsAndConditions()
+    {
+        return View();
     }
 }

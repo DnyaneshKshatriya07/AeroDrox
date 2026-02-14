@@ -214,5 +214,21 @@ namespace AeroDroxUAV.Services
             await _userRepository.UpdateUserAsync(user);
             return true;
         }
+
+
+        // Add this method to check if username/email/mobile already exists
+        public async Task<bool> CheckIfUserExistsAsync(string username, string email, string mobileNumber)
+        {
+            var userByUsername = await _userRepository.GetByUsernameAsync(username);
+            if (userByUsername != null) return true;
+            
+            var userByEmail = await _userRepository.GetByEmailAsync(email);
+            if (userByEmail != null) return true;
+            
+            var userByMobile = await _userRepository.GetByMobileNumberAsync(mobileNumber);
+            if (userByMobile != null) return true;
+            
+            return false;
+        }
     }
 }
