@@ -440,6 +440,61 @@
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     
+    /* Validation Styles */
+    .form-control-lg.is-valid {
+        border-color: #28a745;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        padding-right: calc(1.5em + 0.75rem);
+    }
+    
+    .form-control-lg.is-invalid {
+        border-color: #dc3545;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        padding-right: calc(1.5em + 0.75rem);
+    }
+    
+    .form-select-lg.is-valid {
+        border-color: #28a745;
+    }
+    
+    .form-select-lg.is-invalid {
+        border-color: #dc3545;
+    }
+    
+    .validation-hint {
+        font-size: 0.85rem;
+        margin-top: 4px;
+        color: #6c757d;
+    }
+    
+    .validation-hint.valid {
+        color: #28a745 !important;
+    }
+    
+    .validation-hint.invalid {
+        color: #dc3545 !important;
+    }
+    
+    .character-count {
+        font-size: 0.85rem;
+        margin-top: 4px;
+        color: #6c757d;
+    }
+    
+    .character-count.warning {
+        color: #ffc107 !important;
+    }
+    
+    .character-count.danger {
+        color: #dc3545 !important;
+    }
+    
     /* Responsive adjustments */
     @@media (max-width: 1200px) {
         .services-carousel-container {
@@ -1229,21 +1284,43 @@
                                 </div>
                             }
                             
-                            <form method="post" asp-controller="Contact" asp-action="Submit" id="contactForm">
+                            @if(ViewBag.ErrorMessage != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show mb-4">
+                                    <strong>Error!</strong> @ViewBag.ErrorMessage
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+                            
+                            <form method="post" asp-controller="Contact" asp-action="Submit" id="contactForm" novalidate>
                                 <div class="mb-3">
                                     <label for="name" class="form-label fw-semibold">
-                                        <i class="fas fa-user me-2"></i>Your Name
+                                        <i class="fas fa-user me-2"></i>Your Name <span class="text-danger">*</span>
                                     </label>
                                     <input type="text" name="name" id="name" class="form-control form-control-lg" 
-                                           placeholder="John Doe" required>
+                                           placeholder="John Doe" 
+                                           maxlength="50"
+                                           pattern="[a-zA-Z\s]{2,50}"
+                                           title="Name must be 2-50 characters and contain only letters and spaces"
+                                           value="@(ViewBag.FormData?.Name ?? "")"
+                                           required>
+                                    <div class="validation-hint" id="nameHint">
+                                        <i class="fas fa-info-circle"></i> 2-50 characters, letters and spaces only
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label for="email" class="form-label fw-semibold">
-                                        <i class="fas fa-envelope me-2"></i>Email Address
+                                        <i class="fas fa-envelope me-2"></i>Email Address <span class="text-danger">*</span>
                                     </label>
                                     <input type="email" name="email" id="email" class="form-control form-control-lg" 
-                                           placeholder="john@example.com" required>
+                                           placeholder="john@example.com" 
+                                           maxlength="254"
+                                           value="@(ViewBag.FormData?.Email ?? "")"
+                                           required>
+                                    <div class="validation-hint" id="emailHint">
+                                        <i class="fas fa-info-circle"></i> Enter a valid email address
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-3">
@@ -1251,7 +1328,12 @@
                                         <i class="fas fa-phone me-2"></i>Phone Number
                                     </label>
                                     <input type="tel" name="phone" id="phone" class="form-control form-control-lg" 
-                                           placeholder="+1 (555) 123-4567">
+                                           placeholder="+1 (555) 123-4567"
+                                           maxlength="15"
+                                           value="@(ViewBag.FormData?.Phone ?? "")">
+                                    <div class="validation-hint" id="phoneHint">
+                                        <i class="fas fa-info-circle"></i> Enter a valid phone number (optional)
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-3">
@@ -1259,34 +1341,49 @@
                                         <i class="fas fa-concierge-bell me-2"></i>Service Interested In
                                     </label>
                                     <select name="service" id="service" class="form-select form-select-lg">
-                                        <option value="">Select a Service</option>
-                                        <option value="inspection">Infrastructure Inspection</option>
-                                        <option value="photography">Aerial Photography</option>
-                                        <option value="mapping">3D Mapping</option>
-                                        <option value="training">Drone Training</option>
-                                        <option value="other">Other Services</option>
+                                        @{
+                                            var selectedService = ViewBag.FormData?.Service as string;
+                                        }
+                                        <option value="" selected="@(string.IsNullOrEmpty(selectedService))">Select a Service</option>
+                                        <option value="inspection" selected="@(selectedService == "inspection")">Infrastructure Inspection</option>
+                                        <option value="photography" selected="@(selectedService == "photography")">Aerial Photography</option>
+                                        <option value="mapping" selected="@(selectedService == "mapping")">3D Mapping</option>
+                                        <option value="training" selected="@(selectedService == "training")">Drone Training</option>
+                                        <option value="other" selected="@(selectedService == "other")">Other Services</option>
                                     </select>
+                                    <div class="validation-hint" id="serviceHint">
+                                        <i class="fas fa-info-circle"></i> Select a service (optional)
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label for="message" class="form-label fw-semibold">
-                                        <i class="fas fa-comment me-2"></i>Your Message
+                                        <i class="fas fa-comment me-2"></i>Your Message <span class="text-danger">*</span>
                                     </label>
                                     <textarea name="message" id="message" rows="5" 
                                               class="form-control form-control-lg" 
                                               placeholder="Tell us about your project requirements..." 
-                                              required></textarea>
+                                              minlength="10"
+                                              maxlength="2000"
+                                              required>@(ViewBag.FormData?.Message ?? "")</textarea>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="validation-hint" id="messageHint">
+                                            <i class="fas fa-info-circle"></i> 10-2000 characters
+                                        </div>
+                                        <div class="character-count" id="charCount">0/2000</div>
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="newsletter" name="newsletter">
+                                    <input type="checkbox" class="form-check-input" id="newsletter" name="newsletter" 
+                                           value="true" @(ViewBag.FormData?.Newsletter == true ? "checked" : "")>
                                     <label class="form-check-label" for="newsletter">
                                         Subscribe to our newsletter for updates and offers
                                     </label>
                                 </div>
                                 
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-gradient-primary btn-lg">
+                                    <button type="submit" class="btn btn-gradient-primary btn-lg" id="submitBtn">
                                         <i class="fas fa-paper-plane me-2"></i>Send Message
                                     </button>
                                 </div>
@@ -1319,34 +1416,177 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Form validation
+            // Real-time validation functions
+            function validateName(name) {
+                const pattern = /^[a-zA-Z\s]{2,50}$/;
+                return pattern.test(name) && name.trim().length > 0;
+            }
+            
+            function validateEmail(email) {
+                const pattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                return pattern.test(email) && email.length <= 254;
+            }
+            
+            function validatePhone(phone) {
+                if (!phone || phone.trim() === '') return true; // Optional field
+                const cleanPhone = phone.replace(/[\s\-\(\)\+]/g, '');
+                return /^[0-9]{10,12}$/.test(cleanPhone);
+            }
+            
+            function validateMessage(message) {
+                return message && message.length >= 10 && message.length <= 2000;
+            }
+            
+            // Show validation hints
+            function showHint(element, isValid, validMessage, invalidMessage, infoMessage) {
+                const hint = $(element).siblings('.validation-hint');
+                if ($(element).val().trim().length === 0 && $(element).prop('required')) {
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> ' + infoMessage);
+                } else if (!$(element).prop('required') && $(element).val().trim().length === 0) {
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> ' + infoMessage);
+                } else if (isValid) {
+                    hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> ' + validMessage);
+                } else {
+                    hint.removeClass('valid').addClass('invalid').html('<i class="fas fa-exclamation-circle"></i> ' + invalidMessage);
+                }
+            }
+            
+            // Update field styling
+            function updateFieldStyle(element, isValid, optional = false) {
+                if (!optional && $(element).val().trim().length === 0) {
+                    $(element).removeClass('is-valid is-invalid');
+                } else if (optional && $(element).val().trim().length === 0) {
+                    $(element).removeClass('is-valid is-invalid');
+                } else if (isValid) {
+                    $(element).removeClass('is-invalid').addClass('is-valid');
+                } else {
+                    $(element).removeClass('is-valid').addClass('is-invalid');
+                }
+            }
+            
+            // Name validation
+            $('#name').on('input', function() {
+                const value = $(this).val();
+                const isValid = validateName(value);
+                updateFieldStyle(this, isValid);
+                showHint(this, isValid, 'Valid name', 'Name must be 2-50 characters, letters and spaces only', '2-50 characters, letters and spaces only');
+            });
+            
+            // Email validation
+            $('#email').on('input', function() {
+                const value = $(this).val();
+                const isValid = validateEmail(value);
+                updateFieldStyle(this, isValid);
+                showHint(this, isValid, 'Valid email address', 'Please enter a valid email address', 'Enter a valid email address');
+            });
+            
+            // Phone validation
+            $('#phone').on('input', function() {
+                let value = $(this).val();
+                const isValid = validatePhone(value);
+                
+                updateFieldStyle(this, isValid, true);
+                showHint(this, isValid, 'Valid phone number', 'Please enter a valid phone number', 'Enter a valid phone number (optional)');
+            });
+            
+            // Service validation (optional, just for styling)
+            $('#service').on('change', function() {
+                const value = $(this).val();
+                const hint = $('#serviceHint');
+                
+                if (value) {
+                    $(this).removeClass('is-invalid').addClass('is-valid');
+                    hint.removeClass('invalid').addClass('valid').html('<i class="fas fa-check-circle"></i> Service selected');
+                } else {
+                    $(this).removeClass('is-valid is-invalid');
+                    hint.removeClass('valid invalid').html('<i class="fas fa-info-circle"></i> Select a service (optional)');
+                }
+            });
+            
+            // Message validation with character count
+            $('#message').on('input', function() {
+                const value = $(this).val();
+                const length = value.length;
+                const isValid = validateMessage(value);
+                
+                // Update character count
+                const charCount = $('#charCount');
+                charCount.text(length + '/2000');
+                
+                if (length < 10) {
+                    charCount.removeClass('danger').addClass('warning');
+                } else if (length > 2000) {
+                    charCount.removeClass('warning').addClass('danger');
+                } else {
+                    charCount.removeClass('warning danger');
+                }
+                
+                updateFieldStyle(this, isValid);
+                showHint(this, isValid, 'Valid message', 'Message must be 10-2000 characters', '10-2000 characters');
+            });
+            
+            // Check if form is valid
+            function isFormValid() {
+                const nameValid = validateName($('#name').val());
+                const emailValid = validateEmail($('#email').val());
+                const phoneValid = validatePhone($('#phone').val());
+                const messageValid = validateMessage($('#message').val());
+                
+                return nameValid && emailValid && phoneValid && messageValid;
+            }
+            
+            // Update submit button state
+            function updateSubmitButton() {
+                const isValid = isFormValid();
+                $('#submitBtn').prop('disabled', !isValid);
+                
+                if (isValid) {
+                    $('#submitBtn').css('opacity', '1').css('cursor', 'pointer');
+                } else {
+                    $('#submitBtn').css('opacity', '0.5').css('cursor', 'not-allowed');
+                }
+            }
+            
+            // Update button on input changes
+            $('#name, #email, #phone, #message').on('input', function() {
+                updateSubmitButton();
+            });
+            
+            // Initial validation
+            $('#name').trigger('input');
+            $('#email').trigger('input');
+            $('#phone').trigger('input');
+            $('#message').trigger('input');
+            $('#service').trigger('change');
+            
+            // Form submission
             $('#contactForm').submit(function(e) {
                 e.preventDefault();
                 
-                var isValid = true;
-                $(this).find('[required]').each(function() {
-                    if ($(this).val() === '') {
-                        $(this).addClass('is-invalid');
-                        isValid = false;
-                    } else {
-                        $(this).removeClass('is-invalid');
-                    }
-                });
+                if (!isFormValid()) {
+                    // Highlight all invalid fields
+                    if (!validateName($('#name').val())) $('#name').addClass('is-invalid');
+                    if (!validateEmail($('#email').val())) $('#email').addClass('is-invalid');
+                    if (!validatePhone($('#phone').val()) && $('#phone').val().trim() !== '') $('#phone').addClass('is-invalid');
+                    if (!validateMessage($('#message').val())) $('#message').addClass('is-invalid');
+                    
+                    // Scroll to first error
+                    $('html, body').animate({
+                        scrollTop: $('.is-invalid:first').offset().top - 100
+                    }, 500);
+                    
+                    return false;
+                }
                 
-                if (isValid) {
-                    this.submit();
-                }
+                // Show loading state
+                const submitBtn = $('#submitBtn');
+                submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Sending...').prop('disabled', true);
+                
+                // Submit form
+                this.submit();
             });
             
-            // Form validation on blur
-            $('input[required], textarea[required]').on('blur', function() {
-                if ($(this).val() === '') {
-                    $(this).addClass('is-invalid');
-                } else {
-                    $(this).removeClass('is-invalid');
-                }
-            });
-            
+            // Existing code for smooth scroll, counter animation, carousel etc.
             // Smooth scroll for navigation
             $('a[href^="#"]').on('click', function(e) {
                 e.preventDefault();
