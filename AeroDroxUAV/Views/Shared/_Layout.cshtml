@@ -1,9 +1,10 @@
-﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+﻿﻿@using Microsoft.AspNetCore.Http
 @using AeroDroxUAV.Models
 @using System.Linq
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
-    var httpContext = HttpContextAccessor.HttpContext;
+    var httpContext = HttpContextAccessor?.HttpContext;
     var username = httpContext?.Session.GetString("Username") ?? "";
     var role = httpContext?.Session.GetString("Role") ?? "";
     var isLoggedIn = !string.IsNullOrEmpty(username);
@@ -28,6 +29,9 @@
     
     <!-- Animate.css for animations -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Toastr CSS for notifications -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/_Layout.cshtml.css" asp-append-version="true" />
@@ -60,6 +64,188 @@
         
         .navbar-brand {
             color: white !important;
+        }
+
+        /* Cart Icon Styles */
+        .cart-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #cartCount {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            min-width: 18px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            animation: pulse 1.5s infinite;
+            z-index: 1000;
+        }
+
+        @@keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Cart icon bounce animation */
+        .cart-bounce {
+            animation: bounce 0.5s ease;
+        }
+
+        @@keyframes bounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Navbar logo styling */
+        .navbar-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .navbar-logo {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        
+        .navbar-brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #cfe2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+        
+        /* User avatar */
+        .user-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.05);
+            border-color: white;
+        }
+        
+        /* Dropdown animations */
+        .dropdown-menu {
+            animation: dropdownFade 0.3s ease forwards;
+            transform-origin: top center;
+        }
+        
+        @@keyframes dropdownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Navbar scroll effect */
+        .navbar.scrolled {
+            background: linear-gradient(135deg, #2c3e50, #3498db) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Active nav link */
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2) !important;
+            position: relative;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @@keyframes slideIn {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 30px;
+                opacity: 1;
+            }
+        }
+        
+        /* Ripple effect for buttons */
+        .btn, .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @@keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* Mobile responsive adjustments */
+        @@media (max-width: 768px) {
+            .navbar-brand-text {
+                font-size: 1.2rem;
+            }
+            
+            .navbar-logo {
+                height: 30px;
+            }
+            
+            #cartCount {
+                top: -2px;
+                right: -2px;
+                min-width: 16px;
+                font-size: 0.65rem;
+            }
+            
+            .cart-icon {
+                margin-right: 5px;
+            }
         }
     </style>
 </head>
@@ -178,8 +364,17 @@
                 <ul class="navbar-nav">
                     @if(isLoggedIn)
                     {
+                        <!-- Cart Icon - Moved here for better placement -->
+                        <li class="nav-item me-2">
+                            <a class="nav-link d-flex align-items-center gap-2 cart-icon" href="/Cart/Index">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="d-lg-none">Cart</span>
+                                <span id="cartCount" class="badge rounded-pill bg-danger" style="display: none;">0</span>
+                            </a>
+                        </li>
+
                         <!-- User Profile -->
-                        <li class="nav-item dropdown me-3">
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
                                 <div class="user-avatar position-relative rounded-circle d-flex align-items-center justify-content-center" 
                                      style="width: 45px; height: 45px;">
@@ -217,6 +412,15 @@
                     }
                     else
                     {
+                        <!-- Cart Icon for non-logged in users -->
+                        <li class="nav-item me-2">
+                            <a class="nav-link d-flex align-items-center gap-2 cart-icon" href="/Cart/Index"> <!-- Changed from /Cart to /Cart/Index -->
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="d-lg-none">Cart</span>
+                                <span id="cartCount" class="badge rounded-pill bg-danger" style="display: none;">0</span>
+                            </a>
+                        </li>
+
                         <!-- Auth Buttons -->
                         <li class="nav-item me-2">
                             <a class="btn btn-outline-light d-flex align-items-center gap-2" asp-controller="Account" asp-action="Register">
@@ -651,8 +855,30 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     
+    <!-- Toastr Configuration -->
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+    </script>
+
     <!-- Custom Scripts -->
     <script>
         // Enhanced Navbar scroll effect
@@ -676,6 +902,42 @@
                 const scale = Math.max(0.95, 1 - scrollPosition / 1000);
                 logo.style.transform = `scale(${scale})`;
             }
+        });
+
+        // Cart count update function
+        function updateCartCount() {
+            $.ajax({
+                url: '/Cart/GetCartCount',
+                type: 'GET',
+                success: function(count) {
+                    if (count > 0) {
+                        $('#cartCount').text(count).show();
+                    } else {
+                        $('#cartCount').hide();
+                    }
+                },
+                error: function() {
+                    console.log('Error fetching cart count');
+                }
+            });
+        }
+
+        // Cart icon bounce animation
+        function bounceCartIcon() {
+            $('.cart-icon').addClass('cart-bounce');
+            setTimeout(function() {
+                $('.cart-icon').removeClass('cart-bounce');
+            }, 500);
+        }
+
+        // Listen for cart updates from other pages
+        $(document).on('cartUpdated', function(e, itemCount) {
+            if (itemCount > 0) {
+                $('#cartCount').text(itemCount).show();
+            } else {
+                $('#cartCount').hide();
+            }
+            bounceCartIcon();
         });
         
         // Add active class to current page with animation
@@ -755,17 +1017,12 @@
                     const x = e.clientX - rect.left - size / 2;
                     const y = e.clientY - rect.top - size / 2;
                     
+                    ripple.className = 'ripple';
                     ripple.style.cssText = `
-                        position: absolute;
-                        border-radius: 50%;
-                        background: rgba(255, 255, 255, 0.7);
-                        transform: scale(0);
-                        animation: ripple 0.6s linear;
                         width: ${size}px;
                         height: ${size}px;
                         left: ${x}px;
                         top: ${y}px;
-                        pointer-events: none;
                     `;
                     
                     this.appendChild(ripple);
@@ -775,6 +1032,9 @@
                     }, 600);
                 });
             });
+            
+            // Update cart count on page load
+            updateCartCount();
         });
         
         // Initialize navbar animations on page load
@@ -866,7 +1126,7 @@
                     }, 2000);
                     
                     // Show success message
-                    alert('Thank you for subscribing to AeroDrox UAV newsletter!');
+                    toastr.success('Thank you for subscribing to AeroDrox UAV newsletter!');
                 }, 1500);
                 
                 return false;
@@ -883,6 +1143,11 @@
             $('.footer-links a').on('mouseenter', function() {
                 $(this).addClass('animate__animated animate__fadeInLeft');
             });
+            
+            // Auto-close alerts after 5 seconds
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 5000);
         });
     </script>
     

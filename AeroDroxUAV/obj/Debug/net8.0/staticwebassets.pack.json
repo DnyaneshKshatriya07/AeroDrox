@@ -269,6 +269,22 @@
       "PackagePath": "staticwebassets/lib/jquery/dist/jquery.min.map"
     },
     {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/accessories/88c20685-ca7c-43a9-aecc-a07603893570.jpg",
+      "PackagePath": "staticwebassets/uploads/accessories/88c20685-ca7c-43a9-aecc-a07603893570.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/accessories/f38b0550-f5db-453a-bed6-ab207e4f693e.jpg",
+      "PackagePath": "staticwebassets/uploads/accessories/f38b0550-f5db-453a-bed6-ab207e4f693e.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/drones/0b4b638d-ba6d-421d-8a26-b74fdfd46641_about-whyus.jpg",
+      "PackagePath": "staticwebassets/uploads/drones/0b4b638d-ba6d-421d-8a26-b74fdfd46641_about-whyus.jpg"
+    },
+    {
+      "Id": "/workspaces/ASPNET_Projects/AeroDroxUAV/wwwroot/uploads/drones/fbabca6d-0832-45af-84e4-ef77b2cdb56a_HomeNewBG.jpg",
+      "PackagePath": "staticwebassets/uploads/drones/fbabca6d-0832-45af-84e4-ef77b2cdb56a_HomeNewBG.jpg"
+    },
+    {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AeroDroxUAV.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

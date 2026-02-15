@@ -4,6 +4,10 @@
     ViewData["Title"] = "Product Store";
 }
 
+<!-- Add Toastr CSS and JS for notifications -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 <!-- Video Background Section -->
 <div data-poster-url="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -poster-00001.jpg" 
      data-video-urls="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.mp4,https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.webm" 
@@ -275,32 +279,33 @@
                                     {
                                         @if(ViewBag.IsLoggedIn == true)
                                         {
-                                            /*
-                                            <button class="btn btn-primary btn-sm btn-buy" data-drone-id="@drone.Id">
-                                                <i class="fas fa-shopping-cart me-1"></i>Buy Now
+                                            <button class="btn btn-primary btn-sm add-to-cart" 
+                                                    data-drone-id="@drone.Id" 
+                                                    data-product-name="@drone.Name">
+                                                <i class="fas fa-shopping-cart me-1"></i>Add to Cart
                                             </button>
-                                            */
-                                            <button href="/Contact/Index" class="btn btn-success btn-sm btn-buy">
-                                                <i class="class="fas fa-calendar-check me-1"></i>Inquire Now
-                                            </button>
+                                            <a href="/Contact/Index" class="btn btn-success btn-sm">
+                                                <i class="fas fa-calendar-check me-1"></i>Inquire Now
+                                            </a>
                                         }
                                         else
                                         {
-                                            /*
-                                            <a asp-controller="Account" asp-action="BuyProduct" asp-route-productId="@drone.Id" class="btn btn-primary btn-sm">
-                                                <i class="fas fa-shopping-cart me-1"></i>Buy Now
+                                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-shopping-cart me-1"></i>Login to Buy
                                             </a>
-                                            */
-                                            <button href="/Contact/Index" class="btn btn-success btn-sm btn-buy">
-                                                <i class="class="fas fa-calendar-check me-1"></i>Inquire Now
-                                            </button>
+                                            <a href="/Contact/Index" class="btn btn-success btn-sm">
+                                                <i class="fas fa-calendar-check me-1"></i>Inquire Now
+                                            </a>
                                         }
                                     }
                                     else
                                     {
                                         <button class="btn btn-secondary btn-sm" disabled>
-                                            <i class="fas fa-bell me-1"></i>Notify When Available
+                                            <i class="fas fa-bell me-1"></i>Out of Stock
                                         </button>
+                                        <a href="/Contact/Index" class="btn btn-success btn-sm">
+                                            <i class="fas fa-calendar-check me-1"></i>Inquire Now
+                                        </a>
                                     }
                                     <a href="/Drone/Details/@drone.Id" class="btn btn-outline-secondary btn-sm">
                                         <i class="fas fa-info-circle me-1"></i>Details
@@ -414,7 +419,29 @@
         border-radius: 50px;
     }
     
-    .btn-buy {
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+        border: none;
+    }
+    
+    .btn-success:hover {
+        background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(32, 201, 151, 0.3);
+    }
+    
+    .btn-add-to-cart {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border: none;
         border-radius: 8px;
@@ -425,7 +452,7 @@
         color: white;
     }
     
-    .btn-buy:hover {
+    .btn-add-to-cart:hover {
         background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
         transform: translateY(-1px);
         box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
@@ -519,8 +546,28 @@
 </style>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Configure Toastr
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
             // Search and Filter functionality
             function filterDrones() {
                 const searchTerm = $('#searchInput').val().toLowerCase().trim();
@@ -562,15 +609,52 @@
             
             // Initialize filtering
             filterDrones();
-            
-            // Buy button click handler
-            $('.btn-buy').click(function() {
-                const droneId = $(this).data('drone-id');
-                if (droneId) {
-                    // Implement your buy logic here
-                    // This could redirect to a checkout page or show a modal
-                    alert('Buy functionality for drone #' + droneId + ' will be implemented!');
-                }
+
+            // Add to Cart functionality
+            $('.add-to-cart').click(function() {
+                var button = $(this);
+                var droneId = $(this).data('drone-id');
+                var productName = $(this).data('product-name');
+                
+                // Disable button and show loading
+                button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>Adding...');
+                
+                $.ajax({
+                    url: '/Cart/AddToCart',
+                    type: 'POST',
+                    data: { 
+                        droneId: droneId,
+                        quantity: 1 
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Show success message
+                            toastr.success(productName + ' added to cart!');
+                            
+                            // Update cart count in navbar
+                            $('#cartCount').text(response.itemCount).show();
+                            
+                            // Animate cart icon
+                            $('.cart-icon').addClass('animate__animated animate__bounce');
+                            setTimeout(function() {
+                                $('.cart-icon').removeClass('animate__animated animate__bounce');
+                            }, 1000);
+                        } else {
+                            if (response.redirectUrl) {
+                                window.location.href = response.redirectUrl;
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        }
+                    },
+                    error: function() {
+                        toastr.error('An error occurred while adding to cart');
+                    },
+                    complete: function() {
+                        // Re-enable button
+                        button.prop('disabled', false).html('<i class="fas fa-shopping-cart me-1"></i>Add to Cart');
+                    }
+                });
             });
             
             // Image hover effect

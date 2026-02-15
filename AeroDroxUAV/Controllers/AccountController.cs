@@ -92,7 +92,7 @@ public class AccountController : Controller
             HttpContext.Session.SetString("FullName", user.FullName);
             HttpContext.Session.SetString("Email", user.Email);
             HttpContext.Session.SetString("Role", user.Role);
-            HttpContext.Session.SetInt32("UserId", user.Id);
+            HttpContext.Session.SetInt32("UserId", user.Id); // This stores as integer, not string
             
             var buyProductId = HttpContext.Session.GetString("BuyProductId");
             var buyProductType = HttpContext.Session.GetString("BuyProductType");

@@ -1,0 +1,402 @@
+@model IEnumerable<AeroDroxUAV.Models.CartItem>
+@{
+    ViewData["Title"] = "Shopping Cart";
+    var cartTotal = ViewBag.CartTotal ?? 0;
+    var itemCount = ViewBag.ItemCount ?? 0;
+}
+
+<!-- Video Background Section -->
+<div data-poster-url="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -poster-00001.jpg" 
+     data-video-urls="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.mp4,https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.webm" 
+     data-autoplay="true" 
+     data-loop="true" 
+     data-wf-ignore="true" 
+     class="background-video w-background-video w-background-video-atom">
+    
+    <video id="cart-video-bg" 
+           autoplay="" 
+           loop="" 
+           style="background-image:url('https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -poster-00001.jpg')" 
+           muted="" 
+           playsinline="" 
+           data-wf-ignore="true" 
+           data-object-fit="cover">
+        
+        <source src="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.mp4" 
+                data-wf-ignore="true" 
+                type="video/mp4">
+        
+        <source src="https://cdn.prod.website-files.com/6450b31696e25f8aa6cdd7b0/646f088ca1a027c73d73b145_video background -transcode.webm" 
+                data-wf-ignore="true" 
+                type="video/webm">
+    </video>
+</div>
+
+<!-- Main Content -->
+<div class="container-fluid px-4 main-content-container">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0">
+                <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
+            </h1>
+            <p class="text-muted mb-0">Review and manage your items</p>
+        </div>
+        @if(Model.Any())
+        {
+            <button class="btn btn-outline-danger" id="clearCartBtn">
+                <i class="fas fa-trash me-2"></i>Clear Cart
+            </button>
+        }
+    </div>
+
+    @if(!Model.Any())
+    {
+        <!-- Empty Cart -->
+        <div class="text-center py-5">
+            <i class="fas fa-shopping-cart fa-5x text-muted mb-3"></i>
+            <h3>Your cart is empty</h3>
+            <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/Drone/Index" class="btn btn-primary">
+                    <i class="fas fa-drone me-2"></i>Browse Drones
+                </a>
+                <a href="/Accessories/Index" class="btn btn-success">
+                    <i class="fas fa-tools me-2"></i>Browse Accessories
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Cart Items -->
+        <div class="row">
+            <div class="col-lg-8">
+                @foreach(var item in Model)
+                {
+                    <div class="card mb-3 cart-item" data-id="@item.Id">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <!-- Product Image -->
+                                <div class="col-md-2 col-4 mb-2 mb-md-0">
+                                    @if (!string.IsNullOrEmpty(item.ProductImage))
+                                    {
+                                        <img src="@item.ProductImage" class="img-fluid rounded" 
+                                             alt="@item.ProductName" style="max-height: 80px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                             class="img-fluid rounded" 
+                                             alt="@item.ProductName" style="max-height: 80px; object-fit: cover;">
+                                    }
+                                </div>
+                                
+                                <!-- Product Details -->
+                                <div class="col-md-4 col-8">
+                                    <h6 class="mb-1">@item.ProductName</h6>
+                                    <div class="d-flex gap-2">
+                                        <span class="badge @(item.ProductType == "Drone" ? "bg-primary" : "bg-success") small">
+                                            @item.ProductType
+                                        </span>
+                                        @if(item.ProductType == "Drone" && item.Drone?.Condition != null)
+                                        {
+                                            <span class="badge bg-info small">@item.Drone.Condition</span>
+                                        }
+                                        else if(item.ProductType == "Accessory" && item.Accessory?.Condition != null)
+                                        {
+                                            <span class="badge bg-info small">@item.Accessory.Condition</span>
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <!-- Price -->
+                                <div class="col-md-2 col-4 mt-2 mt-md-0">
+                                    <div class="text-md-center">
+                                        <h6 class="text-success fw-bold mb-0">₹@item.ProductPrice.ToString("N2")</h6>
+                                    </div>
+                                </div>
+                                
+                                <!-- Quantity Controls -->
+                                <div class="col-md-2 col-4 mt-2 mt-md-0">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <button class="btn btn-sm btn-outline-secondary quantity-decrease" 
+                                                data-id="@item.Id" @(item.Quantity <= 1 ? "disabled" : "")>
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <span class="mx-2 quantity-value" data-id="@item.Id">@item.Quantity</span>
+                                        <button class="btn btn-sm btn-outline-secondary quantity-increase" 
+                                                data-id="@item.Id">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Subtotal & Remove -->
+                                <div class="col-md-2 col-4 mt-2 mt-md-0">
+                                    <div class="d-flex flex-column align-items-end">
+                                        <h6 class="text-primary fw-bold mb-2">
+                                            ₹@((item.ProductPrice * item.Quantity).ToString("N2"))
+                                        </h6>
+                                        <button class="btn btn-sm btn-outline-danger remove-item" 
+                                                data-id="@item.Id">
+                                            <i class="fas fa-trash me-1"></i>Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+            <!-- Cart Summary -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Cart Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Items (@itemCount)</span>
+                            <span>₹@cartTotal.ToString("N2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping</span>
+                            <span class="text-success">Free</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Total</strong>
+                            <strong class="text-primary h5">₹@cartTotal.ToString("N2")</strong>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success btn-lg" id="checkoutBtn">
+                                <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                            </button>
+                            <a href="/Drone/Index" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trust Badges -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <i class="fas fa-lock text-success fa-lg"></i>
+                                <p class="small mb-0">Secure Payment</p>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-truck text-primary fa-lg"></i>
+                                <p class="small mb-0">Free Shipping</p>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-undo text-info fa-lg"></i>
+                                <p class="small mb-0">30-Day Returns</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    /* Video Background Styles */
+    .background-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+    
+    .background-video video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+    }
+    
+    /* Dark overlay for better text readability */
+    .background-video::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1;
+    }
+    
+    .background-video video {
+        z-index: 0;
+    }
+    
+    /* Main content container styling */
+    .main-content-container {
+        background-color: rgba(255, 255, 255, 0.98);
+        border-radius: 15px;
+        margin-top: 30px;
+        padding: 25px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(5px);
+    }
+    
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .cart-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-color: rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-outline-secondary {
+        border-radius: 8px;
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+        border: none;
+    }
+    
+    .btn-success:hover {
+        background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(32, 201, 151, 0.3);
+    }
+    
+    .small {
+        font-size: 0.875rem;
+    }
+    
+    @@media (max-width: 768px) {
+        .main-content-container {
+            margin-top: 15px;
+            padding: 15px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Update cart count in navbar
+            function updateNavbarCartCount() {
+                $.get('/Cart/GetCartCount', function(count) {
+                    $('#cartCount').text(count).toggle(count > 0);
+                });
+            }
+
+            // Increase quantity
+            $('.quantity-increase').click(function() {
+                var itemId = $(this).data('id');
+                var quantitySpan = $('.quantity-value[data-id="' + itemId + '"]');
+                var currentQty = parseInt(quantitySpan.text());
+                
+                updateCartItem(itemId, currentQty + 1);
+            });
+
+            // Decrease quantity
+            $('.quantity-decrease').click(function() {
+                var itemId = $(this).data('id');
+                var quantitySpan = $('.quantity-value[data-id="' + itemId + '"]');
+                var currentQty = parseInt(quantitySpan.text());
+                
+                if (currentQty > 1) {
+                    updateCartItem(itemId, currentQty - 1);
+                }
+            });
+
+            // Update cart item quantity
+            function updateCartItem(itemId, newQuantity) {
+                $.ajax({
+                    url: '/Cart/UpdateQuantity',
+                    type: 'POST',
+                    data: { cartItemId: itemId, quantity: newQuantity },
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred while updating the cart');
+                    }
+                });
+            }
+
+            // Remove item
+            $('.remove-item').click(function() {
+                var itemId = $(this).data('id');
+                
+                if (confirm('Are you sure you want to remove this item from your cart?')) {
+                    $.ajax({
+                        url: '/Cart/RemoveFromCart',
+                        type: 'POST',
+                        data: { cartItemId: itemId },
+                        success: function(response) {
+                            if (response.success) {
+                                location.reload();
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function() {
+                            alert('An error occurred while removing the item');
+                        }
+                    });
+                }
+            });
+
+            // Clear cart
+            $('#clearCartBtn').click(function() {
+                if (confirm('Are you sure you want to clear your entire cart? This action cannot be undone.')) {
+                    $.ajax({
+                        url: '/Cart/ClearCart',
+                        type: 'POST',
+                        success: function(response) {
+                            if (response.success) {
+                                location.reload();
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function() {
+                            alert('An error occurred while clearing the cart');
+                        }
+                    });
+                }
+            });
+
+            // Checkout button
+            $('#checkoutBtn').click(function() {
+                alert('Checkout functionality will be implemented soon!');
+                // Redirect to checkout page when ready
+                // window.location.href = '/Checkout/Index';
+            });
+        });
+    </script>
+}

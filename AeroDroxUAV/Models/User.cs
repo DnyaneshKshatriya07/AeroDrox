@@ -20,5 +20,7 @@ namespace AeroDroxUAV.Models
         public string? ProfilePicture { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? Gender { get; set; }
+
+        public ICollection<CartItem>? CartItems { get; set; }
     }
 }
