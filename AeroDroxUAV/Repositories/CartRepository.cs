@@ -34,6 +34,8 @@ namespace AeroDroxUAV.Repositories
         public async Task<CartItem?> GetCartItemByProductAsync(int userId, int? droneId, int? accessoryId)
         {
             return await _context.CartItems
+                .Include(c => c.Drone)
+                .Include(c => c.Accessory)
                 .FirstOrDefaultAsync(c => c.UserId == userId && 
                     ((droneId.HasValue && c.DroneId == droneId) || 
                      (accessoryId.HasValue && c.AccessoryId == accessoryId)));

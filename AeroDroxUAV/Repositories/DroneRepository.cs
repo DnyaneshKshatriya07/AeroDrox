@@ -24,6 +24,18 @@ namespace AeroDroxUAV.Repositories
             return await _context.Drones.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
         }
 
+        public async Task<Drone?> GetByIdForOrderAsync(int id)
+        {
+            // For order creation - no tracking to avoid conflicts
+            return await _context.Drones.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
+        }
+
+        public async Task<Drone?> GetByIdForUpdateAsync(int id)
+        {
+            // For stock updates - with tracking
+            return await _context.Drones.FirstOrDefaultAsync(d => d.Id == id);
+        }
+
         public async Task AddAsync(Drone drone)
         {
             await _context.Drones.AddAsync(drone);
@@ -32,6 +44,12 @@ namespace AeroDroxUAV.Repositories
         public void Update(Drone drone)
         {
             _context.Drones.Update(drone);
+        }
+
+        public async Task UpdateAndSaveAsync(Drone drone)
+        {
+            _context.Drones.Update(drone);
+            await _context.SaveChangesAsync();
         }
 
         public void Delete(Drone drone)

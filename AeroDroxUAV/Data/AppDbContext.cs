@@ -11,7 +11,9 @@ namespace AeroDroxUAV.Data
         public DbSet<Drone> Drones { get; set; }
         public DbSet<DroneServices> DroneServices {get; set;}
         public DbSet<Accessories> Accessories {get; set;}
-        public DbSet<CartItem> CartItems { get; set; } // NEW: Cart items table
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,10 +49,30 @@ namespace AeroDroxUAV.Data
                 .IsUnique()
                 .HasFilter("[AccessoryId] IS NOT NULL");
 
-            // Fix the shadow property issue
-            modelBuilder.Entity<CartItem>()
-                .Property(c => c.UserId)
-                .HasColumnName("UserId");
+            // Order and OrderItem configurations
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany()
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Order)
+                .WithMany(o => o.OrderItems)
+                .HasForeignKey(oi => oi.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Drone)
+                .WithMany()
+                .HasForeignKey(oi => oi.DroneId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Accessory)
+                .WithMany()
+                .HasForeignKey(oi => oi.AccessoryId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

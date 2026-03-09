@@ -26,7 +26,17 @@ namespace AeroDroxUAV.Models
         public string ProductType => DroneId.HasValue ? "Drone" : "Accessory";
         
         [NotMapped]
-        public string ProductName => DroneId.HasValue ? Drone?.Name ?? "Unknown" : Accessory?.Name ?? "Unknown";
+        public string ProductName
+        {
+            get
+            {
+                if (DroneId.HasValue && Drone != null)
+                    return Drone.Name;
+                if (AccessoryId.HasValue && Accessory != null)
+                    return Accessory.Name;
+                return "Unknown";
+            }
+        }
         
         [NotMapped]
         public double ProductPrice
@@ -37,6 +47,19 @@ namespace AeroDroxUAV.Models
                     return Drone.DiscountPrice ?? Drone.Price;
                 if (AccessoryId.HasValue && Accessory != null)
                     return Accessory.DiscountPrice ?? Accessory.Price;
+                return 0;
+            }
+        }
+        
+        [NotMapped]
+        public double OriginalPrice
+        {
+            get
+            {
+                if (DroneId.HasValue && Drone != null)
+                    return Drone.Price;
+                if (AccessoryId.HasValue && Accessory != null)
+                    return Accessory.Price;
                 return 0;
             }
         }
