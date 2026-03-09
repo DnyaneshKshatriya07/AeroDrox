@@ -20,18 +20,35 @@ namespace AeroDroxUAV.Repositories
 
         public async Task<Accessories?> GetByIdAsync(int id)
         {
-            // The AsNoTracking() is good practice for entities only used for view/edit forms
             return await _context.Accessories.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task AddAsync(Accessories accessories) // Corrected parameter name
+        public async Task<Accessories?> GetByIdForOrderAsync(int id)
+        {
+            // For order creation - no tracking to avoid conflicts
+            return await _context.Accessories.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id);
+        }
+
+        public async Task<Accessories?> GetByIdForUpdateAsync(int id)
+        {
+            // For stock updates - with tracking
+            return await _context.Accessories.FirstOrDefaultAsync(d => d.Id == id);
+        }
+
+        public async Task AddAsync(Accessories accessories)
         {
             await _context.Accessories.AddAsync(accessories);
         }
 
-        public void Update(Accessories accessories) // Corrected method signature to match interface
+        public void Update(Accessories accessories)
         {
             _context.Accessories.Update(accessories);
+        }
+
+        public async Task UpdateAndSaveAsync(Accessories accessories)
+        {
+            _context.Accessories.Update(accessories);
+            await _context.SaveChangesAsync();
         }
 
         public void Delete(Accessories accessories)

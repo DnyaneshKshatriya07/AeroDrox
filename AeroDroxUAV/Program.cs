@@ -29,12 +29,20 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDroneRepository, DroneRepository>();
 builder.Services.AddScoped<IDroneServicesRepository, DroneServicesRepository>();
 builder.Services.AddScoped<IAccessoriesRepository, AccessoriesRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 // Register Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDroneService, DroneService>();
 builder.Services.AddScoped<IDroneServicesService, DroneServicesService>();
 builder.Services.AddScoped<IAccessoriesService, AccessoriesService>();
+builder.Services.AddScoped<ICartService, CartService>();
+
+// Register Repositories
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+// Register Services
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 // Add Session services
 builder.Services.AddSession(options =>

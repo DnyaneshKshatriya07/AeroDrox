@@ -1,0 +1,260 @@
+@model AeroDroxUAV.Models.Order
+@{
+    ViewData["Title"] = "Order Details #" + Model.Id;
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0"><i class="fas fa-receipt me-2"></i>Order #AERO-@Model.Id</h1>
+        <div>
+            <a href="/Checkout/AdminOrders" class="btn btn-outline-secondary me-2">
+                <i class="fas fa-arrow-left me-2"></i>Back to Orders
+            </a>
+            <button class="btn btn-primary" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>Print Invoice
+            </button>
+        </div>
+    </div>
+
+    <!-- Update Status Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Update Order Status</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="UpdateOrderStatus" method="post" class="row g-3 align-items-end">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                
+                <div class="col-md-4">
+                    <label class="form-label">Order Status</label>
+                    <select name="orderStatus" class="form-select">
+                        @{
+                            string[] orderStatuses = new[] { "Pending", "Confirmed", "Shipped", "Delivered", "Cancelled" };
+                            foreach (var status in orderStatuses)
+                            {
+                                if (Model.OrderStatus == status)
+                                {
+                                    <option value="@status" selected="selected">@status</option>
+                                }
+                                else
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label">Payment Status</label>
+                    <select name="paymentStatus" class="form-select">
+                        <option value="">Keep Current</option>
+                        @{
+                            string[] paymentStatuses = new[] { "Pending", "Completed", "Failed", "Refunded" };
+                            foreach (var status in paymentStatuses)
+                            {
+                                if (Model.PaymentStatus == status)
+                                {
+                                    <option value="@status" selected="selected">@status</option>
+                                }
+                                else
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-sync-alt me-2"></i>Update Status
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Order Items -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Order Items</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Type</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Discount Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <tr>
+                                        <td>@item.ProductName</td>
+                                        <td>
+                                            @if (item.ProductType == "Drone")
+                                            {
+                                                <span class="badge bg-primary">Drone</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Accessory</span>
+                                            }
+                                        </td>
+                                        <td>@item.Quantity</td>
+                                        <td>₹@item.UnitPrice.ToString("N2")</td>
+                                        <td>₹@item.DiscountPrice.ToString("N2")</td>
+                                        <td class="fw-bold">₹@((item.Quantity * item.DiscountPrice).ToString("N2"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="5" class="text-end">Subtotal:</th>
+                                    <th>₹@Model.TotalAmount.ToString("N2")</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="5" class="text-end">Shipping:</th>
+                                    <th>Free</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="5" class="text-end">Total:</th>
+                                    <th class="text-primary h5">₹@Model.TotalAmount.ToString("N2")</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Customer Information -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Customer Information</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.User != null)
+                    {
+                        <div class="mb-3">
+                            <label class="text-muted">Name</label>
+                            <div class="fw-bold">@Model.User.FullName</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted">Email</label>
+                            <div>@Model.User.Email</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted">Phone</label>
+                            <div>@Model.User.MobileNumber</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Customer information not available</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Shipping Address -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Shipping Address</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                        @Model.ShippingAddress
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-city text-primary me-2"></i>
+                        @Model.ShippingCity, @Model.ShippingState - @Model.ShippingPinCode
+                    </div>
+                    <div>
+                        <i class="fas fa-phone text-primary me-2"></i>
+                        @Model.ShippingPhone
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Information -->
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Payment Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <span class="text-muted">Method:</span>
+                        <span class="fw-bold float-end">
+                            @if (Model.PaymentMethod == "Card")
+                            {
+                                <i class="fas fa-credit-card me-1"></i>
+                            }
+                            else if (Model.PaymentMethod == "UPI")
+                            {
+                                <i class="fas fa-mobile-alt me-1"></i>
+                            }
+                            else if (Model.PaymentMethod == "NetBanking")
+                            {
+                                <i class="fas fa-university me-1"></i>
+                            }
+                            else if (Model.PaymentMethod == "COD")
+                            {
+                                <i class="fas fa-money-bill-wave me-1"></i>
+                            }
+                            @Model.PaymentMethod
+                        </span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-muted">Status:</span>
+                        @if (Model.PaymentStatus == "Completed")
+                        {
+                            <span class="badge bg-success float-end">@Model.PaymentStatus</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning float-end">@Model.PaymentStatus</span>
+                        }
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-muted">Transaction ID:</span>
+                        <span class="float-end small">@Model.TransactionId</span>
+                    </div>
+                    <div>
+                        <span class="text-muted">Order Date:</span>
+                        <span class="float-end">@Model.OrderDate.ToString("dd MMM yyyy, hh:mm tt")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style media="print">
+    @@media print {
+        .btn, form, .navbar, footer, .back-to-top {
+            display: none !important;
+        }
+        
+        .card {
+            border: 1px solid #ddd !important;
+            box-shadow: none !important;
+        }
+        
+        .card-header {
+            background-color: #f8f9fc !important;
+            color: #000 !important;
+        }
+    }
+</style>

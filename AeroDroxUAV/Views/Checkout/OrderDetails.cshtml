@@ -1,0 +1,274 @@
+@model AeroDroxUAV.Models.Order
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0"><i class="fas fa-receipt me-2"></i>Order #AERO-@Model.Id</h1>
+        <a href="/Checkout/OrderHistory" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Orders
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Order Status Timeline -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Order Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="order-timeline">
+                        <div class="timeline-step @(Model.OrderStatus == "Pending" || Model.OrderStatus == "Confirmed" || Model.OrderStatus == "Shipped" || Model.OrderStatus == "Delivered" ? "completed" : "")">
+                            <div class="timeline-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>Order Placed</h6>
+                                <small>@Model.OrderDate.ToString("dd MMM yyyy, hh:mm tt")</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-step @(Model.OrderStatus == "Confirmed" || Model.OrderStatus == "Shipped" || Model.OrderStatus == "Delivered" ? "completed" : "")">
+                            <div class="timeline-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>Order Confirmed</h6>
+                                @if (Model.OrderStatus == "Confirmed" || Model.OrderStatus == "Shipped" || Model.OrderStatus == "Delivered")
+                                {
+                                    <small>@Model.OrderDate.AddHours(2).ToString("dd MMM yyyy, hh:mm tt")</small>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-step @(Model.OrderStatus == "Shipped" || Model.OrderStatus == "Delivered" ? "completed" : "")">
+                            <div class="timeline-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>Shipped</h6>
+                                @if (Model.OrderStatus == "Shipped" || Model.OrderStatus == "Delivered")
+                                {
+                                    <small>@Model.OrderDate.AddDays(1).ToString("dd MMM yyyy, hh:mm tt")</small>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-step @(Model.OrderStatus == "Delivered" ? "completed" : "")">
+                            <div class="timeline-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6>Delivered</h6>
+                                @if (Model.OrderStatus == "Delivered")
+                                {
+                                    <small>@Model.OrderDate.AddDays(3).ToString("dd MMM yyyy, hh:mm tt")</small>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.OrderStatus == "Cancelled")
+                    {
+                        <div class="alert alert-danger mt-3 mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            This order has been cancelled.
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Order Items</h5>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <div class="row mb-3 pb-3 @(!item.Equals(Model.OrderItems.Last()) ? "border-bottom" : "")">
+                            <div class="col-md-2 col-4">
+                                @if (!string.IsNullOrEmpty(item.Drone?.ImageUrl) || !string.IsNullOrEmpty(item.Accessory?.ImageUrl))
+                                {
+                                    <img src="@(item.Drone?.ImageUrl ?? item.Accessory?.ImageUrl)" 
+                                         class="img-fluid rounded" alt="@item.ProductName">
+                                }
+                                else
+                                {
+                                    <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                         class="img-fluid rounded" alt="@item.ProductName">
+                                }
+                            </div>
+                            <div class="col-md-6 col-8">
+                                <h6 class="mb-1">@item.ProductName</h6>
+                                <div class="d-flex gap-2">
+                                    <span class="badge @(item.ProductType == "Drone" ? "bg-primary" : "bg-success")">
+                                        @item.ProductType
+                                    </span>
+                                    @if (item.ProductType == "Drone" && item.Drone?.Condition != null)
+                                    {
+                                        <span class="badge bg-info">@item.Drone.Condition</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-6 mt-2 mt-md-0">
+                                <div class="text-muted">Quantity</div>
+                                <div>@item.Quantity</div>
+                            </div>
+                            <div class="col-md-2 col-6 mt-2 mt-md-0">
+                                <div class="text-muted">Price</div>
+                                <div class="fw-bold text-success">₹@item.DiscountPrice.ToString("N2")</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Order Summary -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal</span>
+                        <span>₹@Model.TotalAmount.ToString("N2")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping</span>
+                        <span class="text-success">Free</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total</span>
+                        <span class="fw-bold text-primary h5">₹@Model.TotalAmount.ToString("N2")</span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="mb-2">
+                        <span class="text-muted">Payment Method:</span>
+                        <span class="fw-bold float-end">
+                            @if (Model.PaymentMethod == "Card")
+                            {
+                                <i class="fas fa-credit-card me-1"></i>
+                            }
+                            else if (Model.PaymentMethod == "UPI")
+                            {
+                                <i class="fas fa-mobile-alt me-1"></i>
+                            }
+                            else if (Model.PaymentMethod == "NetBanking")
+                            {
+                                <i class="fas fa-university me-1"></i>
+                            }
+                            else if (Model.PaymentMethod == "COD")
+                            {
+                                <i class="fas fa-money-bill-wave me-1"></i>
+                            }
+                            @Model.PaymentMethod
+                        </span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-muted">Payment Status:</span>
+                        <span class="badge @(Model.PaymentStatus == "Completed" ? "bg-success" : "bg-warning") float-end">
+                            @Model.PaymentStatus
+                        </span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.TransactionId))
+                    {
+                        <div class="small text-muted">
+                            Transaction ID: @Model.TransactionId
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Shipping Address -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Shipping Address</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                        @Model.ShippingAddress
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-city text-primary me-2"></i>
+                        @Model.ShippingCity, @Model.ShippingState - @Model.ShippingPinCode
+                    </div>
+                    <div>
+                        <i class="fas fa-phone text-primary me-2"></i>
+                        @Model.ShippingPhone
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .order-timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+    
+    .order-timeline::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 2px;
+        height: 100%;
+        background: #dee2e6;
+    }
+    
+    .timeline-step {
+        position: relative;
+        padding-left: 50px;
+        margin-bottom: 30px;
+    }
+    
+    .timeline-step:last-child {
+        margin-bottom: 0;
+    }
+    
+    .timeline-icon {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid #dee2e6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+        z-index: 1;
+    }
+    
+    .timeline-step.completed .timeline-icon {
+        background: #28a745;
+        border-color: #28a745;
+        color: #fff;
+    }
+    
+    .timeline-content {
+        padding-bottom: 10px;
+    }
+    
+    .timeline-content h6 {
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    
+    .timeline-content small {
+        color: #6c757d;
+    }
+</style>
